@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "d1ZOCHLsz+sRf41Myxdw8smchuzN6UPI9E4n4P6Sp2oEr4Fk851jHnwOU/+SzFj511oFjj0F0ev95NwAQaRP+A==",
+  "success": true,
+  "projectFilePath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/Ability.csproj",
+  "expectedPackageFiles": [
+    "/home/d-arrow/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

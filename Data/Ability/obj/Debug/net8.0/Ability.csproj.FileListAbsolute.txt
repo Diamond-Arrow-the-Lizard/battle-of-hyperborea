@@ -1,0 +1,12 @@
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.GeneratedMSBuildEditorConfig.editorconfig
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.AssemblyInfoInputs.cache
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.AssemblyInfo.cs
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.csproj.CoreCompileInputs.cache
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.sourcelink.json
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/bin/Debug/net8.0/Ability.deps.json
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/bin/Debug/net8.0/Ability.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/bin/Debug/net8.0/Ability.pdb
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/refint/Ability.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/Ability.pdb
+/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/obj/Debug/net8.0/ref/Ability.dll

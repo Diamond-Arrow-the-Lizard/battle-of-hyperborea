@@ -1,4 +1,6 @@
-namespace Entity;
+using AbilityClass;
+
+namespace EntityClass;
 
 public class Entity : IEntity {
 
@@ -22,19 +24,31 @@ public class Entity : IEntity {
     }
 
     public int Damage {set; get;}
-    //TODO AttackType, Abilities
+
+    public bool AttackType {set; get;}
+
+    private Ability _active_ability = new Ability();
+    public Ability ActiveAbility {
+        set {
+            _active_ability = value;
+        }
+        get {
+            return _active_ability;
+        }
+    }
 
     public Entity(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
-    //TODO add Abilities to constructor params
-    public Entity(int x, int y, int Hp, int Stamina, int Damage) {
+
+    public Entity(int x, int y, int Hp, int Stamina, int Damage, bool AttackType, Ability ActiveAbility) {
         this.x = x;
         this.y = y;
         this.Hp = Hp;
         this.Stamina = Stamina;
         this.Damage = Damage;
+        this.AttackType = AttackType;
+        this.ActiveAbility = ActiveAbility;
     }
 }

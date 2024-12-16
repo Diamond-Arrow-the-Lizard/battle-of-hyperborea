@@ -10,3 +10,7 @@
 /home/d-arrow/programming/battle-of-hyperborea/Data/Entity/obj/Debug/net8.0/refint/Entity.dll
 /home/d-arrow/programming/battle-of-hyperborea/Data/Entity/obj/Debug/net8.0/Entity.pdb
 /home/d-arrow/programming/battle-of-hyperborea/Data/Entity/obj/Debug/net8.0/ref/Entity.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/obj/Debug/net8.0/Entity.csproj.AssemblyReference.cache
+/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/bin/Debug/net8.0/Ability.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/bin/Debug/net8.0/Ability.pdb
+/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/obj/Debug/net8.0/Entity.csproj.CopyComplete
