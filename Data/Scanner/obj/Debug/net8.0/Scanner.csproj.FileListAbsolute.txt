@@ -1,0 +1,12 @@
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.GeneratedMSBuildEditorConfig.editorconfig
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.AssemblyInfoInputs.cache
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.AssemblyInfo.cs
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.csproj.CoreCompileInputs.cache
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.sourcelink.json
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/bin/Debug/net8.0/Scanner.deps.json
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/bin/Debug/net8.0/Scanner.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/bin/Debug/net8.0/Scanner.pdb
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/refint/Scanner.dll
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/Scanner.pdb
+/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/Debug/net8.0/ref/Scanner.dll

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "6AnzK0Tufwl0eSYHZfOMhjJW8OBYph6w8KXv6o1sv8hL5IN1X/PZYAcW2x0xwXTcLUeCI3ivQCYIeUsDKKggnA==",
+  "success": true,
+  "projectFilePath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj",
+  "expectedPackageFiles": [
+    "/home/d-arrow/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}
