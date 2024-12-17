@@ -4,6 +4,7 @@
     <ProjectReference Include="..\Data\Entity\Entity.csproj" />
     <ProjectReference Include="..\Data\Ability\Ability.csproj" />
     <ProjectReference Include="..\Data\Tile\Tile.csproj" />
+    <ProjectReference Include="..\Data\Scanner\Scanner.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

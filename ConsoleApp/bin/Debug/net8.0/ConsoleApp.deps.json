@@ -10,6 +10,7 @@
         "dependencies": {
           "Ability": "1.0.0",
           "Entity": "1.0.0",
+          "Scanner": "1.0.0",
           "Tile": "1.0.0"
         },
         "runtime": {
@@ -27,6 +28,11 @@
         },
         "runtime": {
           "Entity.dll": {}
+        }
+      },
+      "Scanner/1.0.0": {
+        "runtime": {
+          "Scanner.dll": {}
         }
       },
       "Tile/1.0.0": {
@@ -48,6 +54,11 @@
       "sha512": ""
     },
     "Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Scanner/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

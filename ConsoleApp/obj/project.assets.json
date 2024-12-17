@@ -25,6 +25,16 @@
           "bin/placeholder/Entity.dll": {}
         }
       },
+      "Scanner/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Scanner.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Scanner.dll": {}
+        }
+      },
       "Tile/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -48,6 +58,11 @@
       "path": "../Data/Entity/Entity.csproj",
       "msbuildProject": "../Data/Entity/Entity.csproj"
     },
+    "Scanner/1.0.0": {
+      "type": "project",
+      "path": "../Data/Scanner/Scanner.csproj",
+      "msbuildProject": "../Data/Scanner/Scanner.csproj"
+    },
     "Tile/1.0.0": {
       "type": "project",
       "path": "../Data/Tile/Tile.csproj",
@@ -58,6 +73,7 @@
     "net8.0": [
       "Ability >= 1.0.0",
       "Entity >= 1.0.0",
+      "Scanner >= 1.0.0",
       "Tile >= 1.0.0"
     ]
   },
@@ -91,6 +107,9 @@
             },
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj"
+            },
+            "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj": {
+              "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj"
             },
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Tile/Tile.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Tile/Tile.csproj"

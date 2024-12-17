@@ -32,6 +32,9 @@
               "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj": {
                 "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj"
               },
+              "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj": {
+                "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj"
+              },
               "/home/d-arrow/programming/battle-of-hyperborea/Data/Tile/Tile.csproj": {
                 "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Tile/Tile.csproj"
               }
@@ -158,6 +161,65 @@
                 "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/Ability.csproj"
               }
             }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.10, 8.0.10]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj",
+        "projectName": "Scanner",
+        "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj",
+        "packagesPath": "/home/d-arrow/.nuget/packages/",
+        "outputPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/d-arrow/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
           }
         },
         "warningProperties": {

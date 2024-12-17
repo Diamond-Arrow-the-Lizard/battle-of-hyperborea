@@ -21,3 +21,5 @@
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/obj/Debug/net8.0/ConsoleApp.csproj.CopyComplete
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Tile.dll
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Tile.pdb
+/home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Scanner.dll
+/home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Scanner.pdb
