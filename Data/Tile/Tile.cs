@@ -1,4 +1,4 @@
-namespace Tile;
+namespace TileClass;
 
 ///<summary>
 /// ITile interface realisation

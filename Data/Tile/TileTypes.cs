@@ -1,4 +1,4 @@
-namespace Tile;
+namespace TileClass;
 ///<summary>
 /// enum for storing information
 /// whether the tile is empty or is occupied

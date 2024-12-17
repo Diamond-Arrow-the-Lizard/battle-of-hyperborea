@@ -1,4 +1,4 @@
-﻿namespace Tile;
+﻿namespace TileClass;
 /// <summary>
 ///  Interface for a distinct tile
 /// </summary>
