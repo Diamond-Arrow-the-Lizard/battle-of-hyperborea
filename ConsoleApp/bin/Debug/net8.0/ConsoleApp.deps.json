@@ -9,6 +9,7 @@
       "ConsoleApp/1.0.0": {
         "dependencies": {
           "Ability": "1.0.0",
+          "Attack": "1.0.0",
           "Entity": "1.0.0",
           "Movement": "1.0.0",
           "Scanner": "1.0.0",
@@ -21,6 +22,14 @@
       "Ability/1.0.0": {
         "runtime": {
           "Ability.dll": {}
+        }
+      },
+      "Attack/1.0.0": {
+        "dependencies": {
+          "Entity": "1.0.0"
+        },
+        "runtime": {
+          "Attack.dll": {}
         }
       },
       "Entity/1.0.0": {
@@ -59,6 +68,11 @@
       "sha512": ""
     },
     "Ability/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Attack/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

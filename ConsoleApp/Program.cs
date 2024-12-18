@@ -4,6 +4,7 @@ using TileClass;
 using AbilityClass;
 using ScannerClass;
 using MovementClass;
+using AttackClass;
 
 namespace Main;
 public class Program {
@@ -63,8 +64,7 @@ public class Program {
             }
         }
         Console.WriteLine();
-
-
+        
 
         string[,] ScannedField = GraphicField;
 
@@ -141,6 +141,10 @@ public class Program {
             }
         }
         Console.WriteLine();
+
+        Console.WriteLine($"{Guy.Hp} {Guy.Stamina}");
+        Bandit.Attack(Guy);
+        Console.WriteLine($"{Guy.Hp} {Guy.Stamina}");
 
     }
     

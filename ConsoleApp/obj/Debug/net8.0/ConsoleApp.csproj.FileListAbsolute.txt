@@ -25,3 +25,5 @@
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Scanner.pdb
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Movement.dll
 /home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Movement.pdb
+/home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Attack.dll
+/home/d-arrow/programming/battle-of-hyperborea/ConsoleApp/bin/Debug/net8.0/Attack.pdb

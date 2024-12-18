@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "1YCFruIeXFLRUmA6V8jhqkWtVhhyVJovdrCmf26iLsuoE9KzO9OTdawkyfcRcpQSEZHSoY93+wha2QUBTHbZ/w==",
+  "success": true,
+  "projectFilePath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Attack/Attack.csproj",
+  "expectedPackageFiles": [
+    "/home/d-arrow/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -12,6 +12,19 @@
           "bin/placeholder/Ability.dll": {}
         }
       },
+      "Attack/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Entity": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Attack.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Attack.dll": {}
+        }
+      },
       "Entity/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -67,6 +80,11 @@
       "path": "../Data/Ability/Ability.csproj",
       "msbuildProject": "../Data/Ability/Ability.csproj"
     },
+    "Attack/1.0.0": {
+      "type": "project",
+      "path": "../Data/Attack/Attack.csproj",
+      "msbuildProject": "../Data/Attack/Attack.csproj"
+    },
     "Entity/1.0.0": {
       "type": "project",
       "path": "../Data/Entity/Entity.csproj",
@@ -91,6 +109,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Ability >= 1.0.0",
+      "Attack >= 1.0.0",
       "Entity >= 1.0.0",
       "Movement >= 1.0.0",
       "Scanner >= 1.0.0",
@@ -124,6 +143,9 @@
           "projectReferences": {
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/Ability.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Ability/Ability.csproj"
+            },
+            "/home/d-arrow/programming/battle-of-hyperborea/Data/Attack/Attack.csproj": {
+              "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Attack/Attack.csproj"
             },
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj"
