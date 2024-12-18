@@ -3,6 +3,7 @@ using EntityClass;
 using TileClass;
 using AbilityClass;
 using ScannerClass;
+using MovementClass;
 
 namespace Main;
 public class Program {
@@ -108,6 +109,41 @@ public class Program {
                 Console.Write(ScannedField[i, j]);
             }
         }
-    }
+        Console.WriteLine();
 
+        Bandit.Move(Field, 1, 2);
+        for(int i = 0; i < 5; i++) {
+            for(int j = 0; j < 5; j++) {
+                TileTypes Switcher = Field[i, j].tileType; 
+                switch (Switcher) {
+
+                    case TileTypes.Empty:
+                        GraphicField[i, j] = "O";
+                        break;
+                    case TileTypes.Obstacle:
+                        GraphicField[i, j] = "X";
+                        break;
+                    case TileTypes.Entity:
+                        GraphicField[i, j] = "T";
+                        break;
+                    default:
+                        Console.WriteLine("What?");
+                        break;
+                }
+
+            }
+
+        }
+        for(int i = 0; i < 5; i++) {
+            Console.WriteLine();
+            for(int j = 0; j < 5; j++) {
+                Console.Write(GraphicField[i, j]);
+            }
+        }
+        Console.WriteLine();
+
+
+
+    }
+    
 }

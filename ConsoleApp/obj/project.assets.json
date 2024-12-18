@@ -25,6 +25,20 @@
           "bin/placeholder/Entity.dll": {}
         }
       },
+      "Movement/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Entity": "1.0.0",
+          "Tile": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Movement.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Movement.dll": {}
+        }
+      },
       "Scanner/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -58,6 +72,11 @@
       "path": "../Data/Entity/Entity.csproj",
       "msbuildProject": "../Data/Entity/Entity.csproj"
     },
+    "Movement/1.0.0": {
+      "type": "project",
+      "path": "../Data/Movement/Movement.csproj",
+      "msbuildProject": "../Data/Movement/Movement.csproj"
+    },
     "Scanner/1.0.0": {
       "type": "project",
       "path": "../Data/Scanner/Scanner.csproj",
@@ -73,6 +92,7 @@
     "net8.0": [
       "Ability >= 1.0.0",
       "Entity >= 1.0.0",
+      "Movement >= 1.0.0",
       "Scanner >= 1.0.0",
       "Tile >= 1.0.0"
     ]
@@ -107,6 +127,9 @@
             },
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Entity/Entity.csproj"
+            },
+            "/home/d-arrow/programming/battle-of-hyperborea/Data/Movement/Movement.csproj": {
+              "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Movement/Movement.csproj"
             },
             "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj": {
               "projectPath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Scanner/Scanner.csproj"

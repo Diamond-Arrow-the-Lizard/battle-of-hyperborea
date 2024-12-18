@@ -10,6 +10,7 @@
         "dependencies": {
           "Ability": "1.0.0",
           "Entity": "1.0.0",
+          "Movement": "1.0.0",
           "Scanner": "1.0.0",
           "Tile": "1.0.0"
         },
@@ -28,6 +29,15 @@
         },
         "runtime": {
           "Entity.dll": {}
+        }
+      },
+      "Movement/1.0.0": {
+        "dependencies": {
+          "Entity": "1.0.0",
+          "Tile": "1.0.0"
+        },
+        "runtime": {
+          "Movement.dll": {}
         }
       },
       "Scanner/1.0.0": {
@@ -54,6 +64,11 @@
       "sha512": ""
     },
     "Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Movement/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
