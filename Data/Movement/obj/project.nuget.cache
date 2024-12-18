@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xir3OkoYrhMWyhF5OsrpYqAQJsh/x30CrCi75+G23md5GAbkBRXke3iIxtMoer5eWQONNRCH3b5jn5gYwcOapQ==",
+  "success": true,
+  "projectFilePath": "/home/d-arrow/programming/battle-of-hyperborea/Data/Movement/Movement.csproj",
+  "expectedPackageFiles": [
+    "/home/d-arrow/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.10/microsoft.aspnetcore.app.ref.8.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

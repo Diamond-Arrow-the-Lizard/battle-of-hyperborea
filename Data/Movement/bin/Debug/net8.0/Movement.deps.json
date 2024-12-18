@@ -1,0 +1,60 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Movement/1.0.0": {
+        "dependencies": {
+          "Entity": "1.0.0",
+          "Tile": "1.0.0"
+        },
+        "runtime": {
+          "Movement.dll": {}
+        }
+      },
+      "Ability/1.0.0": {
+        "runtime": {
+          "Ability.dll": {}
+        }
+      },
+      "Entity/1.0.0": {
+        "dependencies": {
+          "Ability": "1.0.0"
+        },
+        "runtime": {
+          "Entity.dll": {}
+        }
+      },
+      "Tile/1.0.0": {
+        "runtime": {
+          "Tile.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Movement/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Ability/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tile/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
