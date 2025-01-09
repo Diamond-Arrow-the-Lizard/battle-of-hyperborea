@@ -1,139 +1,68 @@
 namespace BoH.Models;
 
 using BoH.Interfaces;
+using System;
 
 /// <summary>
-/// Реализует игровое поле с размерами 10x10 и позволяет управлять юнитами, препятствиями и клетками.
+/// Реализация игрового поля.
 /// </summary>
-/// <example>
-/// Пример создания объекта игрового поля и установки юнитов:
-/// <code>
-/// var gameBoard = new GameBoard(); // Создание нового объекта игрового поля
-/// 
-/// // Устанавливаем юнит в клетку (2, 3)
-/// gameBoard[2, 3] = someUnit;
-/// 
-/// // Устанавливаем препятствие в клетку (5, 5)
-/// gameBoard.SetObstacle(5, 5);
-/// 
-/// // Проверяем тип клетки (5, 5)
-/// var cellType = gameBoard.GetCellType(5, 5); // Ожидаем CellType.Obstacle
-/// 
-/// // Проверяем доступность клетки (5, 5)
-/// bool isAvailable = gameBoard.IsCellAvailable(5, 5); // Ожидаем false, так как там препятствие
-/// </code>
-/// </example>
 public class GameBoard : IGameBoard
 {
-    private readonly IUnit?[,] _units;      // Массив для хранения юнитов на поле
-    private readonly CellType[,] _cellTypes; // Массив для типов клеток (пусто, юнит, препятствие)
-
     /// <summary>
     /// Размер игрового поля по ширине (количество столбцов).
     /// </summary>
-    public int Width { get; } = 10;
+    public int Width { get; }
 
     /// <summary>
     /// Размер игрового поля по высоте (количество строк).
     /// </summary>
-    public int Height { get; } = 10;
+    public int Height { get; }
 
     /// <summary>
-    /// Конструктор класса GameBoard, инициализирует поле размером 10x10, заполняя его пустыми клетками.
+    /// Двумерный массив клеток, представляющих игровое поле.
     /// </summary>
-    public GameBoard()
-    {
-        _units = new IUnit?[Width, Height];
-        _cellTypes = new CellType[Width, Height];
+    public ICell[,] Cells { get; }
 
-        // Инициализация поля пустыми клетками
-        for (int x = 0; x < Width; x++)
+    /// <summary>
+    /// Инициализирует новый экземпляр игрового поля с заданными размерами.
+    /// </summary>
+    /// <param name="width">Ширина игрового поля (количество столбцов).</param>
+    /// <param name="height">Высота игрового поля (количество строк).</param>
+    /// <exception cref="ArgumentOutOfRangeException">Выбрасывается, если ширина или высота меньше 1.</exception>
+    public GameBoard(int width, int height)
+    {
+        if (width < 1 || height < 1)
         {
-            for (int y = 0; y < Height; y++)
+            throw new ArgumentOutOfRangeException("Размеры игрового поля должны быть больше нуля.");
+        }
+
+        Width = width;
+        Height = height;
+        Cells = new ICell[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
             {
-                _cellTypes[x, y] = CellType.Empty;
+                Cells[x, y] = new Cell((x, y));
             }
         }
     }
 
     /// <summary>
-    /// Возвращает или задаёт объект (юнита), расположенный в указанной клетке игрового поля.
+    /// Проверяет, является ли ячейка доступной для перемещения.
     /// </summary>
-    /// <param name="x">Координата X (столбец).</param>
-    /// <param name="y">Координата Y (строка).</param>
-    /// <returns>Юнит в клетке или null, если клетка пуста.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Если координаты выходят за пределы поля.</exception>
-    /// <exception cref="InvalidOperationException">Если пытаются поместить юнит на клетку с препятствием.</exception>
-    public IUnit? this[int x, int y]
-    {
-        get
-        {
-            ValidateCoordinates(x, y);
-            return _units[x, y];
-        }
-        set
-        {
-            ValidateCoordinates(x, y);
-
-            // Нельзя разместить юнит в клетке с препятствием
-            if (_cellTypes[x, y] == CellType.Obstacle)
-                throw new InvalidOperationException("Нельзя разместить юнит на клетке с препятствием.");
-
-            _units[x, y] = value;
-            _cellTypes[x, y] = value != null ? CellType.Unit : CellType.Empty;
-        }
-    }
-
-    /// <summary>
-    /// Возвращает тип содержимого клетки по координатам.
-    /// </summary>
-    /// <param name="x">Координата X (столбец).</param>
-    /// <param name="y">Координата Y (строка).</param>
-    /// <returns>Тип содержимого клетки (пусто, юнит, препятствие).</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Если координаты выходят за пределы поля.</exception>
-    public CellType GetCellType(int x, int y)
-    {
-        ValidateCoordinates(x, y);
-        return _cellTypes[x, y];
-    }
-
-    /// <summary>
-    /// Проверяет, является ли клетка доступной для перемещения.
-    /// Клетка считается доступной, если она пуста или на ней стоит юнит.
-    /// </summary>
-    /// <param name="x">Координата X (столбец).</param>
-    /// <param name="y">Координата Y (строка).</param>
-    /// <returns>True, если клетка доступна для перемещения (пустая или с юнитом); иначе false.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Если координаты выходят за пределы поля.</exception>
+    /// <param name="x">Координата X.</param>
+    /// <param name="y">Координата Y.</param>
+    /// <returns>true, если ячейка доступна для перемещения; иначе false.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Выбрасывается, если координаты выходят за пределы игрового поля.</exception>
     public bool IsCellAvailable(int x, int y)
     {
-        ValidateCoordinates(x, y);
-        return _cellTypes[x, y] == CellType.Empty || _cellTypes[x, y] == CellType.Unit;
-    }
-
-    /// <summary>
-    /// Проверяет, находятся ли координаты в пределах игрового поля.
-    /// </summary>
-    /// <param name="x">Координата X (столбец).</param>
-    /// <param name="y">Координата Y (строка).</param>
-    /// <exception cref="ArgumentOutOfRangeException">Если координаты выходят за пределы поля.</exception>
-    private void ValidateCoordinates(int x, int y)
-    {
         if (x < 0 || x >= Width || y < 0 || y >= Height)
-            throw new ArgumentOutOfRangeException($"Координаты ({x}, {y}) выходят за пределы игрового поля.");
-    }
+        {
+            throw new ArgumentOutOfRangeException("Координаты выходят за пределы игрового поля.");
+        }
 
-    /// <summary>
-    /// Устанавливает препятствие в указанной клетке.
-    /// Препятствие не может содержать юнита.
-    /// </summary>
-    /// <param name="x">Координата X (столбец).</param>
-    /// <param name="y">Координата Y (строка).</param>
-    /// <exception cref="ArgumentOutOfRangeException">Если координаты выходят за пределы поля.</exception>
-    public void SetObstacle(int x, int y)
-    {
-        ValidateCoordinates(x, y);
-        _cellTypes[x, y] = CellType.Obstacle;
-        _units[x, y] = null; // Препятствие не может содержать юнита
+        return !Cells[x, y].IsOccupied();
     }
 }
