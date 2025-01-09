@@ -1,67 +1,69 @@
 namespace BoH.Interfaces;
 
 /// <summary>
-/// Представляет юнита в игре с базовыми характеристиками и действиями.
+/// Интерфейс, представляющий боевого юнита.
 /// </summary>
 public interface IUnit
 {
     /// <summary>
-    /// Кортеж-текущая позиция юнита на игровом поле.
-    /// </summary>
-    /// <example>
-    /// (int X, int Y) position = (5, 10); // пример использования кортежа
-    /// </example>
-    public (int X, int Y) Position { get; set; }
-
-    /// <summary>
     /// Уникальный идентификатор юнита.
     /// </summary>
-    public string UnitId { get; }
+    string UnitId { get; }
 
     /// <summary>
     /// Название команды, которой принадлежит юнит.
     /// </summary>
-    public string Team { get; }
+    string Team { get; }
 
     /// <summary>
     /// Иконка, представляющая юнита на игровом поле.
     /// </summary>
-    public char Icon { get; set; }
+    char Icon { get; set; }
 
     /// <summary>
     /// Текущее количество очков здоровья юнита.
     /// </summary>
-    public int Hp { get; set; }
+    int Hp { get; set; }
 
     /// <summary>
     /// Скорость передвижения юнита (количество клеток за ход).
     /// </summary>
-    public int Speed { get; set; }
+    int Speed { get; set; }
 
     /// <summary>
     /// Урон, наносимый юнитом при атаке.
     /// </summary>
-    public int Damage { get; set; }
+    int Damage { get; set; }
 
     /// <summary>
     /// Значение защиты юнита, уменьшающее входящий урон.
     /// </summary>
-    public int Defence { get; set; }
+    int Defence { get; set; }
 
     /// <summary>
     /// Тип или класс юнита (например, пехота, танк и т.д.).
     /// </summary>
-    public UnitType UnitType { get; }
+    UnitType UnitType { get; }
 
     /// <summary>
     /// Показывает, находится ли юнит в состоянии оглушения или не может выполнять действия.
     /// </summary>
-    public bool IsStunned { get; set; }
+    bool IsStunned { get; set; }
+
+    /// <summary>
+    /// Показывает, жив ли юнит.
+    /// </summary>
+    bool IsDead { get; }
 
     /// <summary>
     /// Коллекция способностей, которыми обладает юнит.
     /// </summary>
-    public List<IAbility> Abilities { get; }
+    List<IAbility> Abilities { get; }
+
+    /// <summary>
+    /// Текущая позиция юнита на игровом поле.
+    /// </summary>
+    (int X, int Y) Position { get; set; }
 
     /// <summary>
     /// Применяет урон к юниту, уменьшая его очки здоровья.
@@ -70,14 +72,37 @@ public interface IUnit
     void TakeDamage(int amount);
 
     /// <summary>
-    /// Перемещает юнита в новую позицию на игровом поле.
+    /// Применяет лечение, увеличивая очки здоровья юнита.
     /// </summary>
-    /// <param name="newPosition">Новая позиция, в которую нужно переместить юнита.</param>
+    /// <param name="amount">Количество восстанавливаемого здоровья.</param>
+    void Heal(int amount);
+
+    /// <summary>
+    /// Перемещает юнита на игровом поле.
+    /// </summary>
+    /// <param name="newPosition">Новая позиция юнита.</param>
     void Move((int X, int Y) newPosition);
 
     /// <summary>
-    /// Вычисляет количество урона, который юнит наносит при атаке.
+    /// Проверяет, может ли юнит переместиться.
     /// </summary>
-    /// <returns>Вычисленный урон.</returns>
+    /// <returns>true, если перемещение возможно; иначе false.</returns>
+    bool CanMove();
+
+    /// <summary>
+    /// Вычисляет урон от атаки юнита.
+    /// </summary>
+    /// <returns>Значение урона.</returns>
     int CalculateAttackDamage();
+
+    /// <summary>
+    /// Выполняет атаку по другому юниту.
+    /// </summary>
+    /// <param name="target">Целевой юнит для атаки.</param>
+    void Attack(IUnit target);
+
+    /// <summary>
+    /// Событие, вызываемое при смерти юнита.
+    /// </summary>
+    event Action<IUnit> OnDeath;
 }
