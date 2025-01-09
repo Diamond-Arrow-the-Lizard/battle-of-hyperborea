@@ -1,5 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Interfaces\Interfaces.csproj" />
+    <ProjectReference Include="..\Core\Models\Models.csproj" />
+    <ProjectReference Include="..\Core\GameLogic\GameLogic.csproj" />
+    <ProjectReference Include="..\Core\Abilities\Abilities.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
