@@ -51,7 +51,7 @@ public interface IUnit
     /// <summary>
     /// Тип или класс юнита (например, пехота, танк и т.д.).
     /// </summary>
-    public string UnitType { get; }
+    public UnitType UnitType { get; }
 
     /// <summary>
     /// Показывает, находится ли юнит в состоянии оглушения или не может выполнять действия.
