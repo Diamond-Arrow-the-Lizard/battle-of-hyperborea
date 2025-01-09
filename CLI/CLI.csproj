@@ -6,6 +6,7 @@
     <ProjectReference Include="..\Core\GameLogic\GameLogic.csproj" />
     <ProjectReference Include="..\Core\Abilities\Abilities.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Core\Units\Units.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
