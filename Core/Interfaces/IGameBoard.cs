@@ -21,6 +21,15 @@ public interface IGameBoard
     ICell[,] Cells { get; }
 
     /// <summary>
+    /// Индексатор для получения клетки игрового поля по указанным координатам.
+    /// </summary>
+    /// <param name="x">Координата X.</param>
+    /// <param name="y">Координата Y.</param>
+    /// <returns>Клетка игрового поля по указанным координатам.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Выбрасывается, если координаты выходят за пределы игрового поля.</exception>
+    ICell this[int x, int y] { get; }
+
+    /// <summary>
     /// Проверяет, является ли ячейка доступной для перемещения.
     /// </summary>
     /// <param name="x">Координата X.</param>
