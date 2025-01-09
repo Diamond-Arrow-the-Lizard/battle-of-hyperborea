@@ -16,7 +16,12 @@ public interface IUnit
     /// <summary>
     /// Уникальный идентификатор юнита.
     /// </summary>
-    public string Id { get; }
+    public string UnitId { get; }
+
+    /// <summary>
+    /// Идентификатор игрока, которому принадлежит юнит.
+    /// </summary>
+    public string OwnerId { get; }
 
     /// <summary>
     /// Иконка, представляющая юнита на игровом поле.
@@ -47,11 +52,6 @@ public interface IUnit
     /// Тип или класс юнита (например, пехота, танк и т.д.).
     /// </summary>
     public string UnitType { get; }
-
-    /// <summary>
-    /// Идентификатор игрока, которому принадлежит юнит.
-    /// </summary>
-    public string OwnerId { get; }
 
     /// <summary>
     /// Показывает, находится ли юнит в состоянии оглушения или не может выполнять действия.
