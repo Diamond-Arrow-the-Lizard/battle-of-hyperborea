@@ -2,6 +2,7 @@
 
 using BoH.Interfaces;
 using BoH.Models;
+using BoH.Units;
 
 public class Program
 {
@@ -14,13 +15,15 @@ public class Program
             for (int j = 0; j < 10; j++)
             {
                 var currentCell = gameBoard[i, j];
+                IUnit unit = new BaseUnit();
+                currentCell.Content = unit;
                 if (currentCell.Content == null)
                 {
                     Console.Write("O ");
                 }
-                else if (currentCell.Content.GetType() == typeof(IUnit))
+                else if (currentCell.Content.GetType() == typeof(BaseUnit))
                 {
-                    Console.Write("T ");
+                    Console.Write($"{unit.Icon} ");
                 }
             }
         }
