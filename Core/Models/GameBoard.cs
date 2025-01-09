@@ -24,6 +24,25 @@ public class GameBoard : IGameBoard
     public ICell[,] Cells { get; }
 
     /// <summary>
+    /// Индексатор для доступа к клетке игрового поля по координатам.
+    /// </summary>
+    /// <param name="x">Координата X.</param>
+    /// <param name="y">Координата Y.</param>
+    /// <returns>Клетка игрового поля по указанным координатам.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Выбрасывается, если координаты выходят за пределы игрового поля.</exception>
+    public ICell this[int x, int y]
+    {
+        get
+        {
+            if (x < 0 || x >= Width || y < 0 || y >= Height)
+            {
+                throw new ArgumentOutOfRangeException("Координаты выходят за пределы игрового поля.");
+            }
+            return Cells[x, y];
+        }
+    }
+
+    /// <summary>
     /// Инициализирует новый экземпляр игрового поля с заданными размерами.
     /// </summary>
     /// <param name="width">Ширина игрового поля (количество столбцов).</param>
