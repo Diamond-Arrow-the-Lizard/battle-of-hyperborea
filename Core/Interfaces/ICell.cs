@@ -1,5 +1,6 @@
 namespace BoH.Interfaces;
 
+
 /// <summary>
 /// Представляет клетку игрового поля.
 /// </summary>
@@ -30,4 +31,5 @@ public interface ICell
     /// Очищает клетку, устанавливая её тип как пустой и удаляя содержимое.
     /// </summary>
     void Clear();
+
 }
