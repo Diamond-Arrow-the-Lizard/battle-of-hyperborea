@@ -25,7 +25,22 @@ public class BaseUnit : IUnit
     /// <summary>
     /// Иконка, представляющая юнита на игровом поле.
     /// </summary>
-    public char Icon { get; set; } = 'T';
+    /// <exception cref="ArgumentException">
+    /// Выбрасывается, если символ некорректен (например, не является печатным).
+    /// </exception>
+    public char Icon
+    {
+        get => _icon;
+        set
+        {
+            if (!char.IsLetterOrDigit(value) && !char.IsSymbol(value) && !char.IsPunctuation(value))
+            {
+                throw new ArgumentException("Иконка препятствия должна быть печатным символом.");
+            }
+            _icon = value;
+        }
+    }
+    private char _icon;
 
     /// <summary>
     /// Текущее количество очков здоровья юнита.
@@ -38,9 +53,9 @@ public class BaseUnit : IUnit
     public int Speed { get; set; } = 3;
 
     /// <summary>
-    /// Урон, наносимый юнитом при атаке.
+    /// Текущее количество очков здоровья юнита.
     /// </summary>
-    public int Damage { get; set; } = 10;
+    public int DamageDices { get; set; } = 3;
 
     /// <summary>
     /// Значение защиты юнита, уменьшающее входящий урон.
@@ -76,6 +91,16 @@ public class BaseUnit : IUnit
     /// Событие, вызываемое при смерти юнита.
     /// </summary>
     public event Action<IUnit>? OnDeath;
+
+    /// <summary>
+    /// Инициализирует новый экземпляр препятствия с автоматически сгенерированным идентификатором.
+    /// </summary>
+    /// <param name="icon">Иконка препятствия (необязательный параметр, по умолчанию 'B').</param>
+    public BaseUnit(char icon = 'T')
+    {
+        UnitId = Guid.NewGuid().ToString();
+        Icon = icon;
+    }
 
     /// <summary>
     /// Применяет урон к юниту, уменьшая его очки здоровья.
@@ -131,7 +156,20 @@ public class BaseUnit : IUnit
     /// Вычисляет урон от атаки юнита.
     /// </summary>
     /// <returns>Значение урона. Если юнит мёртв, возвращает 0.</returns>
-    public int CalculateAttackDamage() => IsDead ? 0 : Damage;
+    public int CalculateAttackDamage()
+    {
+        if(!IsDead)
+        {
+            int calculatedDamage = 0;
+            Random rnd = new();
+            for(int i = 0; i < DamageDices; i++)
+            {
+                calculatedDamage += rnd.Next(1, 7);
+            }
+            return calculatedDamage;
+        }
+        else return 0;
+    } 
 
     /// <summary>
     /// Выполняет атаку по другому юниту.
