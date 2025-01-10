@@ -2,6 +2,7 @@ namespace BoH.GameLogic;
 
 using System.Collections.Generic;
 using BoH.Interfaces;
+using BoH.Models;
 
 /// <summary>
 /// Реализация сканера, который определяет клетки в радиусе вокруг заданной клетки.
@@ -56,10 +57,12 @@ public class Scanner : IScanner
         {
             for (int j = y - Range; j <= y + Range; j++)
             {
-                if (i >= 0 && i < gameBoard.Width && j >= 0 && j < gameBoard.Height && gameBoard[i, j].CellType != CellType.Obstacle)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                if (i >= 0 && i < gameBoard.Width && j >= 0 && j < gameBoard.Height && gameBoard[i, j].Content.GetType() != typeof(Obstacle))
                 {
                     scannedCells.Add(gameBoard[i, j]);
                 }
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
 
