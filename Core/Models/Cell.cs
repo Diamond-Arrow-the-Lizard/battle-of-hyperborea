@@ -8,11 +8,6 @@ using BoH.Interfaces;
 public class Cell : ICell
 {
     /// <summary>
-    /// Тип содержимого клетки (пусто, препятствие, юнит).
-    /// </summary>
-    public CellType CellType { get; set; } = CellType.Empty;
-
-    /// <summary>
     /// Позиция клетки на игровом поле.
     /// </summary>
     public (int X, int Y) Position { get; }
@@ -33,7 +28,6 @@ public class Cell : ICell
     /// </summary>
     public void Clear()
     {
-        CellType = CellType.Empty;
         Content = null;
     }
 

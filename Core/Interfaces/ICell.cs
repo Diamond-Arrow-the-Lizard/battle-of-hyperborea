@@ -7,11 +7,6 @@ namespace BoH.Interfaces;
 public interface ICell
 {
     /// <summary>
-    /// Тип содержимого клетки (пусто, препятствие, юнит).
-    /// </summary>
-    CellType CellType { get; set; }
-
-    /// <summary>
     /// Позиция клетки на игровом поле.
     /// </summary>
     (int X, int Y) Position { get; }
