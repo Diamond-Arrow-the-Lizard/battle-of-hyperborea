@@ -10,26 +10,27 @@ public static class GameBoardRenderer
         for (int x = 0; x < board.Width; x++)
         {
             Console.WriteLine();
-            /* //TODO need to refactor
             for (int y = 0; y < board.Width; y++)
             {
-                switch(board[x, y].CellType)
+                var cellContent = board[x, y].Content;
+                
+                if (cellContent is null)
                 {
-                    case CellType.Empty:
-                    Console.Write("O ");
-                    break;
-
-                    case CellType.Obstacle:
-                    Console.Write("B ");
-                    break;
-
-                    case CellType.Unit:
-                    Console.Write($"T ");
-                    break;
+                    Console.Write("O "); // Пустая клетка
                 }
-
+                else if (cellContent is Obstacle)
+                {
+                    Console.Write("B "); // Препятствие
+                }
+                else if (cellContent is IUnit unit)
+                {
+                    Console.Write($"{unit.Icon} "); // Используем свойство Icon интерфейса
+                }
+                else
+                {
+                    Console.Write("? "); // Непредвиденный случай
+                }
             }
-            */
         }
     }
 }
