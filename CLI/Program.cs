@@ -8,7 +8,16 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        GameBoard gameBoard = new(10, 10);
-        GameBoardRenderer.DrawBoard(gameBoard);
+        var board = new GameBoard(5, 5);
+
+        // Заполнение игрового поля
+        board[0, 0].Content = new Obstacle();
+        board[1, 1].Content = new BaseUnit('A'); // Юнит с иконкой 'A'
+        board[1, 4].Content = new BaseUnit(); // Юнит с иконкой 'T'
+        board[2, 2].Content = null; // Пустая клетка
+
+        // Рендеринг игрового поля
+        GameBoardRenderer.DrawBoard(board);
+
     }
 }
