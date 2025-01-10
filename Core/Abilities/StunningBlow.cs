@@ -18,7 +18,7 @@ public class StunningBlow : IAbility
     /// <summary>
     /// Краткое описание способности.
     /// </summary>
-    public string Description { get; } = "Оглушает противника при ударе.";
+    public string Description { get; } = "Оглушает противника при ударе. Бросается только один кубик";
 
     /// <summary>
     /// Указывает, является ли способность активной (требует действия для использования) 
