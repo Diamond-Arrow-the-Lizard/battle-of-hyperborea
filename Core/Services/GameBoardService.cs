@@ -4,8 +4,12 @@ using BoH.Interfaces;
 using BoH.Models;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Сервис для управления игровым полем.
+/// </summary>
 public class GameBoardService : IGameBoardService
 {
+    /// <inheritdoc/>
     public IGameBoard GenerateGameBoard(int width, int length)
     {
         // TODO случайная герерация препятствий
@@ -13,30 +17,35 @@ public class GameBoardService : IGameBoardService
         return gameBoard;
     }
 
-    public void AddObjectToGameBoard(Object? obj, ICell cell)
+    /// <inheritdoc/>
+    public void AddObjectToGameBoard(object? obj, ICell cell)
     {
-        if(obj == null) return;
+        if (obj == null) return;
         cell.Content = obj;
     }
 
-    public void RemoveObjectFromGameBoard(Object? obj, ICell cell)
+    /// <inheritdoc/>
+    public void RemoveObjectFromGameBoard(object? obj, ICell cell)
     {
-        if(obj == null) return;
+        if (obj == null) return;
         cell.Content = null;
     }
 
+    /// <inheritdoc/>
     public async Task SaveGameBoardAsync()
     {
         // TODO
         await Task.Delay(0);
     }
 
+    /// <inheritdoc/>
     public async Task LoadGameBoardAsync()
     {
         // TODO
         await Task.Delay(0);
     }
 
+    /// <inheritdoc/>
     public async Task DeleteGameBoardAsync()
     {
         // TODO
