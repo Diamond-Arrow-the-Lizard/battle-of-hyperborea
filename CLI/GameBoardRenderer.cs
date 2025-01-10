@@ -12,9 +12,20 @@ public static class GameBoardRenderer
             Console.WriteLine();
             for (int y = 0; y < board.Width; y++)
             {
-                if(board.Cells[x, y].Content == null)
+                switch(board[x, y].CellType)
                 {
+                    case CellType.Empty:
                     Console.Write("O ");
+                    break;
+
+                    case CellType.Obstacle:
+                    Console.Write("B ");
+                    break;
+
+                    case CellType.Unit:
+                    //TODO
+                    Console.Write($"T ");
+                    break;
                 }
 
             }
