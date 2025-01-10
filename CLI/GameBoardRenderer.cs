@@ -18,13 +18,13 @@ public static class GameBoardRenderer
                 {
                     Console.Write("O "); // Пустая клетка
                 }
-                else if (cellContent is Obstacle)
+                else if (cellContent is Obstacle obstacle)
                 {
-                    Console.Write("B "); // Препятствие
+                    Console.Write($"{obstacle.Icon} "); // Препятствие
                 }
                 else if (cellContent is IUnit unit)
                 {
-                    Console.Write($"{unit.Icon} "); // Используем свойство Icon интерфейса
+                    Console.Write($"{unit.Icon} "); // Юнит 
                 }
                 else
                 {
