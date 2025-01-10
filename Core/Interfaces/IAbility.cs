@@ -8,7 +8,7 @@ public interface IAbility
     /// <summary>
     /// Уникальный идентификатор способности.
     /// </summary>
-    public string Id { get; }
+    public string AbilityId { get; }
 
     /// <summary>
     /// Название способности.
