@@ -1,4 +1,4 @@
-namespace BoH.Models;
+namespace BoH.GameLogic;
 
 using System.Collections.Generic;
 using BoH.Interfaces;
