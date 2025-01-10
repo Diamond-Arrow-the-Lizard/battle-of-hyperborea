@@ -13,23 +13,16 @@ public static class GameBoardRenderer
             for (int y = 0; y < board.Width; y++)
             {
                 var cellContent = board[x, y].Content;
+
+                char symbol = cellContent switch
+                {
+                    null => '0',
+                    Obstacle obstacle => obstacle.Icon,
+                    IUnit unit => unit.Icon,
+                    _ => '?'
+                };
+                Console.Write($"{symbol} ");
                 
-                if (cellContent is null)
-                {
-                    Console.Write("O "); // Пустая клетка
-                }
-                else if (cellContent is Obstacle obstacle)
-                {
-                    Console.Write($"{obstacle.Icon} "); // Препятствие
-                }
-                else if (cellContent is IUnit unit)
-                {
-                    Console.Write($"{unit.Icon} "); // Юнит 
-                }
-                else
-                {
-                    Console.Write("? "); // Непредвиденный случай
-                }
             }
         }
     }
