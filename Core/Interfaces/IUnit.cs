@@ -31,9 +31,9 @@ public interface IUnit
     int Speed { get; set; }
 
     /// <summary>
-    /// Урон, наносимый юнитом при атаке.
+    /// Количество бросаемых кубов, бросаемых при атаке (D6).
     /// </summary>
-    int Damage { get; set; }
+    int DamageDices { get; set; }
 
     /// <summary>
     /// Значение защиты юнита, уменьшающее входящий урон.
