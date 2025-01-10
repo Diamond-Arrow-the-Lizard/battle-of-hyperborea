@@ -10,6 +10,7 @@ public static class GameBoardRenderer
         for (int x = 0; x < board.Width; x++)
         {
             Console.WriteLine();
+            /* //TODO need to refactor
             for (int y = 0; y < board.Width; y++)
             {
                 switch(board[x, y].CellType)
@@ -23,12 +24,12 @@ public static class GameBoardRenderer
                     break;
 
                     case CellType.Unit:
-                    //TODO
                     Console.Write($"T ");
                     break;
                 }
 
             }
+            */
         }
     }
 }
