@@ -11,6 +11,11 @@ public interface IUnit
     string UnitId { get; }
 
     /// <summary>
+    /// Имя юнита.
+    /// </summary>
+    string UnitName { get; }
+
+    /// <summary>
     /// Название команды, которой принадлежит юнит.
     /// </summary>
     string Team { get; }
