@@ -10,7 +10,7 @@ public class BaseUnit : IUnit
     /// <summary>
     /// Максимально возможное здоровье юнита.
     /// </summary>
-    private readonly int _maxHealth = 100;
+    private int _maxHealth = 100;
 
     /// <summary>
     /// Уникальный идентификатор юнита.
@@ -93,12 +93,16 @@ public class BaseUnit : IUnit
     public event Action<IUnit>? OnDeath;
 
     /// <summary>
-    /// Инициализирует новый экземпляр препятствия с автоматически сгенерированным идентификатором.
+    /// Инициализирует новый экземпляр препятствия.
     /// </summary>
     /// <param name="icon">Иконка препятствия (необязательный параметр, по умолчанию 'B').</param>
-    public BaseUnit(char icon = 'T')
+    /// <param name="team">Фракция юнита (необязательный параметр, по умолчанию "Dev").</param>
+    /// <param name="type">Тип атаки персонажа (необязательный параметр, по умолчанию Melee).</param>
+    public BaseUnit(char icon = 'T', string team = "Dev", UnitType type = UnitType.Melee)
     {
         UnitId = Guid.NewGuid().ToString();
+        UnitType = type;
+        Team = team;
         Icon = icon;
     }
 
