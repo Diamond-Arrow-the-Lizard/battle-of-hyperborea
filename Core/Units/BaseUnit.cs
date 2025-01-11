@@ -10,7 +10,7 @@ public class BaseUnit : IUnit
     /// <summary>
     /// Максимально возможное здоровье юнита.
     /// </summary>
-    private int _maxHealth = 100;
+    protected virtual int MaxHealth { get; } = 100;
 
     /// <summary>
     /// Уникальный идентификатор юнита.
@@ -134,7 +134,7 @@ public class BaseUnit : IUnit
     {
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может быть вылечен.");
 
-        Hp = Math.Min(_maxHealth, Hp + amount); 
+        Hp = Math.Min(MaxHealth, Hp + amount);
     }
 
     /// <summary>
@@ -162,18 +162,18 @@ public class BaseUnit : IUnit
     /// <returns>Значение урона. Если юнит мёртв, возвращает 0.</returns>
     public int CalculateAttackDamage()
     {
-        if(!IsDead)
+        if (!IsDead)
         {
             int calculatedDamage = 0;
             Random rnd = new();
-            for(int i = 0; i < DamageDices; i++)
+            for (int i = 0; i < DamageDices; i++)
             {
                 calculatedDamage += rnd.Next(1, 7);
             }
             return calculatedDamage;
         }
         else return 0;
-    } 
+    }
 
     /// <summary>
     /// Выполняет атаку по другому юниту.
