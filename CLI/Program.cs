@@ -8,13 +8,20 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var board = new GameBoard(5, 5);
+        var board = new GameBoard(10, 10);
 
-        // Заполнение игрового поля
         board[0, 0].Content = new Obstacle();
-        board[1, 1].Content = new BaseUnit('A'); // Юнит с иконкой 'A'
-        board[1, 4].Content = new BaseUnit(); // Юнит с иконкой 'T'
-        board[2, 2].Content = null; // Пустая клетка
+
+        var archer = new RusArcher();
+        var warrior = new RusWarrior();
+        board[3, 3].Content = archer;
+        board[4, 5].Content = warrior;
+
+        Console.WriteLine(warrior.Abilities[0].Activate(warrior, archer));
+        Console.WriteLine(archer.Hp);
+        Console.WriteLine(archer.IsStunned);
+        Console.WriteLine(archer.Abilities[0].Activate(archer));
+        Console.WriteLine(archer.Hp);
 
         // Рендеринг игрового поля
         GameBoardRenderer.DrawBoard(board);
