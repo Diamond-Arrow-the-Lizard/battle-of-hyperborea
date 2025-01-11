@@ -7,20 +7,16 @@ public static class GameBoardRenderer
 {
     public static void DrawBoard(GameBoard board)
     {
-        // Верхняя граница
-        Console.Write("╔");
+        // Рендерим верхнюю границу поля
         for (int x = 0; x < board.Width; x++)
         {
-            Console.Write("═");
-            if (x < board.Width - 1)
-                Console.Write("╦");
+            Console.Write(x == 0 ? "╔═══" : "╦═══");
         }
         Console.WriteLine("╗");
 
-        // Рисуем строки игрового поля
         for (int y = 0; y < board.Height; y++)
         {
-            Console.Write("║");
+            // Рендерим содержимое строк
             for (int x = 0; x < board.Width; x++)
             {
                 var cellContent = board[x, y].Content;
@@ -32,32 +28,28 @@ public static class GameBoardRenderer
                     IUnit unit => unit.Icon,
                     _ => '?'
                 };
-                Console.Write($"{symbol}║");
-            }
-            Console.WriteLine();
 
-            // Горизонтальная разделительная линия (кроме последней строки)
-            if (y < board.Height - 1)
+                Console.Write(x == 0 ? $"║ {symbol} " : $"║ {symbol} ");
+            }
+            Console.WriteLine("║");
+
+            // Рендерим соединительную или нижнюю границу
+            if (y < board.Height - 1) // Если не последняя строка
             {
-                Console.Write("╠");
                 for (int x = 0; x < board.Width; x++)
                 {
-                    Console.Write("═");
-                    if (x < board.Width - 1)
-                        Console.Write("╬");
+                    Console.Write(x == 0 ? "╠═══" : "╬═══");
                 }
                 Console.WriteLine("╣");
             }
+            else // Для последней строки
+            {
+                for (int x = 0; x < board.Width; x++)
+                {
+                    Console.Write(x == 0 ? "╚═══" : "╩═══");
+                }
+                Console.WriteLine("╝");
+            }
         }
-
-        // Нижняя граница
-        Console.Write("╚");
-        for (int x = 0; x < board.Width; x++)
-        {
-            Console.Write("═");
-            if (x < board.Width - 1)
-                Console.Write("╩");
-        }
-        Console.WriteLine("╝");
     }
 }
