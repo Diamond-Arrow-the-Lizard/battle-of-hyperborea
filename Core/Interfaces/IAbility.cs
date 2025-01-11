@@ -27,7 +27,7 @@ public interface IAbility
     public bool IsActive { get; }
 
     /// <summary>
-    /// Выполняет способность, если она активная.
+    /// Выполняет способность.
     /// </summary>
     /// <param name="user">Юнит, использующий способность.</param>
     /// <param name="target">Целевой юнит или объект (опционально).</param>
