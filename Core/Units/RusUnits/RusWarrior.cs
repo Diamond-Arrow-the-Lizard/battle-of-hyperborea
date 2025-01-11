@@ -5,7 +5,7 @@ using BoH.Abilities;
 public class RusWarrior : BaseUnit
 {
     protected override int MaxHealth { get; } = 10;
-    public RusWarrior() : base('R', "Rus")
+    public RusWarrior() : base("Рус-Боец", 'R', "Rus")
     {
         Abilities.Add(new StunningBlow());
         Hp = MaxHealth;

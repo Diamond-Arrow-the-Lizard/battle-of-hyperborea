@@ -15,7 +15,12 @@ public class BaseUnit : IUnit
     /// <summary>
     /// Уникальный идентификатор юнита.
     /// </summary>
-    public string UnitId { get; } = Guid.NewGuid().ToString();
+    public string UnitId { get; }
+
+    /// <summary>
+    /// Имя юнита.
+    /// </summary>
+    public string UnitName { get; } = "Юнит";
 
     /// <summary>
     /// Название команды, которой принадлежит юнит.
@@ -98,8 +103,9 @@ public class BaseUnit : IUnit
     /// <param name="icon">Иконка препятствия (необязательный параметр, по умолчанию 'B').</param>
     /// <param name="team">Фракция юнита (необязательный параметр, по умолчанию "Dev").</param>
     /// <param name="type">Тип атаки персонажа (необязательный параметр, по умолчанию Melee).</param>
-    public BaseUnit(char icon = 'T', string team = "Dev", UnitType type = UnitType.Melee)
+    public BaseUnit(string unitName, char icon = 'T', string team = "Dev", UnitType type = UnitType.Melee)
     {
+        UnitName = unitName;
         UnitId = Guid.NewGuid().ToString();
         UnitType = type;
         Team = team;
