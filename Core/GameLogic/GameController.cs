@@ -13,7 +13,7 @@ public class GameController : IGameController
 {
     private readonly IGameBoardService _boardService;
     private IGameBoard? _gameBoard;
-    private readonly Dictionary<string, List<IUnit>> _teamUnits = new(); // Словарь юнитов по командам
+    private Dictionary<string, List<IUnit>> _teamUnits = new(); // Словарь юнитов по командам
     private int _currentTeamIndex = 0; // Индекс текущей команды
 
     public GameController(IGameBoardService boardService)
@@ -22,19 +22,18 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
-    public async Task StartGame(IGameBoard gameBoard, string[] teams)
+    /// <exception cref="ArgumentException"/>
+    public async Task StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits)
     {
-        if (teams == null || teams.Length < 2)
+        if (_teamUnits.Keys.Count != 2)
         {
-            throw new ArgumentException("Игра требует минимум две команды.");
+            throw new ArgumentException("Игра требует две команды.");
         }
 
-        _gameBoard = gameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
-        _teamUnits.Clear();
+        _teamUnits = teamUnits;
+        _gameBoard = _boardService.GenerateGameBoard(width, length, _teamUnits);
 
-        //TODO Инициализация юнитов для каждой команды
-
-        // Сохраняем начальное состояние игрового поля
+        await _boardService.DeleteGameBoardAsync();
         await _boardService.SaveGameBoardAsync();
 
         Console.WriteLine("Игра началась!");
