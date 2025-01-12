@@ -83,6 +83,11 @@ public class BaseUnit : IUnit
     public bool IsDead { get; private set; } = false;
 
     /// <summary>
+    /// Показывает, сделал ли ход юнит.
+    /// </summary>
+    public bool MadeTurn {get; set; } = true;
+
+    /// <summary>
     /// Коллекция способностей, которыми обладает юнит.
     /// </summary>
     public List<IAbility> Abilities { get; } = new();
