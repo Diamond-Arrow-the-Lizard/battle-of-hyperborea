@@ -45,19 +45,33 @@ public class Program
         Console.WriteLine("Unit positions:");
         // Позиции юнитов команды
         List<ICell> teamCells = [];
+        List<IUnit> teamUnitCells = [];
         for (int x = 0; x < board.Width; x++)
         {
             for (int y = 0; y < board.Height; y++)
             {
                 var currentCellContent = board[x, y].Content;
-                if(currentCellContent is IUnit unit)
+                if (currentCellContent is IUnit unit)
                 {
-                    if(unit.Team == teamNames[currentTeam])
-                    teamCells.Add(board[x, y]);
+                    if (unit.Team == teamNames[currentTeam])
+                    {
+                        teamCells.Add(board[x, y]);
+                        teamUnitCells.Add(unit);
+                        Console.WriteLine(unit.UnitName);
+                    }
                 }
             }
         }
-        foreach(var i in teamCells) Console.WriteLine(i.Position);
+
+        Dictionary<(int x, int y), IUnit> teamUnits = new Dictionary<(int, int), IUnit>();
+        for (int i = 0; i < teamCells.Count; i++)
+        {
+            teamUnits[teamCells[i].Position] = teamUnitCells[i];
+        }
+        foreach (var unit in teamUnits)
+        {
+            Console.WriteLine($"{unit.Value.UnitName} ({unit.Key.x};{unit.Key.y})");
+        }
 
         
 
