@@ -27,5 +27,6 @@ public class Program
         // Рендеринг игрового поля
         GameBoardRenderer.DrawBoard(board);
 
+        GameBoardRenderer.DrawBoard(board, board[board.Width-2, 0], lizWarrior.Speed);
     }
 }
