@@ -5,7 +5,7 @@ using BoH.Models;
 
 public static class GameBoardRenderer
 {
-    public static void DrawBoard(GameBoard board)
+    public static void DrawBoard(IGameBoard board)
     {
         // Рендерим верхнюю границу поля
         for (int x = 0; x < board.Width; x++)
