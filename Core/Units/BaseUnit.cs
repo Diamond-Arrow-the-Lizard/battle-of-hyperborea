@@ -90,7 +90,7 @@ public class BaseUnit : IUnit
     /// <summary>
     /// Показывает, сделал ли ход юнит.
     /// </summary>
-    public bool MadeTurn {get; set; } = true;
+    public bool MadeTurn {get; set; } = false;
 
     /// <summary>
     /// Коллекция способностей, которыми обладает юнит.
