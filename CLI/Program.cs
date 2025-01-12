@@ -6,277 +6,323 @@ using BoH.Models;
 using BoH.Units;
 using BoH.GameLogic;
 
-/// <summary>
-/// Главная точка входа в игру.
-/// </summary>
 public class Program
 {
-    /// <summary>
-    /// Основной метод программы, инициирующий игровой процесс.
-    /// </summary>
     public static async Task Main(string[] args)
     {
-        var service = new GameBoardService();
-        var gameController = new GameController(service);
-
+        GameBoardService service = new GameBoardService();
+        GameController gameController = new GameController(service);
         int currentTeam = 0;
-        var teams = InitializeTeams();
 
-        var board = gameController.StartGame(5, 5, teams);
+        Dictionary<string, List<IUnit>> teams = new Dictionary<string, List<IUnit>>();
+
+        int teamSize = GetTeamSize();
+        teams = SetupTeams(teamSize);
+
+        IGameBoard board = gameController.StartGame(8, 8, teams);
         GameBoardRenderer.DrawBoard(board);
 
         while (true)
         {
-            // Запрос на сохранение игры
-            if (await PromptSaveGame(service))
-                continue;
+            if (await HandleGameSave(service)) break;
 
-            // Проверка завершения игры
-            if (IsGameOver(teams, currentTeam))
+            List<string> teamNames = teams.Keys.ToList();
+            if (currentTeam == 2)
+            {
+                Console.WriteLine("Game ended.");
+                await gameController.EndGame();
                 break;
+            }
+            Console.WriteLine($"Current team: {teamNames[currentTeam]}");
 
-            // Исполнение хода команды
-            if (board is GameBoard gameBoard)
-                ExecuteTeamTurn(gameBoard, teams, gameController, ref currentTeam);
+            List<ICell> teamCells = GetTeamCells(teamNames[currentTeam], board);
+            List<IUnit> teamUnitCells = GetTeamUnits(teamCells);
+
+            Dictionary<(int x, int y), IUnit> teamUnits = MapUnitsToCells(teamCells, teamUnitCells);
+
+            while (true)
+            {
+                if (!HandleTurn(teamUnits, board)) break;
+
+                currentTeam = gameController.NextTurn();
+            }
         }
     }
 
-    /// <summary>
-    /// Инициализирует команды в игре на основе ввода пользователя.
-    /// Запрашивает размер команды и создаёт юнитов для каждой команды.
-    /// </summary>
-    /// <returns>Словарь команд, где ключ — это название команды, а значение — список юнитов.</returns>
-    private static Dictionary<string, List<IUnit>> InitializeTeams()
+    private static int GetTeamSize()
     {
-        var teams = new Dictionary<string, List<IUnit>>();
+        Console.WriteLine("Teams size: ");
+        return Convert.ToInt32(Console.ReadLine());
+    }
 
-        Console.WriteLine("Введите размер команды (1 - нормальная, 2 - большая):");
-        int teamSize = Convert.ToInt32(Console.ReadLine());
-
+    private static Dictionary<string, List<IUnit>> SetupTeams(int teamSize)
+    {
+        Dictionary<string, List<IUnit>> teams = new();
         switch (teamSize)
         {
             case 1:
-                Console.WriteLine("Выбрана нормальная команда.");
-                // Создание нормальной команды
+                Console.WriteLine("Normal");
                 teams["Rus"] = new List<IUnit> { new RusArcher(), new RusWarrior(), new RusWarrior() };
                 teams["Lizard"] = new List<IUnit> { new LizardArcher(), new LizardWarrior(), new LizardWarrior() };
                 break;
             case 2:
-                Console.WriteLine("Выбрана большая команда.");
-                // Создание большой команды
+                Console.WriteLine("Big");
                 teams["Rus"] = new List<IUnit> { new RusArcher(), new RusArcher(), new RusWarrior(), new RusWarrior(), new RusWarrior(), new RusWarrior() };
                 teams["Lizard"] = new List<IUnit> { new LizardArcher(), new LizardArcher(), new LizardWarrior(), new LizardWarrior(), new LizardWarrior(), new LizardWarrior() };
                 break;
             default:
-                throw new Exception("Недопустимый выбор.");
+                throw new Exception("Invalid choice");
         }
-
         return teams;
     }
 
-    /// <summary>
-    /// Запрашивает у пользователя, хочет ли он сохранить текущую игру.
-    /// </summary>
-    /// <param name="service">Сервис для сохранения состояния игры.</param>
-    /// <returns>Возвращает true, если пользователь выбрал сохранить игру, иначе false.</returns>
-    private static async Task<bool> PromptSaveGame(GameBoardService service)
+    private static async Task<bool> HandleGameSave(GameBoardService service)
     {
-        Console.WriteLine("Сохранить игру? (y/n)");
+        Console.WriteLine("Save Game? (y/n)");
         string? ans = Console.ReadLine();
-
-        if (ans != null && ans.ToLower() == "y")
+        if (ans != null && ans[0] == 'y')
         {
             await service.SaveGameBoardAsync();
-            Console.WriteLine("Игра сохранена.");
             return true;
         }
-
         return false;
     }
 
-    /// <summary>
-    /// Проверяет, завершена ли игра.
-    /// Игра считается завершённой, если все команды совершили свой ход.
-    /// </summary>
-    /// <param name="teams">Словарь команд.</param>
-    /// <param name="currentTeam">Индекс текущей команды, чей ход наступил.</param>
-    /// <returns>Возвращает true, если игра завершена, иначе false.</returns>
-    private static bool IsGameOver(Dictionary<string, List<IUnit>> teams, int currentTeam)
+    private static List<ICell> GetTeamCells(string teamName, IGameBoard board)
     {
-        if (currentTeam >= teams.Count)
-        {
-            Console.WriteLine("Игра завершена.");
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Исполняет ход текущей команды.
-    /// Выполняет действия для каждого юнита команды, пока все юниты не сделают ход.
-    /// </summary>
-    /// <param name="board">Игровое поле, представляющее текущее состояние игры.</param>
-    /// <param name="teams">Словарь команд.</param>
-    /// <param name="gameController">Контроллер игры, управляющий её логикой.</param>
-    /// <param name="currentTeam">Ссылка на индекс текущей команды.</param>
-    /// <returns>Асинхронная задача выполнения хода.</returns>
-    private static void ExecuteTeamTurn(GameBoard board, Dictionary<string, List<IUnit>> teams, GameController gameController, ref int currentTeam)
-    {
-        List<string> teamNames = teams.Keys.ToList();
-
-        Console.WriteLine($"Ход команды: {teamNames[currentTeam]}");
-
-        var teamUnits = GetTeamUnits(board, teamNames[currentTeam]);
-
-        while (true)
-        {
-            if (HandleUnitTurn(board, teamUnits, currentTeam, gameController))
-                break;
-        }
-
-        currentTeam = gameController.NextTurn();
-    }
-
-    /// <summary>
-    /// Получает всех юнитов, принадлежащих конкретной команде, с учётом их расположения на поле.
-    /// </summary>
-    /// <param name="board">Игровое поле.</param>
-    /// <param name="teamName">Название команды.</param>
-    /// <returns>Словарь, где ключ — это координаты на поле, а значение — это юнит.</returns>
-    private static Dictionary<(int x, int y), IUnit> GetTeamUnits(GameBoard board, string teamName)
-    {
-        var teamUnits = new Dictionary<(int x, int y), IUnit>();
-
+        List<ICell> teamCells = new();
         for (int x = 0; x < board.Width; x++)
         {
             for (int y = 0; y < board.Height; y++)
             {
-                var content = board[x, y].Content;
-                if (content is IUnit unit && unit.Team == teamName)
+                var currentCellContent = board[x, y].Content;
+                if (currentCellContent is IUnit unit && unit.Team == teamName)
                 {
-                    teamUnits[(x, y)] = unit;
+                    teamCells.Add(board[x, y]);
                 }
             }
         }
+        return teamCells;
+    }
 
+    private static List<IUnit> GetTeamUnits(List<ICell> teamCells)
+    {
+        List<IUnit> teamUnitCells = new();
+        foreach (var cell in teamCells)
+        {
+            if (cell.Content is IUnit unit)
+            {
+                teamUnitCells.Add(unit);
+            }
+        }
+        return teamUnitCells;
+    }
+
+    private static Dictionary<(int x, int y), IUnit> MapUnitsToCells(List<ICell> teamCells, List<IUnit> teamUnitCells)
+    {
+        Dictionary<(int x, int y), IUnit> teamUnits = new();
+        for (int i = 0; i < teamCells.Count; i++)
+        {
+            teamUnits[teamCells[i].Position] = teamUnitCells[i];
+        }
         return teamUnits;
     }
 
-    /// <summary>
-    /// Обрабатывает ход конкретного юнита, позволяя ему выполнить действия, такие как движение.
-    /// </summary>
-    /// <param name="board">Игровое поле.</param>
-    /// <param name="teamUnits">Словарь юнитов команды с координатами.</param>
-    /// <param name="currentTeam">Индекс текущей команды.</param>
-    /// <param name="gameController">Контроллер игры, управляющий её логикой.</param>
-    /// <returns>Возвращает true, если ход завершён, иначе false.</returns>
-    private static bool HandleUnitTurn(GameBoard board, Dictionary<(int x, int y), IUnit> teamUnits, int currentTeam, GameController gameController)
+    private static bool HandleTurn(Dictionary<(int x, int y), IUnit> teamUnits, IGameBoard board)
     {
-        var availableUnits = teamUnits.Where(unit => !unit.Value.MadeTurn).ToList();
-
-        if (!availableUnits.Any())
+        int availableUnits = 0;
+        Console.WriteLine("Available Units:");
+        foreach (var unit in teamUnits)
         {
-            Console.WriteLine("Нет доступных юнитов. Ход завершён.");
-            return true;
+            if (!unit.Value.MadeTurn)
+            {
+                ++availableUnits;
+                Console.WriteLine($"{unit.Value.UnitName} ({unit.Key.x};{unit.Key.y})");
+            }
+        }
+        if (availableUnits == 0)
+        {
+            Console.WriteLine("No units available, turn ends.");
+            return false;
         }
 
-        Console.WriteLine("Доступные юниты:");
-        foreach (var unit in availableUnits)
-        {
-            Console.WriteLine($"{unit.Value.UnitName} ({unit.Key.x}, {unit.Key.y}), HP: {unit.Value.Hp}, Speed: {unit.Value.Speed}, Range: {unit.Value.Range}");
-        }
+        return HandleUnitAction(teamUnits, board);
+    }
 
-        Console.WriteLine("Выберите юнита: Введите координаты.");
+    private static bool HandleUnitAction(Dictionary<(int x, int y), IUnit> teamUnits, IGameBoard board)
+    {
+        Console.WriteLine("Chosen Unit: ");
         Console.Write("X = ");
         int x = Convert.ToInt32(Console.ReadLine());
         Console.Write("Y = ");
         int y = Convert.ToInt32(Console.ReadLine());
-        var userInput = (x, y);
+        (int x, int y) userInput = (x, y);
 
         if (!teamUnits.ContainsKey(userInput))
         {
-            Console.WriteLine("Некорректные координаты. Повторите попытку.");
-            return false;
+            Console.WriteLine("Incorrect coordinates");
+            return true;
         }
 
-        var chosenUnit = teamUnits[userInput];
-
-        if (chosenUnit.MadeTurn)
+        var ChosenUnit = teamUnits[userInput];
+        if (ChosenUnit.MadeTurn)
         {
-            Console.WriteLine("Этот юнит уже сделал ход.");
-            return false;
+            Console.WriteLine("Unit has already made his turn");
+            return true;
         }
 
-        Console.WriteLine($"Выбран юнит: {chosenUnit.UnitName}, HP: {chosenUnit.Hp}, Speed: {chosenUnit.Speed}, Range: {chosenUnit.Range}");
-
-        return HandleUnitMovement(board, teamUnits, userInput, chosenUnit);
+        Console.WriteLine($"Chosen unit: {ChosenUnit.UnitName}");
+        return HandleUnitMoveAndAttack(ChosenUnit, board, userInput, teamUnits);
     }
 
-    /// <summary>
-    /// Обрабатывает перемещение выбранного юнита.
-    /// Позволяет выбрать координаты для движения юнита на поле.
-    /// </summary>
-    /// <param name="board">Игровое поле.</param>
-    /// <param name="teamUnits">Словарь юнитов команды с координатами.</param>
-    /// <param name="userInput">Координаты выбранного юнита.</param>
-    /// <param name="chosenUnit">Выбранный юнит.</param>
-    /// <returns>Возвращает true, если перемещение успешно, иначе false.</returns>
-    private static bool HandleUnitMovement(GameBoard board, Dictionary<(int x, int y), IUnit> teamUnits, (int x, int y) userInput, IUnit chosenUnit)
+    private static bool HandleUnitMoveAndAttack(IUnit ChosenUnit, IGameBoard board, (int x, int y) userInput, Dictionary<(int x, int y), IUnit> teamUnits)
     {
-        var scanner = new Scanner(chosenUnit.Speed);
-        var availableMoves = scanner.Scan(board[userInput.x, userInput.y], board);
+        Scanner scanner = new(ChosenUnit.Speed);
+        IEnumerable<ICell> availableMoves = scanner.Scan(board[userInput.x, userInput.y], board);
+        GameBoardRenderer.DrawBoard(board, board[userInput.x, userInput.y], ChosenUnit.Speed);
+        Console.WriteLine($"Available moves: ");
+        foreach (var i in availableMoves) Console.Write($"({i.Position.X};{i.Position.Y}) | ");
+        Console.WriteLine("\nMove unit to...");
 
-        Console.WriteLine("Доступные ходы:");
-        foreach (var cell in availableMoves)
-        {
-            Console.Write($"({cell.Position.X}, {cell.Position.Y}) ");
-        }
-        Console.WriteLine();
-
-        Console.WriteLine("Переместите юнита: Введите координаты.");
         Console.Write("X = ");
         int newX = Convert.ToInt32(Console.ReadLine());
         Console.Write("Y = ");
         int newY = Convert.ToInt32(Console.ReadLine());
+        Cell move = new((newX, newY));
+        bool isLegal = availableMoves.Any(c => c.Position == move.Position);
 
-        if (TryMoveUnit(board, teamUnits, userInput, (newX, newY), chosenUnit))
+        if (newX < 0 || newY < 0 || newX >= board.Width || newY >= board.Height || board[newX, newY].Content != null || !isLegal)
         {
-            Console.WriteLine("Юнит перемещён.");
+            Console.WriteLine("Illegal move");
             return true;
         }
-        else
+
+        teamUnits[(newX, newY)] = ChosenUnit;
+        board[userInput.x, userInput.y].Content = null;
+        board[newX, newY].Content = ChosenUnit;
+        teamUnits.Remove(userInput);
+        GameBoardRenderer.DrawBoard(board);
+
+        return HandleAttackOrAbility(ChosenUnit, board, userInput, newX, newY);
+    }
+
+    private static bool HandleAttackOrAbility(IUnit ChosenUnit, IGameBoard board, (int x, int y) userInput, int newX, int newY)
+    {
+        Scanner scanner = new(ChosenUnit.Range);
+        IEnumerable<ICell> availableEnemies = scanner.Scan(board[userInput.x, userInput.y], board);
+        Dictionary<(int x, int y), IUnit> enemyUnits = new();
+        foreach (var i in availableEnemies)
         {
-            Console.WriteLine("Недопустимый ход.");
+            if (i.Content is IUnit unit && unit.Team != ChosenUnit.Team)
+                enemyUnits[i.Position] = unit;
+        }
+
+        if (enemyUnits.Count == 0)
+        {
+            Console.WriteLine("No one to attack");
+            ChosenUnit.MadeTurn = true;
             return false;
+        }
+
+        GameBoardRenderer.DrawBoard(board, board[newX, newY], ChosenUnit.Range);
+        Console.WriteLine("Should Unit Attack? ==> ");
+        int userChoice = Convert.ToInt32(Console.ReadLine());
+
+        switch (userChoice)
+        {
+            case 1:
+                return HandleAttack(board, ChosenUnit, enemyUnits);
+            case 2:
+                return HandleAbility(board, ChosenUnit, enemyUnits);
+            case 3:
+                Console.WriteLine("Unit stayed in place");
+                ChosenUnit.MadeTurn = true;
+                return false;
+            default:
+                Console.WriteLine("Invalid choice");
+                return true;
         }
     }
 
-    /// <summary>
-    /// Пытается переместить юнита на новое место на поле, проверяя допустимость перемещения.
-    /// </summary>
-    /// <param name="board">Игровое поле.</param>
-    /// <param name="teamUnits">Словарь юнитов команды с координатами.</param>
-    /// <param name="oldPosition">Старые координаты юнита.</param>
-    /// <param name="newPosition">Новые координаты юнита.</param>
-    /// <param name="chosenUnit">Выбранный юнит для перемещения.</param>
-    /// <returns>Возвращает true, если перемещение успешно, иначе false.</returns>
-    private static bool TryMoveUnit(GameBoard board, Dictionary<(int x, int y), IUnit> teamUnits, (int x, int y) oldPosition, (int x, int y) newPosition, IUnit chosenUnit)
+    private static bool HandleAttack(IGameBoard board, IUnit ChosenUnit, Dictionary<(int x, int y), IUnit> enemyUnits)
     {
-        var scanner = new Scanner(chosenUnit.Speed);
-        var availableMoves = scanner.Scan(board[oldPosition.x, oldPosition.y], board);
+        Console.WriteLine("Enemies available to hit:");
+        foreach (var j in enemyUnits)
+            Console.WriteLine($"{j.Value.UnitName} ({j.Key.x};{j.Key.y})");
 
-        if (newPosition.x >= 0 && newPosition.y >= 0 && newPosition.x < board.Width && newPosition.y < board.Height &&
-            availableMoves.Any(cell => cell.Position == newPosition) && board[newPosition.x, newPosition.y].Content == null)
+        Console.WriteLine("Chosen Unit: ");
+        Console.Write("X = ");
+        int enemyX = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Y = ");
+        int enemyY = Convert.ToInt32(Console.ReadLine());
+        (int enemyX, int enemyY) attackedEnemy = (enemyX, enemyY);
+
+        if (!enemyUnits.ContainsKey(attackedEnemy))
         {
-            board[oldPosition.x, oldPosition.y].Content = null;
-            board[newPosition.x, newPosition.y].Content = chosenUnit;
-
-            teamUnits.Remove(oldPosition);
-            teamUnits[newPosition] = chosenUnit;
+            Console.WriteLine("Illegal move");
             return true;
         }
 
+        Console.WriteLine("Attacking enemy");
+        if (board[enemyX, enemyY].Content is IUnit target && target.Team != ChosenUnit.Team)
+        {
+            ChosenUnit.Attack(target);
+            Console.WriteLine($"{target.UnitName}'s HP reduced to {target.Hp}");
+            ChosenUnit.MadeTurn = true;
+        }
+        return false;
+    }
+
+    private static bool HandleAbility(IGameBoard board, IUnit ChosenUnit, Dictionary<(int x, int y), IUnit> enemyUnits)
+    {
+        List<IAbility> activeAbilities = ChosenUnit.Abilities.FindAll(x => x.IsActive == true);
+        if (activeAbilities.Count == 0)
+        {
+            Console.WriteLine("Unit has no active abilities");
+            return false;
+        }
+
+        int index = 1;
+        foreach (var k in activeAbilities)
+        {
+            Console.WriteLine($"{index}. {k.Name} - {k.Description}");
+            ++index;
+        }
+        Console.Write("Choose Ability ==> ");
+        int chosenAbility = Convert.ToInt32(Console.ReadLine());
+        if (chosenAbility < 1 || chosenAbility > activeAbilities.Count)
+        {
+            Console.WriteLine("Invalid choice");
+            return true;
+        }
+
+        IAbility Ability = activeAbilities[chosenAbility - 1];
+        Console.WriteLine("Enemies available to hit:");
+        foreach (var j in enemyUnits)
+            Console.WriteLine($"{j.Value.UnitName} ({j.Key.x};{j.Key.y})");
+
+        Console.WriteLine("Chosen Unit: ");
+        Console.Write("X = ");
+        int enemyX = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Y = ");
+        int enemyY = Convert.ToInt32(Console.ReadLine());
+        (int enemyX, int enemyY) attackedEnemy = (enemyX, enemyY);
+
+        if (!enemyUnits.ContainsKey(attackedEnemy))
+        {
+            Console.WriteLine("Illegal move");
+            return true;
+        }
+
+        Console.WriteLine("Activating ability");
+        if (board[enemyX, enemyY].Content is IUnit target && target.Team != ChosenUnit.Team)
+        {
+            if (Ability.Activate(ChosenUnit, target))
+            {
+                Console.WriteLine($"{target.UnitName}'s HP reduced to {target.Hp}");
+                ChosenUnit.MadeTurn = true;
+            }
+        }
         return false;
     }
 }
