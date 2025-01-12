@@ -1,12 +1,21 @@
 namespace BoH.CLI;
 
+using BoH.GameLogic;
 using BoH.Interfaces;
 using BoH.Models;
 
 public static class GameBoardRenderer
 {
-    public static void DrawBoard(IGameBoard board)
+    public static void DrawBoard(IGameBoard board, ICell? cellScan = null, int? scanRange = null)
     {
+        IEnumerable<ICell>? scannedCells = null;
+
+        if (cellScan != null && scanRange != null)
+        {
+            Scanner scanner = new Scanner((int)scanRange);
+            scannedCells = scanner.Scan(cellScan, board);
+        }
+
         // Рендерим верхнюю границу поля
         for (int x = 0; x < board.Width; x++)
         {
@@ -28,6 +37,23 @@ public static class GameBoardRenderer
                     IUnit unit => unit.Icon,
                     _ => '?'
                 };
+
+                // Обновляем содержимое клеток, если мы сканируем
+                if (scannedCells != null)
+                {
+                    if (scannedCells.Any(c => c.Position == board[x, y].Position))
+                    {
+                        var scannedContent = board[x, y].Content;
+                        symbol = scannedContent switch
+                        {
+                            null => '#', // Пустая клетка
+                            Obstacle obstacle => obstacle.Icon,
+                            IUnit => '!',
+                            _ => '?'
+                        };
+
+                    }
+                }
 
                 Console.Write(x == 0 ? $"║ {symbol} " : $"║ {symbol} ");
             }
