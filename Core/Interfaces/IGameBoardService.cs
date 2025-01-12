@@ -6,12 +6,13 @@ namespace BoH.Interfaces;
 public interface IGameBoardService
 {
     /// <summary>
-    /// Генерирует новое игровое поле заданного размера.
+    /// Генерирует новое игровое поле заданного размера, расставляет препятствия и юнитов.
     /// </summary>
     /// <param name="width">Ширина игрового поля (количество столбцов).</param>
     /// <param name="length">Длина игрового поля (количество строк).</param>
+    /// <param name="teams">Словарь с юнитами.</param>
     /// <returns>Экземпляр <see cref="IGameBoard"/>, представляющий игровое поле.</returns>
-    IGameBoard GenerateGameBoard(int width, int length);
+    IGameBoard GenerateGameBoard(int width, int length, Dictionary<string, List<IUnit> > teams);
 
     /// <summary>
     /// Добавляет объект в указанную клетку игрового поля.
