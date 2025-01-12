@@ -47,7 +47,7 @@ public class Program
         List<ICell> teamCells = [];
         for (int x = 0; x < board.Width; x++)
         {
-            for (int y = 0; y < board.Width; y++)
+            for (int y = 0; y < board.Height; y++)
             {
                 var currentCellContent = board[x, y].Content;
                 if(currentCellContent is IUnit unit)
@@ -58,6 +58,8 @@ public class Program
             }
         }
         foreach(var i in teamCells) Console.WriteLine(i.Position);
+
+        
 
     }
 }
