@@ -11,14 +11,16 @@ public interface IGameController
     /// Инициализирует игру, включая подготовку игроков и игрового поля.
     /// </summary>
     /// <param name="gameBoard"> Игровое поле.</param>
+    /// <param name="teams"> Названия фракций.</param>
     /// <returns>Асинхронная задача, которая завершается после старта игры.</returns>
-    Task StartGame(IGameBoard gameBoard);
+    Task StartGame(IGameBoard gameBoard, string[] teams);
 
     /// <summary>
     /// Переходит к следующему ходу.
     /// Управляет переключением хода между игроками и выполнением их действий.
     /// </summary>
-    void NextTurn();
+    /// <param name="teams"> Названия фракций.</param>
+    void NextTurn(string[] teams);
 
     /// <summary>
     /// Проверяет выполнение условий победы.
