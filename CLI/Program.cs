@@ -38,5 +38,26 @@ public class Program
 
         GameBoardRenderer.DrawBoard(board);
 
+        List<string> teamNames = teams.Keys.ToList();
+        int currentTeam = 0;
+        Console.WriteLine($"Current team: {teamNames[currentTeam]}");
+
+        Console.WriteLine("Unit positions:");
+        // Позиции юнитов команды
+        List<ICell> teamCells = [];
+        for (int x = 0; x < board.Width; x++)
+        {
+            for (int y = 0; y < board.Width; y++)
+            {
+                var currentCellContent = board[x, y].Content;
+                if(currentCellContent is IUnit unit)
+                {
+                    if(unit.Team == teamNames[currentTeam])
+                    teamCells.Add(board[x, y]);
+                }
+            }
+        }
+        foreach(var i in teamCells) Console.WriteLine(i.Position);
+
     }
 }
