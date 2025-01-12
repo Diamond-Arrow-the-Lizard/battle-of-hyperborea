@@ -4,29 +4,39 @@ using BoH.Interfaces;
 using BoH.Services;
 using BoH.Models;
 using BoH.Units;
-using Microsoft.VisualBasic;
+using BoH.GameLogic;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         GameBoardService service = new GameBoardService();
+        GameController gameController = new GameController(service);
 
-        var rusArcher = new RusArcher();
-        var rusWarrior = new RusWarrior();
+        Dictionary<string, List<IUnit>> teams = new Dictionary<string, List<IUnit>>();
 
-        var lizArcher = new LizardArcher();
-        var lizWarrior = new LizardWarrior();
+        Console.WriteLine("Teams size: ");
+        int teamSize = Convert.ToInt32(Console.ReadLine());
 
-        Dictionary<string, List<IUnit>> teams = new();
-        teams["Rus"] = [rusArcher, rusWarrior];
-        teams["Lizard"] = [lizArcher, lizWarrior];
-        
-        IGameBoard board = service.GenerateGameBoard(10, 10, teams);
+        switch (teamSize)
+        {
+            case 1:
+                Console.WriteLine("Normal");
+                teams["Rus"] = [new RusArcher(), new RusWarrior(), new RusWarrior()];
+                teams["Lizard"] = [new LizardArcher(), new LizardWarrior(), new LizardWarrior()];
+                break;
+            case 2:
+                Console.WriteLine("Big");
+                teams["Rus"] = [new RusArcher(), new RusArcher(), new RusWarrior(), new RusWarrior(), new RusWarrior(), new RusWarrior()];
+                teams["Lizard"] = [new LizardArcher(), new LizardArcher(), new LizardWarrior(), new LizardWarrior(), new LizardWarrior(), new LizardWarrior()];
+                break;
+            default:
+                throw new Exception("Invalid choice");
+        }
 
-        // Рендеринг игрового поля
+        var board = gameController.StartGame(10, 10, teams);
+
         GameBoardRenderer.DrawBoard(board);
 
-        GameBoardRenderer.DrawBoard(board, board[board.Width-2, 0], lizWarrior.Speed);
     }
 }

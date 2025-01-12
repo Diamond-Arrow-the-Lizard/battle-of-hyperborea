@@ -13,8 +13,8 @@ public interface IGameController
     /// <param name="width">Ширина игрового поля (количество столбцов).</param>
     /// <param name="length">Длина игрового поля (количество строк).</param>
     /// <param name="teamUnits">Словарь с юнитами.</param>
-    /// <returns>Асинхронная задача, которая завершается после старта игры.</returns>
-    Task StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits);
+    /// <returns>Новое поле для начала игры</returns>
+    IGameBoard StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits);
 
     /// <summary>
     /// Переходит к следующему ходу.

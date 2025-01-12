@@ -1,6 +1,7 @@
 namespace BoH.GameLogic;
 
 using BoH.Interfaces;
+using BoH.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +24,20 @@ public class GameController : IGameController
 
     /// <inheritdoc/>
     /// <exception cref="ArgumentException"/>
-    public async Task StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits)
+    public IGameBoard StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits)
     {
+        _teamUnits = teamUnits;
         if (_teamUnits.Keys.Count != 2)
         {
             throw new ArgumentException("Игра требует две команды.");
         }
 
-        _teamUnits = teamUnits;
         _gameBoard = _boardService.GenerateGameBoard(width, length, _teamUnits);
 
-        await _boardService.DeleteGameBoardAsync();
-        await _boardService.SaveGameBoardAsync();
+        _boardService.DeleteGameBoardAsync();
+        _boardService.SaveGameBoardAsync();
+
+        return _gameBoard;
 
     }
 
