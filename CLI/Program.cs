@@ -5,6 +5,7 @@ using BoH.Services;
 using BoH.Models;
 using BoH.Units;
 using BoH.GameLogic;
+using System.ComponentModel;
 
 public class Program
 {
@@ -111,7 +112,7 @@ public class Program
                     int newY = Convert.ToInt32(Console.ReadLine());
                     Cell move = new((newX, newY));
                     bool isLegal = availableMoves.Any(c => c.Position == move.Position);
-                    if(newX >= 0 && newY >= 0 && newX < board.Width && newY < board.Height && board[newX, newY].Content == null && isLegal)
+                    if (newX >= 0 && newY >= 0 && newX < board.Width && newY < board.Height && board[newX, newY].Content == null && isLegal)
                     {
                         teamUnits[(newX, newY)] = ChosenUnit;
                         board[x, y].Content = null;
@@ -122,7 +123,37 @@ public class Program
                     else
                     {
                         Console.WriteLine("Illegal move");
+                        continue;
                     }
+                    if(ChosenUnit.UnitType == UnitType.Melee)
+                    {
+                        scanner = new(1);
+                        availableMoves = scanner.Scan(board[userInput.x, userInput.y], board);
+                        List<IUnit> enemyUnits = [];
+                        foreach(var i in availableMoves)
+                        {
+                            if(i.Content is IUnit unit && unit.Team != ChosenUnit.Team)
+                                enemyUnits.Add(unit);
+                            
+                            if(enemyUnits.Count == 0)
+                            {
+                                Console.WriteLine("No one to attack");
+                                ChosenUnit.MadeTurn = true;
+                            }
+                            else
+                            {
+                                GameBoardRenderer.DrawBoard(board, board[newX, newY], 1);
+                                //TODO Ударить выбранного юнита
+                                ChosenUnit.MadeTurn = true;
+                            }
+    
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect coordinates");
+                    continue;
                 }
             }
 
