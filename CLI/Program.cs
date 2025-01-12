@@ -125,29 +125,76 @@ public class Program
                         Console.WriteLine("Illegal move");
                         continue;
                     }
-                    if(ChosenUnit.UnitType == UnitType.Melee)
+                    scanner = new(ChosenUnit.Range);
+                    IEnumerable<ICell> availableEnemies = scanner.Scan(board[userInput.x, userInput.y], board);
+                    Dictionary<(int x, int y), IUnit> enemyUnits = new();
+                    foreach (var i in availableEnemies)
                     {
-                        scanner = new(1);
-                        availableMoves = scanner.Scan(board[userInput.x, userInput.y], board);
-                        List<IUnit> enemyUnits = [];
-                        foreach(var i in availableMoves)
+                        if (i.Content is IUnit unit && unit.Team != ChosenUnit.Team)
+                            enemyUnits[i.Position] = unit;
+
+                        if (enemyUnits.Count == 0)
                         {
-                            if(i.Content is IUnit unit && unit.Team != ChosenUnit.Team)
-                                enemyUnits.Add(unit);
-                            
-                            if(enemyUnits.Count == 0)
-                            {
-                                Console.WriteLine("No one to attack");
-                                ChosenUnit.MadeTurn = true;
-                            }
-                            else
-                            {
-                                GameBoardRenderer.DrawBoard(board, board[newX, newY], 1);
-                                //TODO Ударить выбранного юнита
-                                ChosenUnit.MadeTurn = true;
-                            }
-    
+                            Console.WriteLine("No one to attack");
+                            ChosenUnit.MadeTurn = true;
+                            continue;
                         }
+                        else
+                        {
+                            GameBoardRenderer.DrawBoard(board, board[newX, newY], ChosenUnit.Range);
+                            Console.WriteLine("Should Unit Attack? ==> ");
+                            int userChoice = Convert.ToInt32(Console.ReadLine());
+                            switch (userChoice)
+                            {
+                                case 1: // Атака
+                                    Console.WriteLine("Enemies available to hit:");
+                                    foreach (var j in enemyUnits)
+                                        Console.WriteLine($"{j.Value.UnitName} ({j.Key.x};{j.Key.y})");
+
+                                    Console.WriteLine("Chosen Unit: ");
+                                    Console.Write("X = ");
+                                    int enemyX = Convert.ToInt32(Console.ReadLine());
+                                    Console.Write("Y = ");
+                                    int enemyY = Convert.ToInt32(Console.ReadLine());
+                                    (int enemyX, int enemyY) attackedEnemy = (enemyX, enemyY);
+
+                                    // Проверяем, что координаты корректны и содержат врага
+                                    isLegal = enemyUnits.Any(x => x.Key == attackedEnemy);
+                                    if (enemyX >= 0 && enemyY >= 0 && enemyX < board.Width && enemyY < board.Height && isLegal)
+                                    {
+                                        Console.WriteLine("Attacking enemy");
+                                        if (board[enemyX, enemyY].Content is IUnit target && target.Team != ChosenUnit.Team)
+                                        {
+                                            ChosenUnit.Attack(target);
+                                            Console.WriteLine($"{target.UnitName}'s HP reduced to {target.Hp}");
+                                            ChosenUnit.MadeTurn = true;
+
+                                            // Если здоровье врага <= 0, удаляем его с карты
+                                            if (target.Hp <= 0)
+                                            {
+                                                board[enemyX, enemyY].Content = null;
+                                                Console.WriteLine($"{target.UnitName} has been defeated!");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Illegal move");
+                                    }
+                                    break;
+
+
+                                case 2: // Активировать способность
+
+                                    break;
+
+                                default:
+                                    Console.WriteLine("Invalid choice");
+                                    break;
+                            };
+
+                        }
+
                     }
                 }
                 else
