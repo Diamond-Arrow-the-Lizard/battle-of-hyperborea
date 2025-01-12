@@ -1,6 +1,7 @@
 namespace BoH.GameLogic;
 
 using BoH.Interfaces;
+using BoH.Models;
 using BoH.Services;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
-    public async Task StartGame()
+    public async Task StartGame(IGameBoard gameBoard)
     {
         await Task.Delay(0);
     }
