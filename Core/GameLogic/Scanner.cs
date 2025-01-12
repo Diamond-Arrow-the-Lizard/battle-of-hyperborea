@@ -57,14 +57,17 @@ public class Scanner : IScanner
         {
             for (int j = y - Range; j <= y + Range; j++)
             {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                if (i >= 0 && i < gameBoard.Width && j >= 0 && j < gameBoard.Height && gameBoard[i, j].Content.GetType() != typeof(Obstacle))
+                if (i >= 0 && i < gameBoard.Width && j >= 0 && j < gameBoard.Height)
                 {
-                    scannedCells.Add(gameBoard[i, j]);
+                    var cell = gameBoard[i, j];
+                    if (cell != null && cell.Content?.GetType() != typeof(Obstacle) && scanningCell.Position != cell.Position)
+                    {
+                        scannedCells.Add(cell);
+                    }
                 }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
             }
         }
+
 
         return scannedCells;
     }
