@@ -19,7 +19,8 @@ public interface IGameController
     /// <summary>
     /// Переходит к следующему ходу.
     /// </summary>
-    void NextTurn();
+    /// <returns> Индекс следующей команды </returns>
+    int NextTurn();
 
     /// <summary>
     /// Проверяет выполнение условий победы.
