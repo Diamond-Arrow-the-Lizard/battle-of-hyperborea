@@ -68,6 +68,11 @@ public class BaseUnit : IUnit
     public int Defence { get; set; } = 0;
 
     /// <summary>
+    /// Дальность атаки юнита.
+    /// </summary>
+    public int Range { get; protected set; } = 1;
+
+    /// <summary>
     /// Тип или класс юнита (например, пехота, танк и т.д.).
     /// </summary>
     public UnitType UnitType { get; } = UnitType.Melee;

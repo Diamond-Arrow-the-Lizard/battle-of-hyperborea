@@ -46,6 +46,11 @@ public interface IUnit
     int Defence { get; set; }
 
     /// <summary>
+    /// Дальность атаки юнита.
+    /// </summary>
+    int Range { get; }
+
+    /// <summary>
     /// Тип или класс юнита (например, пехота, танк и т.д.).
     /// </summary>
     UnitType UnitType { get; }
