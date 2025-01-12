@@ -59,6 +59,13 @@ public class GameController : IGameController
         {
             if(unit.IsDead) unit.Icon = 'X';
             else if(unit.IsStunned) unit.Icon = '@';
+            else
+            {
+                foreach(var ability in unit.Abilities)
+                {
+                    if (ability.IsActive == false) ability.Activate(unit);  
+                }
+            }
         }
 
         // Проверяем победу
