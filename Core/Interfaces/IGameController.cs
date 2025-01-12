@@ -18,10 +18,8 @@ public interface IGameController
 
     /// <summary>
     /// Переходит к следующему ходу.
-    /// Управляет переключением хода между игроками и выполнением их действий.
     /// </summary>
-    /// <param name="teams"> Названия фракций.</param>
-    void NextTurn(string[] teams);
+    void NextTurn();
 
     /// <summary>
     /// Проверяет выполнение условий победы.

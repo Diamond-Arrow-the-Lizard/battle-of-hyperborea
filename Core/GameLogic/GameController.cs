@@ -36,11 +36,12 @@ public class GameController : IGameController
         await _boardService.DeleteGameBoardAsync();
         await _boardService.SaveGameBoardAsync();
 
-        Console.WriteLine("Игра началась!");
     }
 
     /// <inheritdoc/>
-    public void NextTurn(string[] teams)
+    /// <exception cref="ArgumentOutOfRangeException"/>
+    /// <exception cref="InvalidOperationException"/>
+    public void NextTurn()
     {
         if (_gameBoard == null || !_teamUnits.Any())
         {
@@ -48,15 +49,16 @@ public class GameController : IGameController
         }
 
         // Получаем текущую команду
-        var currentTeam = teams[_currentTeamIndex];
-        Console.WriteLine($"Ход команды: {currentTeam}");
+        List<string> teamNames = _teamUnits.Keys.ToList();
+        string currentTeam = teamNames[_currentTeamIndex];
 
         // Получаем юнитов команды, которые могут совершать действия
-        List<IUnit> activeUnits = _teamUnits[currentTeam].Where(unit => !unit.IsDead && !unit.IsStunned).ToList();
+        List<IUnit> allUnits = _teamUnits[currentTeam].ToList();
 
-        foreach (var unit in activeUnits)
+        foreach (var unit in allUnits)
         {
-            //TODO
+            if(unit.IsDead) unit.Icon = 'X';
+            else if(unit.IsStunned) unit.Icon = '@';
         }
 
         // Проверяем победу
@@ -67,7 +69,17 @@ public class GameController : IGameController
         }
 
         // Переходим к следующей команде
-        _currentTeamIndex = (_currentTeamIndex + 1) % teams.Length;
+        switch (_currentTeamIndex)
+        {
+            case 0:
+                _currentTeamIndex = 1;
+                break;
+            case 1:
+                _currentTeamIndex = 0;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException("Неверный индекс команды");
+        }
     }
 
     /// <inheritdoc/>
