@@ -61,6 +61,11 @@ public interface IUnit
     bool IsDead { get; }
 
     /// <summary>
+    /// Показывает, сделал ли ход юнит.
+    /// </summary>
+    bool MadeTurn { get; set; }
+
+    /// <summary>
     /// Коллекция способностей, которыми обладает юнит.
     /// </summary>
     List<IAbility> Abilities { get; }
