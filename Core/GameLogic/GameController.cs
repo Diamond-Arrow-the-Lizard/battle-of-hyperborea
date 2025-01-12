@@ -44,7 +44,7 @@ public class GameController : IGameController
     /// <inheritdoc/>
     /// <exception cref="ArgumentOutOfRangeException"/>
     /// <exception cref="InvalidOperationException"/>
-    public void NextTurn()
+    public int NextTurn()
     {
         if (_gameBoard == null || !_teamUnits.Any())
         {
@@ -66,7 +66,8 @@ public class GameController : IGameController
             {
                 foreach(var ability in unit.Abilities)
                 {
-                    if (ability.IsActive == false) ability.Activate(unit);  
+                    if (ability.IsActive == false) ability.Activate(unit);
+                    ability.Update();
                 }
             }
         }
@@ -75,7 +76,7 @@ public class GameController : IGameController
         if (CheckVictoryCondition())
         {
             Console.WriteLine($"Команда {currentTeam} победила!");
-            return;
+            return 2;
         }
 
         // Переходим к следующей команде
@@ -90,6 +91,7 @@ public class GameController : IGameController
             default:
                 throw new ArgumentOutOfRangeException("Неверный индекс команды");
         }
+        return _currentTeamIndex;
     }
 
     /// <inheritdoc/>
