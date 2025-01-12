@@ -10,8 +10,9 @@ public interface IGameController
     /// Запускает игровой процесс.
     /// Инициализирует игру, включая подготовку игроков и игрового поля.
     /// </summary>
+    /// <param name="gameBoard"> Игровое поле.</param>
     /// <returns>Асинхронная задача, которая завершается после старта игры.</returns>
-    Task StartGame();
+    Task StartGame(IGameBoard gameBoard);
 
     /// <summary>
     /// Переходит к следующему ходу.
