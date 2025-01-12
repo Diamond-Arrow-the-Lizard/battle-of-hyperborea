@@ -10,10 +10,11 @@ public interface IGameController
     /// Запускает игровой процесс.
     /// Инициализирует игру, включая подготовку игроков и игрового поля.
     /// </summary>
-    /// <param name="gameBoard"> Игровое поле.</param>
-    /// <param name="teams"> Названия фракций.</param>
+    /// <param name="width">Ширина игрового поля (количество столбцов).</param>
+    /// <param name="length">Длина игрового поля (количество строк).</param>
+    /// <param name="teamUnits">Словарь с юнитами.</param>
     /// <returns>Асинхронная задача, которая завершается после старта игры.</returns>
-    Task StartGame(IGameBoard gameBoard, string[] teams);
+    Task StartGame(int width, int length, Dictionary<string, List<IUnit>> teamUnits);
 
     /// <summary>
     /// Переходит к следующему ходу.
