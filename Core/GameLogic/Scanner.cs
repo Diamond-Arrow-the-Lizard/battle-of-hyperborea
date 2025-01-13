@@ -38,6 +38,12 @@ public class Scanner : IScanner
     /// <exception cref="ArgumentNullException">
     /// Выбрасывается, если одна из переданных ссылок равна null.
     /// </exception>
+    /// <summary>
+    /// Сканирует клетки вокруг заданной клетки на игровом поле, игнорируя клетки с препятствиями.
+    /// </summary>
+    /// <param name="scanningCell">Клетка, вокруг которой производится сканирование.</param>
+    /// <param name="gameBoard">Игровое поле, на котором производится сканирование.</param>
+    /// <returns>Коллекция клеток в пределах радиуса вокруг заданной клетки, игнорируя препятствия.</returns>
     public IEnumerable<ICell> Scan(ICell scanningCell, IGameBoard gameBoard)
     {
         if (scanningCell == null)
@@ -50,24 +56,29 @@ public class Scanner : IScanner
             throw new ArgumentNullException(nameof(gameBoard), "Игровое поле не может быть null.");
         }
 
-        var (x, y) = scanningCell.Position;
-        var scannedCells = new List<ICell>();
+        var (x, y) = scanningCell.Position;  // Получаем позицию сканируемой клетки
+        var scannedCells = new List<ICell>();  // Список для хранения результатов сканирования
 
+        // Проходим по всем клеткам в радиусе
         for (int i = x - Range; i <= x + Range; i++)
         {
             for (int j = y - Range; j <= y + Range; j++)
             {
+                // Проверяем, что клетки находятся в пределах поля
                 if (i >= 0 && i < gameBoard.Width && j >= 0 && j < gameBoard.Height)
                 {
-                    var cell = gameBoard[i, j];
-                    if (cell != null && cell.Content?.GetType() != typeof(Obstacle) && scanningCell.Position != cell.Position)
+                    var cell = gameBoard[i, j];  // Получаем клетку по координатам (i, j)
+
+                    // Пропускаем клетки, которые равны текущей клетке или являются препятствиями
+                    if (cell != null && cell.Position != scanningCell.Position
+                        && !(cell.Content is Obstacle))
                     {
-                        scannedCells.Add(cell);
+                        scannedCells.Add(cell);  // Добавляем подходящую клетку в список
+                        Console.WriteLine($"Сканируем клетку: ({i}, {j})");
                     }
                 }
             }
         }
-
 
         return scannedCells;
     }
