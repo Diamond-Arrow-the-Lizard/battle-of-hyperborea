@@ -55,20 +55,12 @@ public class GameController : IGameController
         List<string> teamNames = _teamUnits.Keys.ToList();
         string currentTeam = teamNames[_currentTeamIndex];
 
-        // Получаем юнитов команды, которые могут совершать действия
-        List<IUnit> allUnits = _teamUnits[currentTeam].ToList();
-
-        foreach (var unit in allUnits)
+        // Сброс состояния MadeTurn для всех юнитов
+        foreach (var unit in _teamUnits[currentTeam])
         {
-            if(unit.IsDead) unit.Icon = 'X';
-            else if(unit.IsStunned) unit.Icon = '@';
-            else
+            if (!unit.IsDead && !unit.IsStunned)
             {
-                foreach(var ability in unit.Abilities)
-                {
-                    if (ability.IsActive == false) ability.Activate(unit);
-                    ability.Update();
-                }
+                unit.MadeTurn = false;
             }
         }
 
@@ -80,19 +72,11 @@ public class GameController : IGameController
         }
 
         // Переходим к следующей команде
-        switch (_currentTeamIndex)
-        {
-            case 0:
-                _currentTeamIndex = 1;
-                break;
-            case 1:
-                _currentTeamIndex = 0;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException("Неверный индекс команды");
-        }
+        _currentTeamIndex = (_currentTeamIndex + 1) % teamNames.Count;
+
         return _currentTeamIndex;
     }
+
 
     /// <inheritdoc/>
     public bool CheckVictoryCondition()
