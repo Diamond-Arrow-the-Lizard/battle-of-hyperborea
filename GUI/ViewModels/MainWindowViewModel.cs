@@ -1,22 +1,18 @@
 ﻿namespace BoH.GUI.ViewModels
 {
     using BoH.Interfaces;
-    using BoH.Services;
-    using BoH.Models;
-    using System.ComponentModel;
+    using BoH.Units;
     using System;
     using System.Collections.Generic;
-    using BoH.Units;
 
     /// <summary>
-    /// Основная ViewModel для главного окна, которая включает все необходимые ViewModel-и для кнопок и игрового поля.
+    /// Основная ViewModel для главного окна.
     /// </summary>
-    public class MainWindowViewModel 
+    public class MainWindowViewModel
     {
-        
         private readonly IGameBoardService _gameBoardService;
+        private readonly IGameBoard _gameBoard;
 
-        private GameBoard gameBoard = new GameBoard(1, 1);
         /// <summary>
         /// ViewModel для игрового поля.
         /// </summary>
@@ -28,25 +24,43 @@
         /// <param name="gameBoardService">Сервис для работы с игровым полем.</param>
         public MainWindowViewModel(IGameBoardService gameBoardService)
         {
+            _gameBoardService = gameBoardService ?? throw new ArgumentNullException(nameof(gameBoardService));
 
-            Dictionary<string, List<IUnit>> teams = new();
-                teams["Rus"] = new List<IUnit>
-            {
-                new RusArcher(), new RusArcher(),
-                new RusWarrior(), new RusWarrior(),
-                new RusWarrior(), new RusWarrior()
-            };
-                teams["Lizard"] = new List<IUnit>
-            {
-                new LizardArcher(), new LizardArcher(),
-                new LizardWarrior(), new LizardWarrior(),
-                new LizardWarrior(), new LizardWarrior()
-            };
+            // Создание команд
+            var teams = CreateTeams();
 
-            _gameBoardService = gameBoardService ?? throw new ArgumentNullException(nameof(gameBoardService));;
-            GameBoardViewModel = new GameBoardViewModel(gameBoard);
+            // Генерация игрового поля
+            try
+            {
+                _gameBoard = _gameBoardService.GenerateGameBoard(8, 8, teams);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка генерации игрового поля: {ex.Message}");
+                throw;
+            }
+
+            // Создание GameBoardViewModel
+            GameBoardViewModel = new GameBoardViewModel(_gameBoard);
         }
-        
+
+        private Dictionary<string, List<IUnit>> CreateTeams()
+        {
+            return new Dictionary<string, List<IUnit>>
+            {
+                ["Rus"] = new List<IUnit>
+                {
+                    new RusArcher(), new RusArcher(),
+                    new RusWarrior(), new RusWarrior(),
+                    new RusWarrior(), new RusWarrior()
+                },
+                ["Lizard"] = new List<IUnit>
+                {
+                    new LizardArcher(), new LizardArcher(),
+                    new LizardWarrior(), new LizardWarrior(),
+                    new LizardWarrior(), new LizardWarrior()
+                }
+            };
+        }
     }
-    
 }
