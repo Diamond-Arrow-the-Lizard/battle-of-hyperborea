@@ -68,13 +68,13 @@ public partial class App : Application
     private void ConfigureServices(ServiceCollection services)
     {
         services.AddSingleton<IGameBoardService, GameBoardService>();
-        services.AddSingleton<GameBoardViewModel>();
-        services.AddSingleton<MainWindowViewModel>();
-        //services.AddSingleton<LoadButtonViewModel>();
-        //services.AddSingleton<SaveButtonViewModel>();
-        services.AddSingleton<GameBoardView>();
-        services.AddSingleton<MainWindow>();
-        //services.AddSingleton<LoadButtonView>();
-        //services.AddSingleton<SaveButtonView>();
+        //services.AddTransient<GameBoardViewModel>();
+        services.AddTransient<MainWindowViewModel>();
+        //services.AddTransient<LoadButtonViewModel>();
+        //services.AddTransient<SaveButtonViewModel>();
+        services.AddTransient<GameBoardView>();
+        services.AddTransient<MainWindow>();
+        //services.AddTransient<LoadButtonView>();
+        //services.AddTransient<SaveButtonView>();
     }
 }
