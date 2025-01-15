@@ -44,6 +44,24 @@
             GameBoardViewModel = new GameBoardViewModel(_gameBoard);
         }
 
+        /// <summary>
+        /// Логика для сохранения текущего состояния игры.
+        /// </summary>
+        private void SaveGame()
+        {
+            // Реализовать логику сохранения игры
+            Console.WriteLine("Игра сохранена");
+        }
+
+        /// <summary>
+        /// Логика для загрузки ранее сохраненной игры.
+        /// </summary>
+        private void LoadGame()
+        {
+            // Реализовать логику загрузки игры
+            Console.WriteLine("Игра загружена");
+        }
+
         private Dictionary<string, List<IUnit>> CreateTeams()
         {
             return new Dictionary<string, List<IUnit>>
