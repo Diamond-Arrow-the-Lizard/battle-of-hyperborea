@@ -1,7 +1,13 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:BoH.GUI.ViewModels"
         xmlns:views="clr-namespace:BoH.GUI.Views"
         x:Class="BoH.GUI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
         Title="Battle of Hyperborea">
-    <views:GameBoardView />
+    <StackPanel>
+        <views:SaveButtonView DataContext="{Binding SaveButtonViewModel}" />
+        <views:LoadButtonView DataContext="{Binding LoadButtonViewModel}" />
+        <views:GameBoardView DataContext="{Binding GameBoardViewModel}" />
+    </StackPanel>
 </Window>

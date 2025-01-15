@@ -3,6 +3,7 @@ namespace BoH.GUI.Views
     using Avalonia.Controls;
     using BoH.GUI.ViewModels;
     using BoH.Models;
+    using BoH.Services;
 
     public partial class GameBoardView : UserControl
     {
@@ -12,7 +13,7 @@ namespace BoH.GUI.Views
 
             // Создание игрового поля
             var gameBoard = new GameBoard(10, 10); // 10x10 поле
-            DataContext = new GameBoardViewModel(gameBoard);
+            DataContext = new GameBoardViewModel(new GameBoardService());
         }
     }
 }
