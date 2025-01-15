@@ -9,8 +9,6 @@
         x:DataType="vm:MainWindowViewModel"
         Title="Battle of Hyperborea">
     <StackPanel>
-        <views:SaveButtonView DataContext="{Binding SaveButtonViewModel}" />
-        <views:LoadButtonView DataContext="{Binding LoadButtonViewModel}" />
         <views:GameBoardView DataContext="{Binding GameBoardViewModel}" />
     </StackPanel>
 </Window>
