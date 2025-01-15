@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// </summary>
 public class GameBoardViewModel
 {
-    private readonly IGameBoard _gameBoard;
+    private IGameBoard _gameBoard;
 
     /// <summary>
     /// Коллекция клеток игрового поля.
