@@ -1,7 +1,21 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:BoH.GUI.ViewModels"
-             x:Class="BoH.GUI.Views.GameBoardView">
+             xmlns:views="clr-namespace:BoH.GUI.Views"
+             x:Class="BoH.GUI.Views.GameBoardView"
+             x:DataType="vm:GameBoardViewModel" >
     <Grid>
+        <ItemsControl ItemsSource="{Binding Cells}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding RowCount}" Columns="{Binding ColumnCount}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:CellViewModel">
+                    <views:CellView />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
