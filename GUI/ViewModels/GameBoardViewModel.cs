@@ -1,52 +1,70 @@
-namespace BoH.GUI.ViewModels;
-
-using BoH.Models;
-using BoH.Interfaces;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-
-/// <summary>
-/// ViewModel, представляющая игровое поле и его состояние.
-/// </summary>
-public class GameBoardViewModel
+namespace BoH.GUI.ViewModels
 {
-    private IGameBoard _gameBoard;
+    using BoH.Interfaces;
+    using BoH.Models;
+    using System.Collections.ObjectModel;
 
     /// <summary>
-    /// Коллекция клеток игрового поля.
+    /// ViewModel для игрового поля.
     /// </summary>
-    public ObservableCollection<CellViewModel> Cells { get; } = new();
-
-    /// <summary>
-    /// Количество строк на игровом поле.
-    /// </summary>
-    public int RowCount => _gameBoard.Height;
-
-    /// <summary>
-    /// Количество столбцов на игровом поле.
-    /// </summary>
-    public int ColumnCount => _gameBoard.Width;
-
-    /// <summary>
-    /// Словарь с командами и юнитами в этих командах.
-    /// </summary>
-    private Dictionary<string, List<IUnit>> _teams = new();
-
-    /// <summary>
-    /// Создаёт новый экземпляр <see cref="GameFieldViewModel"/> с заданным игровым полем.
-    /// </summary>
-    /// <param name="gameBoard">Объект игрового поля.</param>
-    public GameBoardViewModel(IGameBoard gameBoard)
+    public class GameBoardViewModel
     {
-        _gameBoard = gameBoard; 
+        private readonly IGameBoard _gameBoard;
 
-        // Инициализация ViewModel для каждой клетки
-        for (int y = 0; y < _gameBoard.Height; y++)
+        /// <summary>
+        /// Коллекция ViewModel для клеток игрового поля.
+        /// </summary>
+        public ObservableCollection<ObservableCollection<CellViewModel>> Cells { get; }
+
+        /// <summary>
+        /// Конструктор для создания ViewModel игрового поля.
+        /// </summary>
+        /// <param name="gameBoard">Сервис для работы с игровым полем.</param>
+        public GameBoardViewModel(IGameBoard gameBoard)
         {
-            for (int x = 0; x < _gameBoard.Width; x++)
+            _gameBoard = gameBoard;
+
+            // Инициализация коллекции клеток ViewModel
+            Cells = new ObservableCollection<ObservableCollection<CellViewModel>>();
+
+            // Преобразуем все клетки в двумерный массив и создаем для каждой клетки CellViewModel
+            for (int i = 0; i < _gameBoard.Height; i++)
             {
-                //Cells.Add(new CellViewModel(_gameBoard[x, y]));
+                var row = new ObservableCollection<CellViewModel>();
+
+                for (int j = 0; j < _gameBoard.Width; j++)
+                {
+                    var cell = _gameBoard[i, j]; // Получаем клетку из матрицы
+                    if (cell is Cell c)
+                        row.Add(new CellViewModel(c)); // Создаем ViewModel для клетки и добавляем в строку
+                }
+
+                Cells.Add(row); // Добавляем строку в коллекцию
             }
+        }
+
+        /// <summary>
+        /// Получить все клетки игрового поля.
+        /// </summary>
+        /// <returns>Коллекция ViewModel всех клеток.</returns>
+        public ObservableCollection<ObservableCollection<CellViewModel>> GetCells()
+        {
+            return Cells;
+        }
+
+        /// <summary>
+        /// Получить клетку по координатам.
+        /// </summary>
+        /// <param name="x">Координата X клетки.</param>
+        /// <param name="y">Координата Y клетки.</param>
+        /// <returns>ViewModel клетки по заданным координатам.</returns>
+        public CellViewModel? GetCell(int x, int y)
+        {
+            if (x >= 0 && x < _gameBoard.Width && y >= 0 && y < _gameBoard.Height)
+            {
+                return Cells[y][x]; // Возвращаем клетку из коллекции, используя координаты
+            }
+            return null;
         }
     }
 }

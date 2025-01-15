@@ -1,9 +1,13 @@
 namespace BoH.GUI.Views
 {
     using Avalonia.Controls;
+    using Avalonia.Markup.Xaml;
     using BoH.GUI.ViewModels;
     using System;
 
+    /// <summary>
+    /// Представление для игрового поля.
+    /// </summary>
     public partial class GameBoardView : UserControl
     {
         public GameBoardView()
