@@ -36,7 +36,7 @@ public class GameBoardViewModel
     /// Создаёт новый экземпляр <see cref="GameFieldViewModel"/> с заданным игровым полем.
     /// </summary>
     /// <param name="gameBoard">Объект игрового поля.</param>
-    public GameBoardViewModel(IGameBoardService gameBoardService)
+    public GameBoardViewModel(IGameBoardService gameBoardService, GameBoard gameBoard)
     {
         _gameBoard = gameBoardService.GenerateGameBoard(RowCount, ColumnCount, _teams);
 
