@@ -2,13 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="BoH.GUI.App"
              xmlns:local="using:BoH.GUI"
+             xmlns:converters="clr-namespace:BoH.GUI.Converters"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-  
+
+    <Application.Resources>
+        <!-- Добавляем конвертеры в ресурсы -->
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
+        <converters:ContentToDisplayConverter x:Key="ContentToDisplayConverter" />
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
