@@ -1,5 +1,6 @@
 namespace BoH.GUI.Views
 {
+    using System;
     using Avalonia.Controls;
     using BoH.GUI.ViewModels;
     using BoH.Services;
@@ -15,12 +16,10 @@ namespace BoH.GUI.Views
         public MainWindow()
         {
             InitializeComponent();
+            if (Avalonia.Application.Current != null)
+                this.DataContext = ((App)Avalonia.Application.Current).GetService<MainWindowViewModel>();
+            else throw new InvalidOperationException("ServiceProvider is not initialized.");
 
-            // Инициализация сервиса для игрового поля
-            var gameBoardService = new GameBoardService();
-
-            // Привязка MainWindowViewModel к DataContext
-            DataContext = new MainWindowViewModel(gameBoardService);
         }
     }
 }
