@@ -2,8 +2,6 @@ namespace BoH.GUI.Views
 {
     using Avalonia.Controls;
     using Avalonia.Markup.Xaml;
-    using BoH.GUI.ViewModels;
-    using System;
 
     /// <summary>
     /// Представляет View для клетки игрового поля.
@@ -16,9 +14,7 @@ namespace BoH.GUI.Views
         public CellView()
         {
             InitializeComponent();
-            if (Avalonia.Application.Current != null)
-                this.DataContext = ((App)Avalonia.Application.Current).GetService<CellViewModel>();
-            else throw new InvalidOperationException("ServiceProvider is not initialized.");
         }
     }
 }
+
