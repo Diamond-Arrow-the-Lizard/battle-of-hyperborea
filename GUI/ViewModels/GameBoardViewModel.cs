@@ -10,6 +10,8 @@ using System.Collections.Generic;
 /// </summary>
 public class GameBoardViewModel
 {
+    private readonly IGameBoard _gameBoard;
+
     /// <summary>
     /// Коллекция клеток игрового поля.
     /// </summary>
@@ -30,15 +32,13 @@ public class GameBoardViewModel
     /// </summary>
     private Dictionary<string, List<IUnit>> _teams = new();
 
-    private readonly IGameBoard _gameBoard;
-
     /// <summary>
     /// Создаёт новый экземпляр <see cref="GameFieldViewModel"/> с заданным игровым полем.
     /// </summary>
     /// <param name="gameBoard">Объект игрового поля.</param>
-    public GameBoardViewModel(IGameBoardService gameBoardService, GameBoard gameBoard)
+    public GameBoardViewModel(IGameBoard gameBoard)
     {
-        _gameBoard = gameBoardService.GenerateGameBoard(RowCount, ColumnCount, _teams);
+        _gameBoard = gameBoard; 
 
         // Инициализация ViewModel для каждой клетки
         for (int y = 0; y < _gameBoard.Height; y++)

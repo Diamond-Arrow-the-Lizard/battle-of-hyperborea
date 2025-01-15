@@ -70,13 +70,11 @@ public partial class App : Application
         services.AddSingleton<IGameBoardService, GameBoardService>();
         services.AddSingleton<GameBoardViewModel>();
         services.AddSingleton<MainWindowViewModel>();
-        services.AddSingleton<CellViewModel>();
-        services.AddSingleton<LoadButtonViewModel>();
-        services.AddSingleton<SaveButtonViewModel>();
+        //services.AddSingleton<LoadButtonViewModel>();
+        //services.AddSingleton<SaveButtonViewModel>();
         services.AddSingleton<GameBoardView>();
         services.AddSingleton<MainWindow>();
-        services.AddSingleton<CellView>();
-        services.AddSingleton<LoadButtonView>();
-        services.AddSingleton<SaveButtonView>();
+        //services.AddSingleton<LoadButtonView>();
+        //services.AddSingleton<SaveButtonView>();
     }
 }
