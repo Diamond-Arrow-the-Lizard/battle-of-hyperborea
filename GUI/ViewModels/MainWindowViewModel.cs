@@ -1,6 +1,36 @@
-﻿namespace BoH.GUI.ViewModels;
-
-public partial class MainWindowViewModel : ViewModelBase
+﻿namespace BoH.GUI.ViewModels
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    using BoH.Services;
+
+    /// <summary>
+    /// Основная ViewModel для главного окна, которая включает все необходимые ViewModel-и для кнопок и игрового поля.
+    /// </summary>
+    public class MainWindowViewModel
+    {
+        /// <summary>
+        /// ViewModel для игрового поля.
+        /// </summary>
+        public GameBoardViewModel GameBoardViewModel { get; }
+
+        /// <summary>
+        /// ViewModel для кнопки сохранения.
+        /// </summary>
+        public SaveButtonViewModel SaveButtonViewModel { get; }
+
+        /// <summary>
+        /// ViewModel для кнопки загрузки.
+        /// </summary>
+        public LoadButtonViewModel LoadButtonViewModel { get; }
+
+        /// <summary>
+        /// Конструктор для создания экземпляра <see cref="MainWindowViewModel"/>.
+        /// </summary>
+        /// <param name="gameBoardService">Сервис для работы с игровым полем.</param>
+        public MainWindowViewModel(GameBoardService gameBoardService)
+        {
+            GameBoardViewModel = new GameBoardViewModel(gameBoardService);
+            SaveButtonViewModel = new SaveButtonViewModel(gameBoardService);
+            LoadButtonViewModel = new LoadButtonViewModel(gameBoardService);
+        }
+    }
 }
