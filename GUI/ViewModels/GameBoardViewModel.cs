@@ -3,6 +3,7 @@ namespace BoH.GUI.ViewModels;
 using BoH.Models;
 using BoH.Interfaces;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 /// <summary>
 /// ViewModel, представляющая игровое поле и его состояние.
@@ -24,15 +25,20 @@ public class GameBoardViewModel
     /// </summary>
     public int ColumnCount => _gameBoard.Width;
 
-    private readonly GameBoard _gameBoard;
+    /// <summary>
+    /// Словарь с командами и юнитами в этих командах.
+    /// </summary>
+    private Dictionary<string, List<IUnit>> _teams = new();
+
+    private readonly IGameBoard _gameBoard;
 
     /// <summary>
     /// Создаёт новый экземпляр <see cref="GameFieldViewModel"/> с заданным игровым полем.
     /// </summary>
     /// <param name="gameBoard">Объект игрового поля.</param>
-    public GameBoardViewModel(GameBoard gameBoard)
+    public GameBoardViewModel(IGameBoardService gameBoardService)
     {
-        _gameBoard = gameBoard;
+        _gameBoard = gameBoardService.GenerateGameBoard(RowCount, ColumnCount, _teams);
 
         // Инициализация ViewModel для каждой клетки
         for (int y = 0; y < _gameBoard.Height; y++)

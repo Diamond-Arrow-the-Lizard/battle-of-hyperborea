@@ -1,11 +1,26 @@
-using Avalonia.Controls;
-
-namespace BoH.GUI.Views;
-
-public partial class MainWindow : Window
+namespace BoH.GUI.Views
 {
-    public MainWindow()
+    using Avalonia.Controls;
+    using BoH.GUI.ViewModels;
+    using BoH.Services;
+
+    /// <summary>
+    /// Главное окно приложения, которое включает в себя все элементы управления и привязки данных.
+    /// </summary>
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        /// <summary>
+        /// Инициализирует новый экземпляр <see cref="MainWindow"/>.
+        /// </summary>
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            // Инициализация сервиса для игрового поля
+            var gameBoardService = new GameBoardService();
+
+            // Привязка MainWindowViewModel к DataContext
+            DataContext = new MainWindowViewModel(gameBoardService);
+        }
     }
 }
