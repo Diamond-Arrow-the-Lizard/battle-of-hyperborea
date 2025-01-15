@@ -45,7 +45,7 @@ public class GameBoardViewModel
         {
             for (int x = 0; x < _gameBoard.Width; x++)
             {
-                Cells.Add(new CellViewModel(_gameBoard[x, y]));
+                //Cells.Add(new CellViewModel(_gameBoard[x, y]));
             }
         }
     }
