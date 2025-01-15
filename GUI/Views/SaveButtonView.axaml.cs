@@ -1,6 +1,8 @@
 namespace BoH.GUI.Views
 {
     using Avalonia.Controls;
+    using BoH.GUI.ViewModels;
+    using System;
 
     /// <summary>
     /// Представляет View для кнопки сохранения игрового поля.
@@ -13,6 +15,9 @@ namespace BoH.GUI.Views
         public SaveButtonView()
         {
             InitializeComponent();
+            if (Avalonia.Application.Current != null)
+                this.DataContext = ((App)Avalonia.Application.Current).GetService<SaveButtonViewModel>();
+            else throw new InvalidOperationException("ServiceProvider is not initialized.");
         }
     }
 }

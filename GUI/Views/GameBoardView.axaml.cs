@@ -2,18 +2,16 @@ namespace BoH.GUI.Views
 {
     using Avalonia.Controls;
     using BoH.GUI.ViewModels;
-    using BoH.Models;
-    using BoH.Services;
+    using System;
 
     public partial class GameBoardView : UserControl
     {
         public GameBoardView()
         {
             InitializeComponent();
-
-            // Создание игрового поля
-            var gameBoard = new GameBoard(10, 10); // 10x10 поле
-            DataContext = new GameBoardViewModel(new GameBoardService());
+            if (Avalonia.Application.Current != null)
+                this.DataContext = ((App)Avalonia.Application.Current).GetService<GameBoardViewModel>();
+            else throw new InvalidOperationException("ServiceProvider is not initialized.");
         }
     }
 }
