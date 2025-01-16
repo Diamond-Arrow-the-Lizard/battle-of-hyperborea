@@ -23,7 +23,7 @@ namespace BoH.GUI.Converters
         {
             if (value is IUnit unit)
             {
-                return unit.GetType().Name; // Возвращает имя типа юнита
+                return unit.Icon.ToString(); // Возвращает имя типа юнита
             }
 
             if (value is IObstacle obstacle)
