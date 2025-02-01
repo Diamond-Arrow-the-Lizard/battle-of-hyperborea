@@ -1,18 +1,18 @@
-namespace BoH.Abilities;
+namespace BoH.Models;
 
-using System.Security.Cryptography.X509Certificates;
 using BoH.Interfaces;
 
-public class MadDash : IAbility
+public class StunningBlow : IAbility
 {
+    
     /// <inheritdoc/> 
     public string AbilityId { get; }
 
     /// <inheritdoc/> 
-    public string Name { get; } = "Безумный рывок";
+    public string Name { get; } = "Ошеломляющий удар";
 
     /// <inheritdoc/> 
-    public string Description { get; } = "Атакуйте выбранного юнита, не изменяя своего исходного движения. Потеряйте 5 здоровья (не применится, если у применяющего юнита меньше 6 здоровья).";
+    public string Description { get; } = "Оглушает противника при ударе. Бросается только один кубик";
 
     /// <inheritdoc/> 
     public bool IsActive { get; } = true;
@@ -30,15 +30,14 @@ public class MadDash : IAbility
         {
             return false;
         }
-        else if(user.Hp < 6)
-        {
-            return false;
-        }
         else
         {
+            target.IsStunned = true;
+            var userDices = user.DamageDices;
+            user.DamageDices = 1;
             user.Attack(target);
-            user.Hp -= 5;
-            Coolown = 3;
+            user.DamageDices = userDices;
+            Coolown = 2;
             return true;
         }
     }
@@ -50,9 +49,8 @@ public class MadDash : IAbility
             --Coolown;
     }
 
-    public MadDash()
+    public StunningBlow()
     {
         AbilityId = Guid.NewGuid().ToString();
     }
-
 }
