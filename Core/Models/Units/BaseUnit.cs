@@ -1,4 +1,4 @@
-﻿namespace BoH.Units;
+﻿namespace BoH.Models;
 
 using BoH.Interfaces;
 

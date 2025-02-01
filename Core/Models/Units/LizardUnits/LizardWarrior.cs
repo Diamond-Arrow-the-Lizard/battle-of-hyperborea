@@ -1,6 +1,4 @@
-namespace BoH.Units;
-
-using BoH.Abilities;
+namespace BoH.Models;
 
 public class LizardWarrior : BaseUnit
 {

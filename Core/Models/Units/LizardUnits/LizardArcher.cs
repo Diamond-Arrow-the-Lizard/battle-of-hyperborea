@@ -1,7 +1,6 @@
 
-namespace BoH.Units;
+namespace BoH.Models;
 
-using BoH.Abilities;
 using BoH.Interfaces;
 
 public class LizardArcher : BaseUnit

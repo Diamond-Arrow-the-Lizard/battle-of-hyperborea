@@ -1,7 +1,5 @@
-namespace BoH.Abilities;
+namespace BoH.Models;
 
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
 using BoH.Interfaces;
 public class SelfCare : IAbility
 {
