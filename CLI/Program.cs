@@ -3,7 +3,6 @@
 using BoH.Interfaces;
 using BoH.Services;
 using BoH.Models;
-using BoH.Units;
 using BoH.GameLogic;
 
 public class Program
