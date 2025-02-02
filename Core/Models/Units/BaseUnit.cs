@@ -29,7 +29,7 @@ public class BaseUnit : IUnit, IIconHolder
     public string Icon
     {
         get => _icon;
-        private set 
+        private set
         {
             if (value.Length != 1 ||
                !char.IsLetterOrDigit(value[0]) &&
@@ -41,7 +41,7 @@ public class BaseUnit : IUnit, IIconHolder
             _icon = value;
         }
     }
-    private string _icon = "T";  
+    private string _icon = "T";
 
     /// <inheritdoc/>
     public int Hp { get; set; } = 100;
@@ -166,7 +166,18 @@ public class BaseUnit : IUnit, IIconHolder
     }
 
     /// <inheritdoc/>
-    /// <exception cref="InvalidEnumArgumentException"/>
+    /// <remarks>
+    /// Полностью сбрасывает состояние хода, устанавливая фазу в <see cref="TurnPhase.Movement"/>
+    /// </remarks>
+    public void ResetTurnState()
+    {
+        CurrentTurnPhase = TurnPhase.Movement;
+    }
+
+    /// <inheritdoc/>
+    /// <exception cref="InvalidEnumArgumentException">
+    /// Выбрасывается, если текущая фаза содержит недопустимое значение.
+    /// </exception>
     public void ChangeTurnPhase()
     {
         CurrentTurnPhase = CurrentTurnPhase switch
@@ -174,7 +185,8 @@ public class BaseUnit : IUnit, IIconHolder
             TurnPhase.Movement => TurnPhase.Action,
             TurnPhase.Action => TurnPhase.End,
             TurnPhase.End => TurnPhase.Movement,
-            _ => throw new InvalidEnumArgumentException("Неизвестная фаза хода юнита."),
+            _ => throw new InvalidEnumArgumentException(
+                $"Недопустимое значение фазы хода: {CurrentTurnPhase}")
         };
     }
 }

@@ -117,6 +117,14 @@ public interface IUnit
     void ChangeTurnPhase();
 
     /// <summary>
+    /// Полностью сбрасывает состояние хода юнита к начальной фазе.
+    /// </summary>
+    /// <remarks>
+    /// Должен устанавливать <see cref="CurrentTurnPhase"/> в <see cref="TurnPhase.Movement"/>
+    /// </remarks>
+    void ResetTurnState();
+
+    /// <summary>
     /// Событие, вызываемое при смерти юнита.
     /// </summary>
     event Action<IUnit> OnDeath;
