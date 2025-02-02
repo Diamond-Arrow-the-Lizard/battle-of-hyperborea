@@ -1,5 +1,6 @@
 ﻿namespace BoH.Models;
 
+using System.ComponentModel;
 using BoH.Interfaces;
 
 /// <summary>
@@ -12,24 +13,16 @@ public class BaseUnit : IUnit
     /// </summary>
     protected virtual int MaxHealth { get; } = 100;
 
-    /// <summary>
-    /// Уникальный идентификатор юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public string UnitId { get; }
 
-    /// <summary>
-    /// Имя юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public string UnitName { get; } = "Юнит";
 
-    /// <summary>
-    /// Название команды, которой принадлежит юнит.
-    /// </summary>
+    /// <inheritdoc/>
     public string Team { get; } = "Dev";
 
-    /// <summary>
-    /// Иконка, представляющая юнита на игровом поле.
-    /// </summary>
+    /// <inheritdoc/>
     /// <exception cref="ArgumentException">
     /// Выбрасывается, если символ некорректен (например, не является печатным).
     /// </exception>
@@ -47,64 +40,40 @@ public class BaseUnit : IUnit
     }
     private char _icon;
 
-    /// <summary>
-    /// Текущее количество очков здоровья юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public int Hp { get; set; } = 100;
 
-    /// <summary>
-    /// Скорость передвижения юнита (количество клеток за ход).
-    /// </summary>
+    /// <inheritdoc/>
     public int Speed { get; set; } = 3;
 
-    /// <summary>
-    /// Текущее количество очков здоровья юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public int DamageDices { get; set; } = 3;
 
-    /// <summary>
-    /// Значение защиты юнита, уменьшающее входящий урон.
-    /// </summary>
+    /// <inheritdoc/>
     public int Defence { get; set; } = 0;
 
-    /// <summary>
-    /// Дальность атаки юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public int Range { get; protected set; } = 1;
 
-    /// <summary>
-    /// Тип или класс юнита (например, пехота, танк и т.д.).
-    /// </summary>
+    /// <inheritdoc/>
     public UnitType UnitType { get; } = UnitType.Melee;
 
-    /// <summary>
-    /// Показывает, находится ли юнит в состоянии оглушения или не может выполнять действия.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsStunned { get; set; } = false;
 
-    /// <summary>
-    /// Показывает, жив ли юнит.
-    /// </summary>
+    /// <inheritdoc/>
     public bool IsDead { get; private set; } = false;
 
-    /// <summary>
-    /// Показывает, сделал ли ход юнит.
-    /// </summary>
-    public bool MadeTurn {get; set; } = false;
+    /// <inheritdoc/>
+    public TurnPhase CurrentTurnPhase { get; set; }
 
-    /// <summary>
-    /// Коллекция способностей, которыми обладает юнит.
-    /// </summary>
+    /// <inheritdoc/>
     public List<IAbility> Abilities { get; } = new();
 
-    /// <summary>
-    /// Текущая позиция юнита на игровом поле.
-    /// </summary>
+    /// <inheritdoc/>
     public (int X, int Y) Position { get; set; }
 
-    /// <summary>
-    /// Событие, вызываемое при смерти юнита.
-    /// </summary>
+    /// <inheritdoc/>
     public event Action<IUnit>? OnDeath;
 
     /// <summary>
@@ -122,9 +91,7 @@ public class BaseUnit : IUnit
         Icon = icon;
     }
 
-    /// <summary>
-    /// Применяет урон к юниту, уменьшая его очки здоровья.
-    /// </summary>
+    /// <inheritdoc/>
     /// <param name="amount">Количество урона для применения.</param>
     public void TakeDamage(int amount)
     {
@@ -141,10 +108,7 @@ public class BaseUnit : IUnit
         }
     }
 
-    /// <summary>
-    /// Применяет лечение, увеличивая очки здоровья юнита.
-    /// </summary>
-    /// <param name="amount">Количество восстанавливаемого здоровья.</param>
+    /// <inheritdoc/>
     /// <exception cref="InvalidOperationException">Выбрасывается, если юнит мёртв.</exception>
     public void Heal(int amount)
     {
@@ -153,28 +117,23 @@ public class BaseUnit : IUnit
         Hp = Math.Min(MaxHealth, Hp + amount);
     }
 
-    /// <summary>
-    /// Перемещает юнита на игровом поле.
-    /// </summary>
-    /// <param name="newPosition">Новая позиция юнита.</param>
-    /// <exception cref="InvalidOperationException">Выбрасывается, если юнит мёртв или оглушён.</exception>
+    /// <inheritdoc/>
+    /// <exception cref="InvalidOperationException"></exception>
     public void Move((int X, int Y) newPosition)
     {
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может двигаться.");
         if (IsStunned) throw new InvalidOperationException("Оглушенный юнит не может двигаться.");
+        if (CurrentTurnPhase != TurnPhase.Movement) throw new InvalidOperationException("Юнит не в фазе передвижения.");
 
         Position = newPosition;
+        ChangeTurnPhase();
     }
 
-    /// <summary>
-    /// Проверяет, может ли юнит переместиться.
-    /// </summary>
+    /// <inheritdoc/>
     /// <returns>true, если перемещение возможно; иначе false.</returns>
-    public bool CanMove() => !IsDead && !IsStunned;
+    public bool CanMove() => !IsDead && !IsStunned && CurrentTurnPhase == TurnPhase.Movement;
 
-    /// <summary>
-    /// Вычисляет урон от атаки юнита.
-    /// </summary>
+    /// <inheritdoc/>
     /// <returns>Значение урона. Если юнит мёртв, возвращает 0.</returns>
     public int CalculateAttackDamage()
     {
@@ -191,16 +150,28 @@ public class BaseUnit : IUnit
         else return 0;
     }
 
-    /// <summary>
-    /// Выполняет атаку по другому юниту.
-    /// </summary>
-    /// <param name="target">Целевой юнит для атаки.</param>
-    /// <exception cref="InvalidOperationException">Выбрасывается, если атакующий или цель мертвы.</exception>
+    /// <inheritdoc/>
+    /// <exception cref="InvalidOperationException"/>
     public void Attack(IUnit target)
     {
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может атаковать.");
+        if (CurrentTurnPhase != TurnPhase.Action) throw new InvalidOperationException("Юнит не в фазе действия.");
         if (target.IsDead) throw new InvalidOperationException("Нельзя атаковать мертвого юнита.");
 
         target.TakeDamage(CalculateAttackDamage());
+        ChangeTurnPhase();
+    }
+
+    /// <inheritdoc/>
+    /// <exception cref="InvalidEnumArgumentException"/>
+    public void ChangeTurnPhase()
+    {
+        CurrentTurnPhase = CurrentTurnPhase switch
+        {
+            TurnPhase.Movement => TurnPhase.Action,
+            TurnPhase.Action => TurnPhase.End,
+            TurnPhase.End => TurnPhase.Movement,
+            _ => throw new InvalidEnumArgumentException("Неизвестная фаза хода юнита."),
+        };
     }
 }
