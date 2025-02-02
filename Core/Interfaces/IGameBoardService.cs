@@ -9,10 +9,13 @@ public interface IGameBoardService
     /// Генерирует новое игровое поле заданного размера, расставляет препятствия и юнитов.
     /// </summary>
     /// <param name="width">Ширина игрового поля (количество столбцов).</param>
-    /// <param name="length">Длина игрового поля (количество строк).</param>
-    /// <param name="teams">Словарь с юнитами.</param>
+    /// <param name="height">Высота игрового поля (количество строк).</param>
+    /// <param name="teams">Словарь, в котором ключ — название команды, а значение — список юнитов этой команды.</param>
+    /// <param name="players">Список игроков, которым будут распределены юниты.</param>
     /// <returns>Экземпляр <see cref="IGameBoard"/>, представляющий игровое поле.</returns>
-    IGameBoard GenerateGameBoard(int width, int length, Dictionary<string, List<IUnit> > teams);
+    /// <exception cref="ArgumentException">Если передано меньше двух команд или их больше двух.</exception>
+    /// <exception cref="InvalidOperationException">Если число юнитов превышает допустимый лимит для игрового поля.</exception>
+    IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, ref IPlayer[] players);
 
     /// <summary>
     /// Добавляет объект в указанную клетку игрового поля.
