@@ -66,9 +66,9 @@ public interface IUnit
     bool IsDead { get; }
 
     /// <summary>
-    /// Показывает, сделал ли ход юнит.
+    /// Показывает текущую фазу хода юнита.
     /// </summary>
-    bool MadeTurn { get; set; }
+    TurnPhase CurrentTurnPhase { get; set; }
 
     /// <summary>
     /// Коллекция способностей, которыми обладает юнит.
@@ -115,6 +115,11 @@ public interface IUnit
     /// </summary>
     /// <param name="target">Целевой юнит для атаки.</param>
     void Attack(IUnit target);
+
+    /// <summary>
+    /// Меняет фазу хода юнита.
+    /// </summary>
+    void ChangeTurnPhase();
 
     /// <summary>
     /// Событие, вызываемое при смерти юнита.
