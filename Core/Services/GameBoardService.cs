@@ -10,25 +10,24 @@ using System.Threading.Tasks;
 public class GameBoardService : IGameBoardService
 {
     /// <inheritdoc/>
-    public IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, ref IPlayer[] players)
+    public IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, IPlayer[] players)
     {
-        // Проверка входных данных
-        if (players == null || players.Length < 2)
-            throw new ArgumentException("Массив игроков должен содержать минимум двух игроков.", nameof(players));
+        // Валидация входных параметров
+        if (players == null || players.Length != 2)
+            throw new ArgumentException("Требуется ровно два игрока", nameof(players));
 
-        Random rnd = new Random();
-        var gameBoard = new GameBoard(width, height);
+        if (units == null)
+            throw new ArgumentNullException(nameof(units));
 
-        // Сбор имен команд из всех юнитов
-        List<string> teamNames = new List<string>();
-        foreach (var unit in units)
-            teamNames.Add(unit.Team); 
-
-        var uniqueTeams = teamNames.Distinct().ToList();
+        // Проверка уникальных команд
+        var uniqueTeams = units.Select(u => u.Team).Distinct().ToList();
         if (uniqueTeams.Count != 2)
-            throw new InvalidOperationException("Число команд не равно двум.");
+            throw new ArgumentException("Должно быть ровно две уникальные команды", nameof(units));
 
-        // Распределение юнитов по игрокам в зависимости от команды
+        var gameBoard = new GameBoard(width, height);
+        var rnd = new Random();
+
+        // Распределение юнитов по игрокам
         foreach (var unit in units)
         {
             if (unit.Team == uniqueTeams[0])
@@ -36,64 +35,64 @@ public class GameBoardService : IGameBoardService
             else if (unit.Team == uniqueTeams[1])
                 players[1].AddUnit(unit);
             else
-                throw new InvalidOperationException($"Неизвестная команда: {unit.Team}");
+                throw new InvalidOperationException($"Юнит принадлежит неизвестной команде: {unit.Team}");
         }
 
-        // Проверка: число юнитов для каждого игрока не должно превышать допустимое число (например, не больше количества столбцов)
-        if (players[0].Units.Count > gameBoard.Width || players[1].Units.Count > gameBoard.Width)
-            throw new InvalidOperationException("Количество юнитов превышает допустимое число для игрового поля.");
+        // Проверка вместимости поля
+        int maxUnitsPerRow = Math.Max(
+            players[0].Units.Count,
+            players[1].Units.Count
+        );
 
-        // Размещение юнитов в диаметрально противоположных углах:
-        // Для наглядности, выберем следующую стратегию:
-        // - Юниты первого игрока (команда uniqueTeams[0]) размещаются по верхней строке слева направо.
-        // - Юниты второго игрока (команда uniqueTeams[1]) – по нижней строке справа налево.
-        int pos = 0;
+        if (maxUnitsPerRow > width || height < 2)
+            throw new InvalidOperationException(
+                $"Поле {width}x{height} слишком мало для размещения юнитов");
+
+        // Размещение юнитов первого игрока (верхняя строка)
+        int column = 0;
         foreach (var unit in players[0].Units)
         {
-            if (unit is IIconHolder iconHolder)
-            {
-                // Верхняя строка (индекс 0), колонки слева направо
-                gameBoard[pos, 0].Content = iconHolder;
-                pos++;
-            }
+            if (column >= width) break;
+            var cell = gameBoard[column, 0];
+            cell.Content = unit as IIconHolder;
+            cell.UpdateIcon();
+            column++;
         }
 
-        pos = 0;
+        // Размещение юнитов второго игрока (нижняя строка)
+        column = width - 1;
         foreach (var unit in players[1].Units)
         {
-            if (unit is IIconHolder iconHolder)
+            if (column < 0) break;
+            var cell = gameBoard[column, height - 1];
+            cell.Content = unit as IIconHolder;
+            cell.UpdateIcon();
+            column--;
+        }
+
+        // Генерация препятствий
+        var availableCells = new List<ICell>();
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
             {
-                // Нижняя строка (индекс Height - 1), колонки справа налево
-                gameBoard[gameBoard.Width - 1 - pos, gameBoard.Height - 1].Content = iconHolder;
-                pos++;
+                if (!gameBoard[x, y].IsOccupied())
+                    availableCells.Add(gameBoard[x, y]);
             }
         }
 
-        // Размещение препятствий. Количество препятствий случайное от 0 до gameBoard.Width - 1.
-        int obstacleCount = rnd.Next(0, gameBoard.Width);
-        int failedPlacements = 0;
-        while (obstacleCount > 0)
+        int obstacleCount = rnd.Next(0, Math.Min(width, availableCells.Count));
+        for (int i = 0; i < obstacleCount; i++)
         {
-            int x = rnd.Next(0, gameBoard.Width);
-            int y = rnd.Next(0, gameBoard.Height);
-            if (gameBoard[x, y].Content != null)
-            {
-                failedPlacements++;
-                if (failedPlacements == 3)
-                    break;
-            }
-            else
-            {
-                gameBoard[x, y].Content = new Obstacle();
-                obstacleCount--;
-                // Сброс счётчика неудачных попыток после успешного размещения
-                failedPlacements = 0;
-            }
+            var index = rnd.Next(availableCells.Count);
+            var cell = availableCells[index];
+            cell.Content = new Obstacle(); 
+            cell.UpdateIcon();
+            availableCells.RemoveAt(index);
         }
 
         return gameBoard;
     }
-
 
     /// <inheritdoc/>
     public void AddObjectToGameBoard(IIconHolder? obj, ICell cell)
