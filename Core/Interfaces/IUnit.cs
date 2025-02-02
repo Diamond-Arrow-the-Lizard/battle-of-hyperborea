@@ -21,11 +21,6 @@ public interface IUnit
     string Team { get; }
 
     /// <summary>
-    /// Иконка, представляющая юнита на игровом поле.
-    /// </summary>
-    char Icon { get; set; }
-
-    /// <summary>
     /// Текущее количество очков здоровья юнита.
     /// </summary>
     int Hp { get; set; }

@@ -9,9 +9,4 @@ public interface IObstacle
     /// Уникальный идентификатор препятствия.
     /// </summary>
     string ObstacleId { get; }
-
-    /// <summary>
-    /// Графическое представление препятствия (символ).
-    /// </summary>
-    char Icon { get; set; }
 }
