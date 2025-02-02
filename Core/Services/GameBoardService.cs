@@ -14,10 +14,13 @@ public class GameBoardService : IGameBoardService
     // Юниты появляются в диаметрально противоположных углах
     public IGameBoard GenerateGameBoard(int width, int length, Dictionary<string, List<IUnit>> teams)
     {
+        var gameBoard = new GameBoard(width, length);
+        return gameBoard;
+        /*
         Random rnd = new Random();
         var gameBoard = new GameBoard(width, length);
         List<string> teamNames = teams.Keys.ToList();
-        List<IUnit> teamOne = teams[teamNames[0]];
+        List<IIconHolder> teamOne = teams[teamNames[0]];
         List<IUnit> teamTwo = teams[teamNames[1]];
 
         if (teamOne.Count > gameBoard.Width - 1 || teamTwo.Count > gameBoard.Width - 1)
@@ -57,17 +60,18 @@ public class GameBoardService : IGameBoardService
         }
 
         return gameBoard;
+        */
     }
 
     /// <inheritdoc/>
-    public void AddObjectToGameBoard(object? obj, ICell cell)
+    public void AddObjectToGameBoard(IIconHolder? obj, ICell cell)
     {
         if (obj == null) return;
         cell.Content = obj;
     }
 
     /// <inheritdoc/>
-    public void RemoveObjectFromGameBoard(object? obj, ICell cell)
+    public void RemoveObjectFromGameBoard(IIconHolder? obj, ICell cell)
     {
         if (obj == null) return;
         cell.Content = null;
