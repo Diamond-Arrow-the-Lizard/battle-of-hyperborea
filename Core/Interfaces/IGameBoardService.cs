@@ -10,12 +10,24 @@ public interface IGameBoardService
     /// </summary>
     /// <param name="width">Ширина игрового поля (количество столбцов).</param>
     /// <param name="height">Высота игрового поля (количество строк).</param>
-    /// <param name="teams">Словарь, в котором ключ — название команды, а значение — список юнитов этой команды.</param>
-    /// <param name="players">Список игроков, которым будут распределены юниты.</param>
+    /// <param name="units">Коллекция юнитов для размещения на поле.</param>
+    /// <param name="players">Массив из двух игроков, которым будут распределены юниты.</param>
     /// <returns>Экземпляр <see cref="IGameBoard"/>, представляющий игровое поле.</returns>
-    /// <exception cref="ArgumentException">Если передано меньше двух команд или их больше двух.</exception>
-    /// <exception cref="InvalidOperationException">Если число юнитов превышает допустимый лимит для игрового поля.</exception>
-    IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, ref IPlayer[] players);
+    /// <exception cref="ArgumentException">
+    /// Выбрасывается при:
+    /// <list type="bullet">
+    /// <item><description>Количестве игроков отличном от 2</description></item>
+    /// <item><description>Количестве уникальных команд не равном 2</description></item>
+    /// </list>
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// Выбрасывается при:
+    /// <list type="bullet">
+    /// <item><description>Недостаточном размере поля для размещения юнитов</description></item>
+    /// <item><description>Обнаружении юнита с неизвестной командой</description></item>
+    /// </list>
+    /// </exception>
+    IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, IPlayer[] players);
 
     /// <summary>
     /// Добавляет объект в указанную клетку игрового поля.
