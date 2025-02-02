@@ -6,6 +6,7 @@ using BoH.Models;
 
 public static class GameBoardRenderer
 {
+    /*
     public static void DrawBoard(IGameBoard board, ICell? cellScan = null, int? scanRange = null)
     {
         IEnumerable<ICell>? scannedCells = null;
@@ -78,4 +79,5 @@ public static class GameBoardRenderer
             }
         }
     }
+    */
 }
