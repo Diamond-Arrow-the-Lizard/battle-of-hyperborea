@@ -2,33 +2,51 @@ namespace BoH.Models;
 
 using BoH.Interfaces;
 
-/// <summary>
-/// Представляет клетку игрового поля.
-/// </summary>
-public class Cell : ICell
+/// <inheritdoc/>
+public class Cell : ICell, IIconHolder
 {
-    /// <summary>
-    /// Позиция клетки на игровом поле.
-    /// </summary>
+    /// <inheritdoc/>
     public (int X, int Y) Position { get; }
 
-    /// <summary>
-    /// Объект, содержащийся в клетке (юнит, препятствие или ничего).
-    /// </summary>
-    public object? Content { get; set; }
+    /// <inheritdoc/>
+    /// <exception cref="ArgumentException">
+    /// Выбрасывается, если символ некорректен (например, не является печатным).
+    /// </exception>
+    public string Icon
+    {
+        get => _icon;
+        private set
+        {
+            if (value.Length != 1 ||
+               !char.IsLetterOrDigit(value[0]) &&
+               !char.IsSymbol(value[0]) &&
+               !char.IsPunctuation(value[0]))
+            {
+                throw new ArgumentException("Иконка юнита должна быть одним печатным символом.");
+            }
+            _icon = value;
+        }
+    }
+    private string _icon = "T";
 
-    /// <summary>
-    /// Проверяет, является ли клетка занятой (содержит юнит или препятствие).
-    /// </summary>
+    /// <inheritdoc/>
+    public IIconHolder? Content { get; set; } = null;
+
+    /// <inheritdoc/>
     /// <returns>true, если клетка занята; иначе false.</returns>
     public bool IsOccupied() => Content != null;
 
-    /// <summary>
-    /// Очищает клетку, устанавливая её тип как пустой и удаляя содержимое.
-    /// </summary>
+    /// <inheritdoc/>
     public void Clear()
     {
         Content = null;
+    }
+
+    /// <inheritdoc/>
+    /// <exception cref="ArgumentException"/>
+    public void UpdateIcon()
+    {
+        Icon = Content?.Icon ?? " ";
     }
 
     /// <summary>
@@ -44,4 +62,5 @@ public class Cell : ICell
         }
         this.Position = Position;
     }
+
 }
