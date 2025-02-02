@@ -4,7 +4,7 @@ namespace BoH.Interfaces;
 /// <summary>
 /// Представляет клетку игрового поля.
 /// </summary>
-public interface ICell
+public interface ICell 
 {
     /// <summary>
     /// Позиция клетки на игровом поле.
@@ -14,7 +14,7 @@ public interface ICell
     /// <summary>
     /// Объект, содержащийся в клетке (юнит, препятствие или ничего).
     /// </summary>
-    object? Content { get; set; }
+    IIconHolder? Content { get; set; }
 
     /// <summary>
     /// Проверяет, является ли клетка занятой (содержит юнит или препятствие).
@@ -26,5 +26,10 @@ public interface ICell
     /// Очищает клетку, устанавливая её тип как пустой и удаляя содержимое.
     /// </summary>
     void Clear();
+
+    /// <summary>
+    /// Обновляет иконку клетки в зависимости от её содержания
+    /// </summary>
+    void UpdateIcon();
 
 }
