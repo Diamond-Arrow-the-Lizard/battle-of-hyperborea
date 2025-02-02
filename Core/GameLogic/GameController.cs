@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// Класс для управления игровым процессом.
 /// </summary>
+/* 
 public class GameController : IGameController
 {
     private readonly IGameBoardService _boardService;
@@ -101,3 +102,4 @@ public class GameController : IGameController
     }
 
 }
+*/
