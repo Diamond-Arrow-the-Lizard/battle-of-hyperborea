@@ -7,12 +7,15 @@ using BoH.GameLogic;
 
 public class Program
 {
+    
     /// <summary>
     /// Точка входа в приложение. Отвечает за запуск игры и обработку игровых раундов.
     /// </summary>
     /// <param name="args">Аргументы командной строки (не используются).</param>
     public static async Task Main(string[] args)
     {
+        await Task.Delay(100);
+        /*
         // Инициализация игрового сервиса и контроллера
         GameBoardService service = new GameBoardService();
         GameController gameController = new GameController(service);
@@ -74,8 +77,9 @@ public class Program
         }
 
     }
+    */
 
-
+/*
     /// <summary>
     /// Запрашивает у пользователя размер команды и возвращает его.
     /// </summary>
@@ -456,5 +460,7 @@ public class Program
             }
         }
         return false;
+        */
     }
+    
 }
