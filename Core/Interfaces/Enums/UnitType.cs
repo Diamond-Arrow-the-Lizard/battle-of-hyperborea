@@ -1,7 +1,10 @@
 namespace BoH.Interfaces;
 
+/// <summary>
+/// Тип юнита.
+/// </summary>
 public enum UnitType
 {
-    Melee,
-    Range
+    Melee, // Ближнего боя
+    Range // Дальнего боя
 }
