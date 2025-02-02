@@ -6,7 +6,7 @@ using BoH.Interfaces;
 /// <summary>
 /// Базовая реализация боевого юнита.
 /// </summary>
-public class BaseUnit : IUnit
+public class BaseUnit : IUnit, IIconHolder
 {
     /// <summary>
     /// Максимально возможное здоровье юнита.
@@ -26,19 +26,22 @@ public class BaseUnit : IUnit
     /// <exception cref="ArgumentException">
     /// Выбрасывается, если символ некорректен (например, не является печатным).
     /// </exception>
-    public char Icon
+    public string Icon
     {
         get => _icon;
-        set
+        private set 
         {
-            if (!char.IsLetterOrDigit(value) && !char.IsSymbol(value) && !char.IsPunctuation(value))
+            if (value.Length != 1 ||
+               !char.IsLetterOrDigit(value[0]) &&
+               !char.IsSymbol(value[0]) &&
+               !char.IsPunctuation(value[0]))
             {
-                throw new ArgumentException("Иконка препятствия должна быть печатным символом.");
+                throw new ArgumentException("Иконка юнита должна быть одним печатным символом.");
             }
             _icon = value;
         }
     }
-    private char _icon;
+    private string _icon = "T";  
 
     /// <inheritdoc/>
     public int Hp { get; set; } = 100;
@@ -88,7 +91,7 @@ public class BaseUnit : IUnit
         UnitId = Guid.NewGuid().ToString();
         UnitType = type;
         Team = team;
-        Icon = icon;
+        Icon = icon.ToString();
     }
 
     /// <inheritdoc/>

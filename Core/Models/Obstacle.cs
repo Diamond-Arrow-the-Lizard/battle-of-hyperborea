@@ -6,33 +6,33 @@ using BoH.Interfaces;
 /// <summary>
 /// Реализация препятствия на игровом поле.
 /// </summary>
-public class Obstacle : IObstacle
+public class Obstacle : IObstacle, IIconHolder
 {
     /// <summary>
     /// Уникальный идентификатор препятствия. Генерируется автоматически.
     /// </summary>
     public string ObstacleId { get; }
 
-    /// <summary>
-    /// Графическое представление препятствия (символ). 
-    /// По умолчанию используется символ 'B'.
-    /// </summary>
+    /// <inheritdoc/>
     /// <exception cref="ArgumentException">
     /// Выбрасывается, если символ некорректен (например, не является печатным).
     /// </exception>
-    public char Icon
+    public string Icon
     {
         get => _icon;
-        set
+        private set
         {
-            if (!char.IsLetterOrDigit(value) && !char.IsSymbol(value) && !char.IsPunctuation(value))
+            if (value.Length != 1 ||
+               !char.IsLetterOrDigit(value[0]) &&
+               !char.IsSymbol(value[0]) &&
+               !char.IsPunctuation(value[0]))
             {
-                throw new ArgumentException("Иконка препятствия должна быть печатным символом.");
+                throw new ArgumentException("Иконка юнита должна быть одним печатным символом.");
             }
             _icon = value;
         }
     }
-    private char _icon;
+    private string _icon = "T";
 
     /// <summary>
     /// Инициализирует новый экземпляр препятствия с автоматически сгенерированным идентификатором.
@@ -41,6 +41,6 @@ public class Obstacle : IObstacle
     public Obstacle(char icon = 'B')
     {
         ObstacleId = Guid.NewGuid().ToString();
-        Icon = icon;
+        Icon = icon.ToString();
     }
 }
