@@ -19,14 +19,14 @@ public interface IGameBoardService
     /// </summary>
     /// <param name="obj">Объект для добавления.</param>
     /// <param name="cell">Целевая клетка игрового поля.</param>
-    void AddObjectToGameBoard(object? obj, ICell cell);
+    void AddObjectToGameBoard(IIconHolder? obj, ICell cell);
 
     /// <summary>
     /// Удаляет объект из указанной клетки игрового поля.
     /// </summary>
     /// <param name="obj">Объект для удаления.</param>
     /// <param name="cell">Целевая клетка игрового поля.</param>
-    void RemoveObjectFromGameBoard(object? obj, ICell cell);
+    void RemoveObjectFromGameBoard(IIconHolder? obj, ICell cell);
 
     /// <summary>
     /// Асинхронно сохраняет текущее состояние игрового поля.
