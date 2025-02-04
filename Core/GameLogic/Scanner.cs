@@ -12,7 +12,7 @@ public class Scanner : IScanner
     /// <summary>
     /// Радиус сканирования.
     /// </summary>
-    public int Range { get; }
+    public int Range { get; set; }
 
     /// <summary>
     /// Инициализирует новый экземпляр сканера с заданным радиусом.
