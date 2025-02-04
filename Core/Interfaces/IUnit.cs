@@ -71,9 +71,9 @@ public interface IUnit
     List<IAbility> Abilities { get; }
 
     /// <summary>
-    /// Текущая позиция юнита на игровом поле.
+    /// Клетка, которую занимает юнит.
     /// </summary>
-    (int X, int Y) Position { get; set; }
+    ICell? OccupiedCell { get; set; }
 
     /// <summary>
     /// Применяет урон к юниту, уменьшая его очки здоровья.
@@ -91,7 +91,7 @@ public interface IUnit
     /// Перемещает юнита на игровом поле.
     /// </summary>
     /// <param name="newPosition">Новая позиция юнита.</param>
-    void Move((int X, int Y) newPosition);
+    void PlaceUnit(ICell newPosition);
 
     /// <summary>
     /// Проверяет, может ли юнит переместиться.

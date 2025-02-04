@@ -68,10 +68,10 @@ public class TurnManager
             .Where(u => !u.IsDead && !u.IsStunned && u.Team == _currentPlayer.Team)
             .ToList();
 
-        foreach(var i in _availableUnits)
+        foreach (var i in _availableUnits)
         {
-            Cell unitCell = new(i.Position);
-            _availableUnitsCells.Add(unitCell);
+            if (i.OccupiedCell != null)
+                _availableUnitsCells.Add(i.OccupiedCell);
         }
 
         OnTurnStart?.Invoke(_currentPlayer);
@@ -116,7 +116,7 @@ public class TurnManager
     public List<ICell> ProcessScanner(ActionType action, int scanRange)
     {
         List<ICell> scannedCells = new();
-        switch(action)
+        switch (action)
         {
             // TODO
         }
@@ -139,15 +139,17 @@ public class TurnManager
                     {
                         _actionHandler.HandleMovement(_selectedUnit, destination, availableCells);
                         OnTurnStateChanged?.Invoke(_selectedUnit);
-                    } else throw new InvalidDataException("Передвижение осуществляется не на клетку.");
+                    }
+                    else throw new InvalidDataException("Передвижение осуществляется не на клетку.");
                     break;
                 case ActionType.Attack:
                     ArgumentNullException.ThrowIfNull(availableCells);
-                    if(target is ICell targetedCellForAttack)
+                    if (target is ICell targetedCellForAttack)
                     {
                         _actionHandler.HandleAttack(_selectedUnit, targetedCellForAttack, availableCells);
                         OnTurnStateChanged?.Invoke(_selectedUnit);
-                    } else throw new InvalidDataException("Атака осуществляется не на клетку.");
+                    }
+                    else throw new InvalidDataException("Атака осуществляется не на клетку.");
                     break;
                 case ActionType.Ability:
                     ArgumentNullException.ThrowIfNull(availableCells);
@@ -156,7 +158,8 @@ public class TurnManager
                     {
                         _actionHandler.HandleAbility(_selectedUnit, usedAbility, targetedCellForAbility, availableCells);
                         OnTurnStateChanged?.Invoke(_selectedUnit);
-                    } else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
+                    }
+                    else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
                     break;
                 case ActionType.Skip:
                     _actionHandler.HandleSkip(_selectedUnit);
