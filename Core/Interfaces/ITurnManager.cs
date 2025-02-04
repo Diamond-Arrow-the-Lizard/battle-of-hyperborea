@@ -40,6 +40,16 @@ public interface ITurnManager
     event Action<IPlayer> OnTurnStart;
 
     /// <summary>
+    /// Событие выбора юнита для выполнения действия
+    /// </summary>
+    event Action<IUnit, AvailableActions>? OnUnitSelected;
+
+    /// <summary>
+    /// Событие изменения состояния хода
+    /// </summary>
+    event Action? OnTurnStateChanged;
+
+    /// <summary>
     /// Инициализирует новый игровой раунд.
     /// </summary>
     /// <param name="firstPlayer">Игрок, который будет ходить первым в раунде.</param>
@@ -81,4 +91,18 @@ public interface ITurnManager
     /// </list>
     /// </remarks>
     void EndTurn();
+
+    /// <summary>
+    /// Выбирает активного юнита для выполнения действий
+    /// </summary>
+    /// <param name="unit">Выбираемый юнит</param>
+    void SelectUnit(IUnit unit);
+/*
+    /// <summary>
+    /// Обрабатывает действие игрока
+    /// </summary>
+    /// <param name="action">Тип действия</param>
+    /// <param name="target">Цель действия (опционально)</param>
+    void ProcessPlayerAction(ActionType action, object? target = null);
+    */
 }
