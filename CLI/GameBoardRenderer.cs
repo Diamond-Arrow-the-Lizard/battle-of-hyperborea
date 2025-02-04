@@ -4,80 +4,25 @@ using BoH.GameLogic;
 using BoH.Interfaces;
 using BoH.Models;
 
-public static class GameBoardRenderer
+public class ConsoleGameBoardRenderer : IGameBoardRenderer
 {
-    /*
-    public static void DrawBoard(IGameBoard board, ICell? cellScan = null, int? scanRange = null)
+    public void Render(IGameBoard gameBoard)
     {
-        IEnumerable<ICell>? scannedCells = null;
-
-        if (cellScan != null && scanRange != null)
+        // TODO
+        Console.WriteLine("Cool game board");
+        for (int x = 0; x < gameBoard.Width; x++)
         {
-            Scanner scanner = new Scanner((int)scanRange);
-            scannedCells = scanner.Scan(cellScan, board);
-        }
-
-        // Рендерим верхнюю границу поля
-        for (int x = 0; x < board.Width; x++)
-        {
-            Console.Write(x == 0 ? "╔═══" : "╦═══");
-        }
-        Console.WriteLine("╗");
-
-        for (int y = 0; y < board.Height; y++)
-        {
-            // Рендерим содержимое строк
-            for (int x = 0; x < board.Width; x++)
+            for (int y = 0; y < gameBoard.Width; y++)
             {
-                var cellContent = board[x, y].Content;
-
-                char symbol = cellContent switch
-                {
-                    null => ' ', // Пустая клетка
-                    Obstacle obstacle => obstacle.Icon,
-                    IUnit unit => unit.Icon,
-                    _ => '?'
-                };
-
-                // Обновляем содержимое клеток, если мы сканируем
-                if (scannedCells != null)
-                {
-                    if (scannedCells.Any(c => c.Position == board[x, y].Position))
-                    {
-                        var scannedContent = board[x, y].Content;
-                        symbol = scannedContent switch
-                        {
-                            null => '#', // Пустая клетка
-                            Obstacle obstacle => obstacle.Icon,
-                            IUnit => '!',
-                            _ => '?'
-                        };
-
-                    }
-                }
-
-                Console.Write(x == 0 ? $"║ {symbol} " : $"║ {symbol} ");
+                if (gameBoard[x, y] is Cell cell)
+                    Console.Write(cell.Icon);
             }
-            Console.WriteLine("║");
-
-            // Рендерим соединительную или нижнюю границу
-            if (y < board.Height - 1) // Если не последняя строка
-            {
-                for (int x = 0; x < board.Width; x++)
-                {
-                    Console.Write(x == 0 ? "╠═══" : "╬═══");
-                }
-                Console.WriteLine("╣");
-            }
-            else // Для последней строки
-            {
-                for (int x = 0; x < board.Width; x++)
-                {
-                    Console.Write(x == 0 ? "╚═══" : "╩═══");
-                }
-                Console.WriteLine("╝");
-            }
+            Console.WriteLine();
         }
     }
-    */
+    public void ScanRender(IGameBoard gameBoard, List<ICell> scannedCells)
+    {
+        // TODO
+        Console.WriteLine($"Cool game board (scanned {scannedCells.Count} cells)");
+    }
 }
