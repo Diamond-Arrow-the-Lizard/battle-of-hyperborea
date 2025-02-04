@@ -5,29 +5,44 @@ using BoH.Models;
 using System.Linq;
 
 /// <inheritdoc cref="ITurnManager"/>
-public class TurnManager
+/// <remarks>
+/// Управляет очередью ходов, переключением между игроками и обработкой игровых действий.
+/// Взаимодействует с <see cref="IScannerHandler"/> для определения доступных клеток
+/// и с <see cref="IActionHandler"/> для выполнения действий.
+/// </remarks>
+public class TurnManager : ITurnManager
 {
+    private IGameBoard _gameBoard;
     private Player _currentPlayer;
     private readonly Player[] _players;
     private readonly IActionHandler _actionHandler;
     private readonly IScannerHandler _scannerHandler;
     private int _currentPlayerIndex = 0;
-    private List<IUnit> _availableUnits = new();
     private List<ICell> _availableUnitsCells = new();
     private IUnit? _selectedUnit;
 
     /// <summary>
     /// Инициализирует новый экземпляр менеджера ходов.
     /// </summary>
+    /// <param name="gameBoard">Игровое поле, на котором происходит действие.</param>
     /// <param name="players">Массив из двух игроков.</param>
+    /// <param name="scanner">Сканер для определения доступных клеток.</param>
+    /// <param name="actionHandler">Обработчик игровых действий.</param>
+    /// <param name="scannerHandler">Обработчик сканирования клеток.</param>
     /// <exception cref="ArgumentException">
-    /// Выбрасывается, если players не содержит ровно двух игроков.
+    /// Выбрасывается, если <paramref name="players"/> не содержит ровно двух игроков.
     /// </exception>
-    public TurnManager(Player[] players, IScanner scanner, IActionHandler actionHandler, IScannerHandler scannerHandler)
+    public TurnManager(
+        IGameBoard gameBoard, 
+        Player[] players, 
+        IScanner scanner, 
+        IActionHandler actionHandler, 
+        IScannerHandler scannerHandler)
     {
         if (players.Length != 2)
             throw new ArgumentException("Требуется ровно два игрока", nameof(players));
 
+        _gameBoard = gameBoard;
         _players = players;
         _actionHandler = actionHandler;
         _scannerHandler = scannerHandler;
@@ -64,14 +79,17 @@ public class TurnManager
             player.ResetUnitsForNewTurn();
 
         // Подготовка доступных юнитов
-        _availableUnits = _currentPlayer.Units
-            .Where(u => !u.IsDead && !u.IsStunned && u.Team == _currentPlayer.Team)
-            .ToList();
-
-        foreach (var i in _availableUnits)
+        for (int x = 0; x < _gameBoard.Width; x++)
         {
-            if (i.OccupiedCell != null)
-                _availableUnitsCells.Add(i.OccupiedCell);
+            for (int y = 0; y < _gameBoard.Height; y++)
+            {
+                if (_gameBoard[x, y].Content is IUnit unit && 
+                    unit.Team == _currentPlayer.Team && 
+                    unit.CanMove())
+                {
+                    _availableUnitsCells.Add(_gameBoard[x, y]);
+                }
+            }
         }
 
         OnTurnStart?.Invoke(_currentPlayer);
@@ -90,44 +108,66 @@ public class TurnManager
         // Переключение игрока
         OnTurnEnd?.Invoke(_currentPlayer);
         _availableUnitsCells.Clear();
-        _availableUnits.Clear();
         _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Length;
         _currentPlayer = _players[_currentPlayerIndex];
         _currentPlayer.ResetUnitsForNewTurn();
     }
 
     /// <inheritdoc/>
-    public void SelectUnit(IUnit unit)
+    public AvailableActions SelectUnit(ICell unitCell)
     {
-        if (!_availableUnits.Contains(unit) || unit.IsDead)
-            throw new InvalidOperationException("Юнит недоступен для выбора");
+        if (!_availableUnitsCells.Contains(unitCell))
+            throw new InvalidOperationException("Юнит недоступен для выбора.");
 
-        _selectedUnit = unit;
+        _selectedUnit = unitCell.Content as IUnit ?? 
+            throw new ArgumentNullException("В клетке не было юнита.");
 
-        OnUnitSelected?.Invoke(unit, new AvailableActions
+        AvailableActions availableActions = new AvailableActions
         {
-            CanMove = unit.CurrentTurnPhase == TurnPhase.Movement && unit.CanMove(),
-            CanAttack = unit.CurrentTurnPhase == TurnPhase.Action && unit.IsStunned == false && unit.IsDead == false,
-            Abilities = unit.Abilities.Where(a => a.IsActive == true).ToList()
-        });
+            CanMove = _selectedUnit.CurrentTurnPhase == TurnPhase.Movement && _selectedUnit.CanMove(),
+            CanAttack = _selectedUnit.CurrentTurnPhase == TurnPhase.Action && 
+                        !_selectedUnit.IsStunned && 
+                        !_selectedUnit.IsDead,
+            Abilities = _selectedUnit.Abilities.Where(a => a.IsActive).ToList()
+        };
+
+        OnUnitSelected?.Invoke(_selectedUnit, availableActions);
+
+        return availableActions;
     }
 
     /// <inheritdoc/>
-    public List<ICell> ProcessScanner(ActionType action, int scanRange)
+    public List<ICell> ProcessScanner(ActionType action)
     {
+        ArgumentNullException.ThrowIfNull(_selectedUnit);
+        ArgumentNullException.ThrowIfNull(_selectedUnit.OccupiedCell);
+
+        ICell scanningCell = _selectedUnit.OccupiedCell;
         List<ICell> scannedCells = new();
+
         switch (action)
         {
-            // TODO
+            case ActionType.Move:
+                _scannerHandler.HandleScan(scanningCell, _selectedUnit.Speed);
+                break;
+            case ActionType.Attack:
+            case ActionType.Ability:
+                _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
+                break;
         }
 
         return scannedCells;
     }
 
     /// <inheritdoc/>
-    public void ProcessPlayerAction(ActionType action, List<ICell>? availableCells = null, object? target = null, IAbility? usedAbility = null)
+    public void ProcessPlayerAction(
+        ActionType action, 
+        List<ICell>? availableCells = null, 
+        object? target = null, 
+        IAbility? usedAbility = null)
     {
         if (_selectedUnit == null) return;
+        ArgumentNullException.ThrowIfNull(_selectedUnit.OccupiedCell);
 
         try
         {
@@ -168,7 +208,7 @@ public class TurnManager
             }
 
             if (_selectedUnit.CurrentTurnPhase == TurnPhase.End)
-                _availableUnits.Remove(_selectedUnit);
+                _availableUnitsCells.Remove(_selectedUnit.OccupiedCell);
 
             OnTurnStateChanged?.Invoke(_selectedUnit);
         }
