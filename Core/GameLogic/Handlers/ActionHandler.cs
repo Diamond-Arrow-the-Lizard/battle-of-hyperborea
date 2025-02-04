@@ -75,5 +75,6 @@ public class ActionHandler : IActionHandler
     public void HandleSkip(IUnit unit)
     {
         if (unit.CurrentTurnPhase != TurnPhase.End) unit.ChangeTurnPhase();
+        OnUpdatingGameBoard?.Invoke(_gameBoard);
     }
 }
