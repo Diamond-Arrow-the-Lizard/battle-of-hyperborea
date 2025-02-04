@@ -1,56 +1,32 @@
 namespace BoH.Interfaces;
 
 /// <summary>
-/// Управляет очередью ходов и переключением между игроками в рамках игрового раунда.
+/// Управляет очередью ходов, переключением между игроками и обработкой игровых действий.
 /// </summary>
 public interface ITurnManager
 {
     /// <summary>
-    /// Событие, возникающее при успешном завершении хода игрока.
+    /// Событие, возникающее при завершении хода текущего игрока.
     /// </summary>
-    /// <remarks>
-    /// Срабатывает после выполнения следующих действий:
-    /// <list type="number">
-    /// <item><description>Проверки завершения всех фаз текущим игроком</description></item>
-    /// <item><description>Применения пассивных способностей юнитов</description></item>
-    /// <item><description>Переключения активного игрока</description></item>
-    /// <item><description>Сброса фаз юнитов нового игрока</description></item>
-    /// </list>
-    /// </remarks>
-    /// <example>
-    /// Пример подписки на событие:
-    /// <code>
-    /// turnManager.OnTurnEnd += nextPlayer => 
-    ///     Console.WriteLine($"Ход переходит к {nextPlayer.Team}");
-    /// </code>
-    /// </example>
-    event Action<IPlayer> OnTurnEnd;
+    event Action<IPlayer>? OnTurnEnd;
 
     /// <summary>
-    /// Событие, возникающее при начале нового хода игрока.
+    /// Событие, возникающее при начале хода нового игрока.
     /// </summary>
-    /// <remarks>
-    /// Срабатывает непосредственно перед началом хода:
-    /// <list type="number">
-    /// <item><description>После завершения предыдущего хода</description></item>
-    /// <item><description>После сброса состояний юнитов</description></item>
-    /// <item><description>До начала действий нового игрока</description></item>
-    /// </list>
-    /// </remarks>
-    event Action<IPlayer> OnTurnStart;
+    event Action<IPlayer>? OnTurnStart;
 
     /// <summary>
-    /// Событие выбора юнита для выполнения действия
+    /// Событие, возникающее при выборе юнита для выполнения действий.
     /// </summary>
     event Action<IUnit, AvailableActions>? OnUnitSelected;
 
     /// <summary>
-    /// Событие изменения состояния хода
+    /// Событие, возникающее при изменении состояния хода (например, после выполнения действия).
     /// </summary>
-    event Action? OnTurnStateChanged;
+    event Action<IUnit>? OnTurnStateChanged;
 
     /// <summary>
-    /// Инициализирует новый игровой раунд.
+    /// Начинает новый игровой раунд, инициализируя состояние хода для указанного игрока.
     /// </summary>
     /// <param name="firstPlayer">Игрок, который будет ходить первым в раунде.</param>
     /// <exception cref="ArgumentNullException">
@@ -59,50 +35,46 @@ public interface ITurnManager
     /// <exception cref="ArgumentException">
     /// Выбрасывается, если <paramref name="firstPlayer"/> не является участником игры.
     /// </exception>
-    /// <remarks>
-    /// Выполняет:
-    /// <list type="number">
-    /// <item><description>Сброс состояний менеджера ходов</description></item>
-    /// <item><description>Инициализацию очереди ходов</description></item>
-    /// <item><description>Активацию первого игрока</description></item>
-    /// </list>
-    /// </remarks>
     void StartNewRound(IPlayer firstPlayer);
 
     /// <summary>
-    /// Завершает текущий ход и переключает управление на следующего игрока.
+    /// Завершает текущий ход, применяя пассивные способности и переключая активного игрока.
     /// </summary>
-    /// <exception cref="InvalidOperationException">
-    /// Выбрасывается в случаях:
-    /// <list type="bullet">
-    /// <item><description>Попытка завершить ход до начала раунда</description></item>
-    /// <item><description>Не все юниты завершили свои фазы</description></item>
-    /// </list>
-    /// </exception>
-    /// <remarks>
-    /// Последовательность выполнения:
-    /// <list type="number">
-    /// <item><description>Проверка условий завершения хода</description></item>
-    /// <item><description>Применение пассивных способностей</description></item>
-    /// <item><description>Переключение активного игрока</description></item>
-    /// <item><description>Сброс фаз юнитов нового игрока</description></item>
-    /// <item><description>Вызов события OnTurnEnd</description></item>
-    /// <item><description>Вызов события OnTurnStart для нового игрока</description></item>
-    /// </list>
-    /// </remarks>
     void EndTurn();
 
     /// <summary>
-    /// Выбирает активного юнита для выполнения действий
+    /// Выбирает юнита для выполнения действий на основе выбранной клетки.
     /// </summary>
-    /// <param name="unit">Выбираемый юнит</param>
-    void SelectUnit(IUnit unit);
-/*
+    /// <param name="unitCell">Клетка, содержащая выбранного юнита.</param>
+    /// <returns>Доступные действия для выбранного юнита.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Выбрасывается, если юнит недоступен для выбора.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    /// Выбрасывается, если в клетке нет юнита.
+    /// </exception>
+    AvailableActions SelectUnit(ICell unitCell);
+
     /// <summary>
-    /// Обрабатывает действие игрока
+    /// Обрабатывает сканирование клеток для указанного действия.
     /// </summary>
-    /// <param name="action">Тип действия</param>
-    /// <param name="target">Цель действия (опционально)</param>
-    void ProcessPlayerAction(ActionType action, object? target = null);
-    */
+    /// <param name="action">Тип действия (перемещение, атака, способность).</param>
+    /// <returns>Список клеток, доступных для выполнения действия.</returns>
+    List<ICell> ProcessScanner(ActionType action);
+
+    /// <summary>
+    /// Выполняет действие, выбранное игроком.
+    /// </summary>
+    /// <param name="action">Тип действия.</param>
+    /// <param name="availableCells">Список клеток, доступных для действия (опционально).</param>
+    /// <param name="target">Цель действия (опционально).</param>
+    /// <param name="usedAbility">Способность, используемая для действия (опционально).</param>
+    /// <exception cref="InvalidDataException">
+    /// Выбрасывается, если цель действия не является клеткой.
+    /// </exception>
+    void ProcessPlayerAction(
+        ActionType action, 
+        List<ICell>? availableCells = null, 
+        object? target = null, 
+        IAbility? usedAbility = null);
 }
