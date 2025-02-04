@@ -13,17 +13,16 @@ public class ActionHandler : IActionHandler
     }
     public void HandleMovement(IUnit movingUnit, ICell destination, List<ICell> legalMoves)
     {
+        if(movingUnit.OccupiedCell == null) throw new ArgumentNullException("Юнит не был поставлен на поле.");
         if(!legalMoves.Contains(destination)) throw new InvalidOperationException("Клетка не находится в радиусе передвижения.");
         if(destination.IsOccupied()) throw new InvalidOperationException("Клетка занята, передвижение невозможно.");
 
-        (int x, int y) originalPosition = movingUnit.Position;
-        Scanner scanner = new(movingUnit.Speed);
+        (int x, int y) originalPosition = movingUnit.OccupiedCell.Position;
 
         _gameBoard[originalPosition.x, originalPosition.y].Content = null;
 
-        (int x, int y) newPosition = destination.Position;
-        movingUnit.Position =  newPosition;
-        _gameBoard[newPosition.x, newPosition.y].Content = movingUnit as IIconHolder;
+        movingUnit.OccupiedCell = destination;
+        destination.Content = movingUnit as IIconHolder;
 
         movingUnit.ChangeTurnPhase();
         OnUpdatingGameBoard?.Invoke(_gameBoard);

@@ -2,7 +2,7 @@ namespace BoH.Models;
 
 public class RusWarrior : BaseUnit
 {
-    protected override int MaxHealth { get; } = 10;
+    protected override int MaxHealth { get; } = 15;
     public RusWarrior() : base("Рус-Боец", 'R', "Rus")
     {
         Abilities.Add(new StunningBlow());

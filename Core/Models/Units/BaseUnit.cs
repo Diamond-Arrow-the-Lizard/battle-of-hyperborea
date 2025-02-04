@@ -74,13 +74,13 @@ public class BaseUnit : IUnit, IIconHolder
     public List<IAbility> Abilities { get; } = new();
 
     /// <inheritdoc/>
-    public (int X, int Y) Position { get; set; }
+    public ICell? OccupiedCell { get; set; } = null;
 
     /// <inheritdoc/>
     public event Action<IUnit>? OnDeath;
 
     /// <summary>
-    /// Инициализирует новый экземпляр препятствия.
+    /// Инициализирует новый экземпляр юнита.
     /// </summary>
     /// <param name="icon">Иконка препятствия (необязательный параметр, по умолчанию 'B').</param>
     /// <param name="team">Фракция юнита (необязательный параметр, по умолчанию "Dev").</param>
@@ -122,13 +122,16 @@ public class BaseUnit : IUnit, IIconHolder
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException"></exception>
-    public void Move((int X, int Y) newPosition)
+    public void PlaceUnit(ICell newPosition)
     {
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может двигаться.");
         if (IsStunned) throw new InvalidOperationException("Оглушенный юнит не может двигаться.");
         if (CurrentTurnPhase != TurnPhase.Movement) throw new InvalidOperationException("Юнит не в фазе передвижения.");
+        if (newPosition.Content != null) throw new InvalidOperationException("Клетка занята, передвижение невозможно.");
 
-        Position = newPosition;
+        if (OccupiedCell != null) OccupiedCell.Content = null;
+        OccupiedCell = newPosition;
+        newPosition.Content = this;
         ChangeTurnPhase();
     }
 
@@ -162,7 +165,6 @@ public class BaseUnit : IUnit, IIconHolder
         if (target.IsDead) throw new InvalidOperationException("Нельзя атаковать мертвого юнита.");
 
         target.TakeDamage(CalculateAttackDamage());
-        ChangeTurnPhase();
     }
 
     /// <inheritdoc/>
