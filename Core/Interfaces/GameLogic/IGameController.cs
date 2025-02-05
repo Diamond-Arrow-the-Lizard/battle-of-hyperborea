@@ -6,7 +6,16 @@ namespace BoH.Interfaces;
 /// </summary>
 public interface IGameController
 {
-    // TODO
+
+    /// <summary>
+    /// Запускает игровой процесс.
+    /// Инициализирует игру, включая подготовку игроков и игрового поля.
+    /// </summary>
+    /// <param name="width">Ширина игрового поля (количество столбцов).</param>
+    /// <param name="length">Длина игрового поля (количество строк).</param>
+    /// <param name="players">Команды игроков.</param>
+    /// <returns>Новое поле для начала игры</returns>
+    IGameBoard StartGame(int width, int length, IPlayer[] players);
 
     /// <summary>
     /// Переходит к следующему ходу.

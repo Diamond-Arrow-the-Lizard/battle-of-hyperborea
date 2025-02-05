@@ -7,7 +7,7 @@ using BoH.GameLogic;
 
 public class Program
 {
-    
+
     /// <summary>
     /// Точка входа в приложение. Отвечает за запуск игры и обработку игровых раундов.
     /// </summary>
@@ -15,6 +15,21 @@ public class Program
     public static async Task Main(string[] args)
     {
         await Task.Delay(100);
+        Player[] players = new Player[2];
+        players[0] = new Player("Rus");
+
+        players[0].Units.Add(new RusArcher());
+        players[0].Units.Add(new RusWarrior());
+        players[0].Units.Add(new RusArcher());
+        players[0].Units.Add(new RusWarrior());
+
+        players[1] = new Player("Lizard");
+        
+        players[1].Units.Add(new LizardArcher());
+        players[1].Units.Add(new LizardWarrior());
+        players[1].Units.Add(new LizardArcher());
+        players[1].Units.Add(new LizardWarrior());
+
         GameBoard gameBoard = new GameBoard(5, 5);
         ActionHandler actionHandler = new(gameBoard);
         ScannerHandler scannerHandler = new(gameBoard);
@@ -29,5 +44,5 @@ public class Program
         actionHandler.HandleSkip(unit);
         scannedCells = scannerHandler.HandleScan(gameBoard[1, 1], 2);
     }
-    
+
 }
