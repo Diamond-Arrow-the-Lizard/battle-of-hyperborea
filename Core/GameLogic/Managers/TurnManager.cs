@@ -55,7 +55,7 @@ public class TurnManager : ITurnManager
     public event Action<IPlayer>? OnTurnStart;
 
     /// <inheritdoc/>
-    public event Action<IUnit, AvailableActions>? OnUnitSelected;
+    public event Action<IUnit>? OnUnitSelected;
 
     /// <inheritdoc/>
     public event Action<IUnit>? OnTurnStateChanged;
@@ -113,7 +113,7 @@ public class TurnManager : ITurnManager
     }
 
     /// <inheritdoc/>
-    public AvailableActions SelectUnit(ICell unitCell)
+    public void SelectUnit(ICell unitCell)
     {
         if (!_availableUnitsCells.Contains(unitCell))
             throw new InvalidOperationException("Юнит недоступен для выбора.");
@@ -122,18 +122,8 @@ public class TurnManager : ITurnManager
             throw new ArgumentNullException("В клетке не было юнита.");
         _selectedUnit.OccupiedCell = unitCell;
 
-        AvailableActions availableActions = new AvailableActions
-        {
-            CanMove = _selectedUnit.CurrentTurnPhase == TurnPhase.Movement && _selectedUnit.CanMove(),
-            CanAttack = _selectedUnit.CurrentTurnPhase == TurnPhase.Action && 
-                        !_selectedUnit.IsStunned && 
-                        !_selectedUnit.IsDead,
-            Abilities = _selectedUnit.Abilities.Where(a => a.IsActive).ToList()
-        };
+        OnUnitSelected?.Invoke(_selectedUnit);
 
-        OnUnitSelected?.Invoke(_selectedUnit, availableActions);
-
-        return availableActions;
     }
 
     /// <inheritdoc/>
