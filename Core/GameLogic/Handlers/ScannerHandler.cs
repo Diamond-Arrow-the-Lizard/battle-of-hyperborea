@@ -26,7 +26,7 @@ public class ScannerHandler : IScannerHandler
     {
         Scanner scanner = new(range);
         List<ICell> scannedCells = new();
-        scannedCells = (List<ICell>)scanner.Scan(scanningCell, _gameBoard);
+        scannedCells = scanner.Scan(scanningCell, _gameBoard);
         OnGameBoardScanned?.Invoke(_gameBoard, scannedCells);
         return scannedCells;
     }

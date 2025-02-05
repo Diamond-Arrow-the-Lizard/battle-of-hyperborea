@@ -11,7 +11,7 @@ public class MadDash : IAbility
     public string Name { get; } = "Безумный рывок";
 
     /// <inheritdoc/> 
-    public string Description { get; } = "Атакуйте выбранного юнита, не изменяя своего исходного движения. Потеряйте 5 здоровья (не применится, если у применяющего юнита меньше 6 здоровья).";
+    public string Description { get; } = "Вернитесь на фазу передвижения. Потеряйте 5 здоровья (не применится, если у применяющего юнита меньше 6 здоровья).";
 
     /// <inheritdoc/> 
     public bool IsActive { get; } = true;
@@ -20,24 +20,29 @@ public class MadDash : IAbility
     public int Coolown { set; get; } = 0;
 
     /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnCooldown;
+
+    /// <inheritdoc/> 
     public bool Activate(IUnit user, IUnit? target = null)
     {
-        if (Coolown != 0)
-            return false;
-
-        if (target == null)
-        {
+        if (Coolown != 0) {
+            OnCooldown?.Invoke(this);
             return false;
         }
+
         else if(user.Hp < 6)
         {
             return false;
         }
         else
         {
-            user.Attack(target);
+            user.CurrentTurnPhase = TurnPhase.End;
             user.Hp -= 5;
             Coolown = 3;
+            OnAbilityUsed?.Invoke(this);
             return true;
         }
     }

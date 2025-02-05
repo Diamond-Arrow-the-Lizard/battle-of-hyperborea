@@ -18,5 +18,5 @@ public interface IScanner
     /// <param name="scanningCell">Клетка, вокруг которой производится сканирование.</param>
     /// <param name="gameBoard">Игровое поле, на котором производится сканирование.</param>
     /// <returns>Коллекция клеток в пределах радиуса вокруг заданной клетки.</returns>
-    IEnumerable<ICell> Scan(ICell scanningCell, IGameBoard gameBoard);
+    List<ICell> Scan(ICell scanningCell, IGameBoard gameBoard);
 }

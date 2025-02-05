@@ -43,8 +43,8 @@ public class Scanner : IScanner
     /// </summary>
     /// <param name="scanningCell">Клетка, вокруг которой производится сканирование.</param>
     /// <param name="gameBoard">Игровое поле, на котором производится сканирование.</param>
-    /// <returns>Коллекция клеток в пределах радиуса вокруг заданной клетки, игнорируя препятствия.</returns>
-    public IEnumerable<ICell> Scan(ICell scanningCell, IGameBoard gameBoard)
+    /// <returns>Лист клеток в пределах радиуса вокруг заданной клетки, игнорируя препятствия.</returns>
+    public List<ICell> Scan(ICell scanningCell, IGameBoard gameBoard)
     {
         if (scanningCell == null)
         {
@@ -74,7 +74,8 @@ public class Scanner : IScanner
                         && !(cell.Content is Obstacle))
                     {
                         scannedCells.Add(cell);  // Добавляем подходящую клетку в список
-                        // Console.WriteLine($"Сканируем клетку: ({i}, {j})");
+
+                        //Console.WriteLine($"Сканируем клетку: ({i}, {j})");
                     }
                 }
             }

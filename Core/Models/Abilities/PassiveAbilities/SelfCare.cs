@@ -16,11 +16,27 @@ public class SelfCare : IAbility
     public bool IsActive { get; } = false;
 
     /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnCooldown = null;
+
+    /// <inheritdoc/> 
+    public int Coolown { set; get; } = 0;
+
+    /// <inheritdoc/> 
     public bool Activate(IUnit user, IUnit? target = null)
     {
+        if (Coolown != 0)
+        {
+            OnCooldown?.Invoke(this);
+            return false;
+        }
+
         Random rnd = new Random();
         target = user;
         user.Heal(rnd.Next(1, 7));
+        OnAbilityUsed?.Invoke(this);
         return true;
     }
 
