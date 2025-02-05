@@ -26,7 +26,7 @@ public interface IPlayer
     /// <summary>
     /// Список юнитов, принадлежащих игроку.
     /// </summary>
-    List<IUnit> Units { get; }
+    List<IUnit> Units { get; set; }
 
     /// <summary>
     /// Проверяет, есть ли у игрока живые юниты.

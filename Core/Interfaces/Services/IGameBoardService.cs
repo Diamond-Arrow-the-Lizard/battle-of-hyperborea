@@ -27,7 +27,7 @@ public interface IGameBoardService
     /// <item><description>Обнаружении юнита с неизвестной командой</description></item>
     /// </list>
     /// </exception>
-    IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, IPlayer[] players);
+    IGameBoard GenerateGameBoard(int width, int height, List<IUnit> units, IPlayer[] players);
 
     /// <summary>
     /// Добавляет объект в указанную клетку игрового поля.

@@ -15,7 +15,7 @@ public class ConsoleGameBoardRenderer : IGameBoardRenderer
             for (int y = 0; y < gameBoard.Width; y++)
             {
                 if (gameBoard[x, y] is Cell cell)
-                    Console.Write(cell.Icon);
+                    Console.Write($"{cell.Icon} ");
             }
             Console.WriteLine();
         }
@@ -24,5 +24,27 @@ public class ConsoleGameBoardRenderer : IGameBoardRenderer
     {
         // TODO
         Console.WriteLine($"Cool game board (scanned {scannedCells.Count} cells)");
+        for (int x = 0; x < gameBoard.Width; x++)
+        {
+            for (int y = 0; y < gameBoard.Width; y++)
+            {
+                if (gameBoard[x, y] is Cell cell)
+                {
+                    if (scannedCells.Contains(cell))
+                    {
+                        if (cell.Content is IUnit unit)
+                            Console.Write("! ");
+                        else
+                            Console.Write("# ");
+                    }
+                    else
+                    {
+                        Console.Write($"{cell.Icon} ");
+
+                    }
+                }
+            }
+            Console.WriteLine();
+        }
     }
 }

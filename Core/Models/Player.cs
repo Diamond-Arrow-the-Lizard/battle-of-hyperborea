@@ -15,7 +15,7 @@ public class Player : IPlayer
     public string Team { get; }
 
     /// <inheritdoc/>
-    public List<IUnit> Units => new();
+    public List<IUnit> Units { get; set; } = new();
 
     /// <inheritdoc/>
     public bool HasAliveUnits => Units.Any(u => !u.IsDead);
