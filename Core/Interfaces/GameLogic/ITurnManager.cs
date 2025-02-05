@@ -18,7 +18,7 @@ public interface ITurnManager
     /// <summary>
     /// Событие, возникающее при выборе юнита для выполнения действий.
     /// </summary>
-    event Action<IUnit, AvailableActions>? OnUnitSelected;
+    event Action<IUnit>? OnUnitSelected;
 
     /// <summary>
     /// Событие, возникающее при изменении состояния хода (например, после выполнения действия).
@@ -46,14 +46,13 @@ public interface ITurnManager
     /// Выбирает юнита для выполнения действий на основе выбранной клетки.
     /// </summary>
     /// <param name="unitCell">Клетка, содержащая выбранного юнита.</param>
-    /// <returns>Доступные действия для выбранного юнита.</returns>
     /// <exception cref="InvalidOperationException">
     /// Выбрасывается, если юнит недоступен для выбора.
     /// </exception>
     /// <exception cref="ArgumentNullException">
     /// Выбрасывается, если в клетке нет юнита.
     /// </exception>
-    AvailableActions SelectUnit(ICell unitCell);
+    void SelectUnit(ICell unitCell);
 
     /// <summary>
     /// Обрабатывает сканирование клеток для указанного действия.

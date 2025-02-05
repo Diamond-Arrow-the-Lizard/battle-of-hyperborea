@@ -67,7 +67,7 @@ public class ConsoleUnitNotifications : IUnitNotifications
         Console.WriteLine($"{unit.UnitName} изменил фазу хода");
     }
 
-    public void Notify_UnitSelected(IUnit unit, AvailableActions availableActions)
+    public void Notify_UnitSelected(IUnit unit)
     {
         Console.WriteLine($"{unit.UnitName} был выбран\n");
         ShowUnitStats(unit);
