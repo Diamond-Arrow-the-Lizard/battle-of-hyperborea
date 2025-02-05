@@ -15,7 +15,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         GameBoardService gameBoardService = new GameBoardService();
-        GameController gameController = new GameController();
+        GameController gameController = new GameController(gameBoardService);
         await Task.Delay(100);
         Player[] players = new Player[2];
         List<IUnit> units = new(){
