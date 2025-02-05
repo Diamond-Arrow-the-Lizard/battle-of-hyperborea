@@ -26,11 +26,7 @@ public interface IPlayer
     /// <summary>
     /// Список юнитов, принадлежащих игроку.
     /// </summary>
-    /// <remarks>
-    /// Предоставляет доступ только для чтения к коллекции юнитов.
-    /// Для модификации коллекции используйте методы AddUnit и RemoveUnit.
-    /// </remarks>
-    IReadOnlyList<IUnit> Units { get; }
+    List<IUnit> Units { get; }
 
     /// <summary>
     /// Проверяет, есть ли у игрока живые юниты.
@@ -40,28 +36,6 @@ public interface IPlayer
     /// Возвращает true, если хотя бы один юнит жив.
     /// </remarks>
     bool HasAliveUnits { get; }
-
-    /// <summary>
-    /// Добавляет нового юнита в команду игрока.
-    /// </summary>
-    /// <param name="unit">Добавляемый юнит.</param>
-    /// <exception cref="ArgumentNullException">
-    /// Выбрасывается, если передаваемый юнит равен null.
-    /// </exception>
-    /// <exception cref="InvalidOperationException">
-    /// Выбрасывается, если юнит с таким ID уже существует в команде.
-    /// </exception>
-    void AddUnit(IUnit unit);
-
-    /// <summary>
-    /// Удаляет юнит из команды игрока по его идентификатору.
-    /// </summary>
-    /// <param name="unitId">Идентификатор удаляемого юнита.</param>
-    /// <returns>
-    /// true, если юнит был успешно удалён; 
-    /// false, если юнит с указанным ID не найден.
-    /// </returns>
-    bool RemoveUnit(string unitId);
 
     /// <summary>
     /// Подготавливает юнитов игрока к новому ходу.

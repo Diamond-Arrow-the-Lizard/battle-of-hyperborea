@@ -8,8 +8,6 @@ using System.Collections.ObjectModel;
 /// </summary>
 public class Player : IPlayer
 {
-    private readonly List<IUnit> _units = new();
-
     /// <inheritdoc/>
     public string Id { get; } = Guid.NewGuid().ToString();
 
@@ -17,10 +15,10 @@ public class Player : IPlayer
     public string Team { get; }
 
     /// <inheritdoc/>
-    public IReadOnlyList<IUnit> Units => new ReadOnlyCollection<IUnit>(_units);
+    public List<IUnit> Units => new();
 
     /// <inheritdoc/>
-    public bool HasAliveUnits => _units.Any(u => !u.IsDead);
+    public bool HasAliveUnits => Units.Any(u => !u.IsDead);
 
     /// <summary>
     /// Инициализирует нового игрока.
@@ -37,39 +35,9 @@ public class Player : IPlayer
         Team = team;
     }
 
-    /// <inheritdoc/>
-    /// <exception cref="ArgumentNullException">
-    /// Выбрасывается, если юнит равен null.
-    /// </exception>
-    /// <exception cref="InvalidOperationException">
-    /// Выбрасывается, если юнит с таким ID уже существует в команде.
-    /// </exception>
-    public void AddUnit(IUnit unit)
-    {
-        if (unit == null)
-            throw new ArgumentNullException(nameof(unit), "Юнит не может быть null.");
-
-        if (_units.Any(u => u.UnitId == unit.UnitId))
-            throw new InvalidOperationException($"Юнит с ID {unit.UnitId} уже существует в команде.");
-
-        _units.Add(unit);
-    }
-
-    /// <inheritdoc/>
-    public bool RemoveUnit(string unitId)
-    {
-        var unit = _units.FirstOrDefault(u => u.UnitId == unitId);
-        return unit != null && _units.Remove(unit);
-    }
-
-    /// <inheritdoc/>
-    /// <remarks>
-    /// Сбрасывает фазу хода всех живых юнитов в состояние <see cref="TurnPhase.Movement"/>
-    /// и снимает временные эффекты (например, оглушение).
-    /// </remarks>
     public void ResetUnitsForNewTurn()
     {
-        foreach (var unit in _units.Where(u => !u.IsDead))
+        foreach (var unit in Units.Where(u => !u.IsDead))
         {
             unit.ResetTurnState();
             unit.IsStunned = false;
