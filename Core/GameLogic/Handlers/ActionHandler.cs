@@ -8,7 +8,7 @@ using BoH.Interfaces;
 public class ActionHandler : IActionHandler
 {
     private IGameBoard _gameBoard;
-    
+
     /// <inheritdoc/>
     public event Action<IGameBoard>? OnUpdatingGameBoard;
 
@@ -20,24 +20,30 @@ public class ActionHandler : IActionHandler
     {
         _gameBoard = gameBoard;
     }
-    
+
     /// <inheritdoc/>
     public void HandleMovement(IUnit movingUnit, ICell destination, List<ICell> legalMoves)
     {
         if (movingUnit.OccupiedCell == null) throw new ArgumentNullException("Юнит не был поставлен на поле.");
-        if (!legalMoves.Contains(destination)) throw new InvalidOperationException("Клетка не находится в радиусе передвижения.");
+        if (legalMoves.Count == 0) throw new ArgumentException("Список доступных координат пуст.");
+        if (!legalMoves.Any(cell => cell.Position.X == destination.Position.X && cell.Position.Y == destination.Position.Y))
+            throw new InvalidOperationException("Клетка не находится в радиусе передвижения.");
+
         if (destination.IsOccupied()) throw new InvalidOperationException("Клетка занята, передвижение невозможно.");
-        
-        (int x, int y) originalPosition = movingUnit.OccupiedCell.Position;
+
+        ICell originalCell = movingUnit.OccupiedCell;
+        (int x, int y) originalPosition = originalCell.Position;
         _gameBoard[originalPosition.x, originalPosition.y].Content = null;
-        
+        originalCell.UpdateIcon();
+
         movingUnit.OccupiedCell = destination;
         destination.Content = movingUnit as IIconHolder;
-        
+        destination.UpdateIcon();
+
         movingUnit.ChangeTurnPhase();
         OnUpdatingGameBoard?.Invoke(_gameBoard);
     }
-    
+
     /// <inheritdoc/>
     public void HandleAttack(IUnit attacker, ICell targetedCell, List<ICell> legalAttackLocations)
     {
@@ -53,7 +59,7 @@ public class ActionHandler : IActionHandler
         }
         else throw new InvalidDataException("Неизвестный тип объекта в клетке.");
     }
-    
+
     /// <inheritdoc/>
     public void HandleAbility(IUnit attacker, IAbility usedAbility, ICell targetedCell, List<ICell> legalAttackLocations)
     {

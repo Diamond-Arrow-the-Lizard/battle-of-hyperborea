@@ -10,5 +10,5 @@ public interface IUnitNotifications
     void Notify_UnitRecievedDamage(IUnit unit);
     void Notify_UnitUsedAbility(IUnit unit);
     void Notify_UnitHealed(IUnit unit);
-    void Notify_UnitSkippedTurnPhase(IUnit unit);
+    void Notify_UnitChangedTurnPhase(IUnit unit);
 }

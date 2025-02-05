@@ -35,7 +35,6 @@ public class TurnManager : ITurnManager
     public TurnManager(
         IGameBoard gameBoard, 
         Player[] players, 
-        IScanner scanner, 
         IActionHandler actionHandler, 
         IScannerHandler scannerHandler)
     {
@@ -121,6 +120,7 @@ public class TurnManager : ITurnManager
 
         _selectedUnit = unitCell.Content as IUnit ?? 
             throw new ArgumentNullException("В клетке не было юнита.");
+        _selectedUnit.OccupiedCell = unitCell;
 
         AvailableActions availableActions = new AvailableActions
         {
@@ -148,11 +148,11 @@ public class TurnManager : ITurnManager
         switch (action)
         {
             case ActionType.Move:
-                _scannerHandler.HandleScan(scanningCell, _selectedUnit.Speed);
+                scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Speed);
                 break;
             case ActionType.Attack:
             case ActionType.Ability:
-                _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
+                scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
                 break;
         }
 
@@ -175,9 +175,12 @@ public class TurnManager : ITurnManager
             {
                 case ActionType.Move:
                     ArgumentNullException.ThrowIfNull(availableCells);
+                    Console.WriteLine(availableCells.Count);
                     if (target is ICell destination)
                     {
+                        _availableUnitsCells.Remove(_selectedUnit.OccupiedCell);
                         _actionHandler.HandleMovement(_selectedUnit, destination, availableCells);
+                        _availableUnitsCells.Add(_selectedUnit.OccupiedCell);
                         OnTurnStateChanged?.Invoke(_selectedUnit);
                     }
                     else throw new InvalidDataException("Передвижение осуществляется не на клетку.");

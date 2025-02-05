@@ -128,4 +128,30 @@ public interface IUnit
     /// Событие, вызываемое при смерти юнита.
     /// </summary>
     event Action<IUnit> OnDeath;
+
+    /// <summary>
+    /// Событие, вызываемое при ошеломлении юнита.
+    /// </summary>
+    event Action<IUnit> OnStunned;
+
+    /// <summary>
+    /// Событие, вызываемое при передвижении юнита.
+    /// </summary>
+    event Action<IUnit> OnMove;
+
+    /// <summary>
+    /// Событие, вызываемое при атаки юнита.
+    /// </summary>
+    event Action<IUnit> OnAttack;
+
+    /// <summary>
+    /// Событие, вызываемое при получении урона.
+    /// </summary>
+    event Action<IUnit> OnTakingDamage;
+
+    /// <summary>
+    /// Событие, вызываемое при лечении юнита.
+    /// </summary>
+    event Action<IUnit> OnHealed;
+
 }

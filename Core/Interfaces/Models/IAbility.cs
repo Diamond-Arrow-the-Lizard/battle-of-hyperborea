@@ -26,6 +26,11 @@ public interface IAbility
     /// </summary>
     public bool IsActive { get; }
 
+    /// </summary>
+    /// Кулдаун способности (для активных).
+    /// </summary>
+    int Coolown { set; get; }
+
     /// <summary>
     /// Выполняет способность.
     /// </summary>
@@ -39,4 +44,14 @@ public interface IAbility
     /// или влияние на окружающих.
     /// </summary>
     void Update();
+
+    /// <summary>
+    /// Событие при применении способности 
+    /// </summary>
+    event Action<IAbility> OnAbilityUsed;
+
+    /// <summary>
+    /// Событие при кулдауне способности 
+    /// </summary>
+    event Action<IAbility>? OnCooldown;
 }
