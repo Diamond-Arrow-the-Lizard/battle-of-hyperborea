@@ -18,17 +18,12 @@ public interface IGameController
     IGameBoard StartGame(int width, int length, IPlayer[] players);
 
     /// <summary>
-    /// Переходит к следующему ходу.
-    /// </summary>
-    /// <returns> Индекс следующей команды </returns>
-    int NextTurn();
-
-    /// <summary>
     /// Проверяет выполнение условий победы.
     /// Определяет, выполнены ли условия завершения игры, например, остались ли юниты только одной команды.
     /// </summary>
+    /// <param name="players">Команды игроков.</param>
     /// <returns>True, елси выполнены условия победы. </returns> 
-    bool CheckVictoryCondition();
+    bool CheckVictoryCondition(IPlayer[] players);
 
     /// <summary>
     /// Завершает игровой процесс.

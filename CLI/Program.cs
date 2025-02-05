@@ -14,23 +14,32 @@ public class Program
     /// <param name="args">Аргументы командной строки (не используются).</param>
     public static async Task Main(string[] args)
     {
+        GameBoardService gameBoardService = new GameBoardService();
+        GameController gameController = new GameController();
         await Task.Delay(100);
         Player[] players = new Player[2];
+        List<IUnit> units = new(){
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior(),
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior(),
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior()
+        };
+
+        foreach(var i in units)
+        Console.WriteLine(i.ToString());
+
         players[0] = new Player("Rus");
-
-        players[0].Units.Add(new RusArcher());
-        players[0].Units.Add(new RusWarrior());
-        players[0].Units.Add(new RusArcher());
-        players[0].Units.Add(new RusWarrior());
-
         players[1] = new Player("Lizard");
-        
-        players[1].Units.Add(new LizardArcher());
-        players[1].Units.Add(new LizardWarrior());
-        players[1].Units.Add(new LizardArcher());
-        players[1].Units.Add(new LizardWarrior());
 
-        GameBoard gameBoard = new GameBoard(5, 5);
+        GameBoard gameBoard = (GameBoard)gameBoardService.GenerateGameBoard(8, 8, units, players);
         ActionHandler actionHandler = new(gameBoard);
         ScannerHandler scannerHandler = new(gameBoard);
         List<ICell> scannedCells = new();

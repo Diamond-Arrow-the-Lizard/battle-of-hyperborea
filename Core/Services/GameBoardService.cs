@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public class GameBoardService : IGameBoardService
 {
     /// <inheritdoc/>
-    public IGameBoard GenerateGameBoard(int width, int height, IEnumerable<IUnit> units, IPlayer[] players)
+    public IGameBoard GenerateGameBoard(int width, int height, List<IUnit> units, IPlayer[] players)
     {
         // Валидация входных параметров
         if (players == null || players.Length != 2)
@@ -54,7 +54,7 @@ public class GameBoardService : IGameBoardService
         {
             if (column >= width) break;
             var cell = gameBoard[column, 0];
-            cell.Content = unit as IIconHolder;
+            AddObjectToGameBoard(unit as IIconHolder, cell);
             cell.UpdateIcon();
             column++;
         }
@@ -65,7 +65,7 @@ public class GameBoardService : IGameBoardService
         {
             if (column < 0) break;
             var cell = gameBoard[column, height - 1];
-            cell.Content = unit as IIconHolder;
+            AddObjectToGameBoard(unit as IIconHolder, cell);
             cell.UpdateIcon();
             column--;
         }

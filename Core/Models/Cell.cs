@@ -27,7 +27,7 @@ public class Cell : ICell, IIconHolder
             _icon = value;
         }
     }
-    private string _icon = "T";
+    private string _icon = " ";
 
     /// <inheritdoc/>
     public IIconHolder? Content { get; set; } = null;
