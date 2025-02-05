@@ -79,6 +79,21 @@ public class BaseUnit : IUnit, IIconHolder
     /// <inheritdoc/>
     public event Action<IUnit>? OnDeath;
 
+    /// <inheritdoc/>
+    public event Action<IUnit>? OnStunned;
+
+    /// <inheritdoc/>
+    public event Action<IUnit>? OnMove;
+
+    /// <inheritdoc/>
+    public event Action<IUnit>? OnAttack;
+
+    /// <inheritdoc/>
+    public event Action<IUnit>? OnTakingDamage;
+
+    /// <inheritdoc/>
+    public event Action<IUnit>? OnHealed;
+
     /// <summary>
     /// Инициализирует новый экземпляр юнита.
     /// </summary>
@@ -102,6 +117,7 @@ public class BaseUnit : IUnit, IIconHolder
 
         int effectiveDamage = Math.Max(0, amount - Defence);
         Hp -= effectiveDamage;
+        OnTakingDamage?.Invoke(this);
 
         if (Hp <= 0)
         {
@@ -118,6 +134,7 @@ public class BaseUnit : IUnit, IIconHolder
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может быть вылечен.");
 
         Hp = Math.Min(MaxHealth, Hp + amount);
+        OnHealed?.Invoke(this);
     }
 
     /// <inheritdoc/>
@@ -165,6 +182,7 @@ public class BaseUnit : IUnit, IIconHolder
         if (target.IsDead) throw new InvalidOperationException("Нельзя атаковать мертвого юнита.");
 
         target.TakeDamage(CalculateAttackDamage());
+        OnAttack?.Invoke(this);
     }
 
     /// <inheritdoc/>

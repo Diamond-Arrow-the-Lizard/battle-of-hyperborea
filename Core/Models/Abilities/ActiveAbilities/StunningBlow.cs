@@ -21,10 +21,18 @@ public class StunningBlow : IAbility
     public int Coolown { set; get; } = 0;
 
     /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnCooldown;
+
+    /// <inheritdoc/> 
     public bool Activate(IUnit user, IUnit? target = null)
     {
-        if (Coolown != 0)
+        if (Coolown != 0) {
+            OnCooldown?.Invoke(this);
             return false;
+        }
 
         if (target == null)
         {
@@ -38,6 +46,7 @@ public class StunningBlow : IAbility
             user.Attack(target);
             user.DamageDices = userDices;
             Coolown = 2;
+            OnAbilityUsed?.Invoke(this);
             return true;
         }
     }

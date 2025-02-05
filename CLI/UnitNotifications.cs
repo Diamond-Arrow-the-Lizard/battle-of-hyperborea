@@ -15,7 +15,7 @@ public class ConsoleUnitNotifications : IUnitNotifications
         infoMessage += $"Защита: {unit.Defence}\n";
         infoMessage += $"Брошенных кубиков при атаке: {unit.DamageDices}\n";
         infoMessage += $"Может передвигаться: {unit.CanMove()}\n";
-        infoMessage += $"Тип Юнита: \n";
+        infoMessage += $"Тип Юнита: ";
         switch (unit.UnitType)
         {
             case UnitType.Melee:
@@ -23,13 +23,13 @@ public class ConsoleUnitNotifications : IUnitNotifications
                 break;
             case UnitType.Range:
                 infoMessage += $"Дальний бой\n";
-                infoMessage += $"Дальность атаки: {unit.Range}";
+                infoMessage += $"Дальность атаки: {unit.Range}\n";
                 break;
         }
         infoMessage += $"Способности: \n";
         foreach(var i in unit.Abilities)
         {
-            infoMessage += $"{i} ";
+            infoMessage += $"{i.Name} ";
         }
         infoMessage += "\n";
         Console.WriteLine(infoMessage);
@@ -62,8 +62,14 @@ public class ConsoleUnitNotifications : IUnitNotifications
     {
         Console.WriteLine($"{unit.UnitName} был излечен");
     }
-    public void Notify_UnitSkippedTurnPhase(IUnit unit)
+    public void Notify_UnitChangedTurnPhase(IUnit unit)
     {
-        Console.WriteLine($"{unit.UnitName} пропустил фазу хода");
+        Console.WriteLine($"{unit.UnitName} изменил фазу хода");
+    }
+
+    public void Notify_UnitSelected(IUnit unit, AvailableActions availableActions)
+    {
+        Console.WriteLine($"{unit.UnitName} был выбран\n");
+        ShowUnitStats(unit);
     }
 }

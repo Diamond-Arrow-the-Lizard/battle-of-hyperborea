@@ -31,5 +31,4 @@ public interface ICell
     /// Обновляет иконку клетки в зависимости от её содержания
     /// </summary>
     void UpdateIcon();
-
 }

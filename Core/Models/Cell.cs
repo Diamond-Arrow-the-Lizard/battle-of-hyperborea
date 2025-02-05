@@ -17,13 +17,6 @@ public class Cell : ICell, IIconHolder
         get => _icon;
         private set
         {
-            if (value.Length != 1 ||
-               !char.IsLetterOrDigit(value[0]) &&
-               !char.IsSymbol(value[0]) &&
-               !char.IsPunctuation(value[0]))
-            {
-                throw new ArgumentException("Иконка юнита должна быть одним печатным символом.");
-            }
             _icon = value;
         }
     }
@@ -63,4 +56,12 @@ public class Cell : ICell, IIconHolder
         this.Position = Position;
     }
 
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Cell other)
+            return false;
+        return Position.X == other.Position.X && Position.Y == other.Position.Y;
+    }
+
+    public override int GetHashCode() => HashCode.Combine(Position.X, Position.Y);
 }

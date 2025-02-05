@@ -4,6 +4,7 @@ using BoH.Interfaces;
 using BoH.Services;
 using BoH.Models;
 using BoH.GameLogic;
+using System.Diagnostics;
 
 public class Program
 {
@@ -33,9 +34,6 @@ public class Program
             new LizardWarrior()
         };
 
-        foreach(var i in units)
-        Console.WriteLine(i.ToString());
-
         players[0] = new Player("Rus");
         players[1] = new Player("Lizard");
 
@@ -48,10 +46,24 @@ public class Program
         actionHandler.OnUpdatingGameBoard += renderer.Render;
         scannerHandler.OnGameBoardScanned += renderer.ScanRender;
 
+        ConsoleAbilityNotifications abilityNotifications = new ConsoleAbilityNotifications();
+        ConsoleUnitNotifications unitNotifications = new ConsoleUnitNotifications();
 
-        BaseUnit unit = new("Guy");
-        actionHandler.HandleSkip(unit);
-        scannedCells = scannerHandler.HandleScan(gameBoard[1, 1], 2);
+        TurnManager turnManager = new TurnManager(gameBoard, players, actionHandler, scannerHandler);
+
+        turnManager.OnUnitSelected += unitNotifications.Notify_UnitSelected;
+
+        turnManager.StartNewRound(players[0]);
+        turnManager.SelectUnit(gameBoard[0, 0]);
+        scannedCells = turnManager.ProcessScanner(ActionType.Move);
+        turnManager.ProcessPlayerAction(ActionType.Move, scannedCells, gameBoard[1, 1]);
+        turnManager.SelectUnit(gameBoard[1, 1]);
+        turnManager.ProcessPlayerAction(ActionType.Skip);
+
+        turnManager.EndTurn();
+        gameController.CheckVictoryCondition(players);
+        turnManager.StartNewRound(players[1]);
+        turnManager.SelectUnit(gameBoard[7, 7]);
     }
 
 }
