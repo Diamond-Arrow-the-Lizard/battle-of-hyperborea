@@ -1,6 +1,5 @@
 namespace BoH.CLI;
 
-using BoH.GameLogic;
 using BoH.Interfaces;
 using BoH.Models;
 
@@ -8,43 +7,61 @@ public class ConsoleGameBoardRenderer : IGameBoardRenderer
 {
     public void Render(IGameBoard gameBoard)
     {
-        // TODO
-        Console.WriteLine("Cool game board");
-        for (int x = 0; x < gameBoard.Width; x++)
+        int size = gameBoard.Width;
+        PrintHorizontalBorder(size);
+        for (int y = 0; y < size; y++)
         {
-            for (int y = 0; y < gameBoard.Width; y++)
+            for (int x = 0; x < size; x++)
             {
                 if (gameBoard[x, y] is Cell cell)
-                    Console.Write($"{cell.Icon} ");
+                {
+                    // Центрирование иконки, если она занимает 1 символ (можно изменить формат при необходимости)
+                    Console.Write($"| {cell.Icon} ");
+                }
             }
-            Console.WriteLine();
+            Console.WriteLine("|"); // закрывающая вертикальная граница строки
+            PrintHorizontalBorder(size);
         }
     }
+
     public void ScanRender(IGameBoard gameBoard, List<ICell> scannedCells)
     {
-        // TODO
-        Console.WriteLine($"Cool game board (scanned {scannedCells.Count} cells)");
-        for (int x = 0; x < gameBoard.Width; x++)
+        int size = gameBoard.Width;
+        PrintHorizontalBorder(size);
+        for (int y = 0; y < size; y++)
         {
-            for (int y = 0; y < gameBoard.Width; y++)
+            for (int x = 0; x < gameBoard.Height; x++)
             {
                 if (gameBoard[x, y] is Cell cell)
                 {
                     if (scannedCells.Contains(cell))
                     {
-                        if (cell.Content is IUnit unit)
-                            Console.Write("! ");
+                        // Выводим специальный символ, если клетка отсканирована: "!" для юнита, "#" для других объектов
+                        if (cell.Content is IUnit)
+                            Console.Write("| ! ");
                         else
-                            Console.Write("# ");
+                            Console.Write("| # ");
                     }
                     else
                     {
-                        Console.Write($"{cell.Icon} ");
-
+                        Console.Write($"| {cell.Icon} ");
                     }
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine("|");
+            PrintHorizontalBorder(size);
         }
+    }
+    /// <summary>
+    /// Выводит горизонтальную границу для игрового поля.
+    /// Например, для поля шириной 3 будет выведено: +---+---+---+
+    /// </summary>
+    private void PrintHorizontalBorder(int width)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            Console.Write("+---");
+        }
+        Console.WriteLine("+");
     }
 }
