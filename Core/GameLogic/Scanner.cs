@@ -74,7 +74,7 @@ public class Scanner : IScanner
                         && !(cell.Content is Obstacle))
                     {
                         scannedCells.Add(cell);  // Добавляем подходящую клетку в список
-                        Console.WriteLine($"Сканируем клетку: ({i}, {j})");
+                        // Console.WriteLine($"Сканируем клетку: ({i}, {j})");
                     }
                 }
             }
