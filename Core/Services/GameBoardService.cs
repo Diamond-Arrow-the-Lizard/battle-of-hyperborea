@@ -31,9 +31,9 @@ public class GameBoardService : IGameBoardService
         foreach (var unit in units)
         {
             if (unit.Team == uniqueTeams[0])
-                players[0].AddUnit(unit);
+                players[0].Units.Add(unit);
             else if (unit.Team == uniqueTeams[1])
-                players[1].AddUnit(unit);
+                players[1].Units.Add(unit);
             else
                 throw new InvalidOperationException($"Юнит принадлежит неизвестной команде: {unit.Team}");
         }
