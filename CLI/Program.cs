@@ -15,6 +15,8 @@ public class Program
     /// <param name="args">Аргументы командной строки (не используются).</param>
     public static async Task Main(string[] args)
     {
+        // Сетап игры
+        // ------------------------------------------------------------------------------------------------------
         GameBoardService gameBoardService = new GameBoardService();
         GameController gameController = new GameController(gameBoardService);
         await Task.Delay(100);
@@ -52,7 +54,9 @@ public class Program
         TurnManager turnManager = new TurnManager(gameBoard, players, actionHandler, scannerHandler);
 
         turnManager.OnUnitSelected += unitNotifications.Notify_UnitSelected;
+        // ------------------------------------------------------------------------------------------------------
 
+        // Ход игрока 1
         turnManager.StartNewRound(players[0]);
         turnManager.SelectUnit(gameBoard[0, 0]);
         scannedCells = turnManager.ProcessScanner(ActionType.Move);
@@ -60,10 +64,17 @@ public class Program
         turnManager.SelectUnit(gameBoard[1, 1]);
         turnManager.ProcessPlayerAction(ActionType.Skip);
 
+        // ... Проходит ход...
+
+        // Ход игрока 2
         turnManager.EndTurn();
         gameController.CheckVictoryCondition(players);
         turnManager.StartNewRound(players[1]);
         turnManager.SelectUnit(gameBoard[7, 7]);
+
+        // ... Проходит ход...
+
+        // ...
     }
 
 }
