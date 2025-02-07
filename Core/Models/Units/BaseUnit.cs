@@ -181,8 +181,8 @@ public class BaseUnit : IUnit, IIconHolder
         if (CurrentTurnPhase != TurnPhase.Action) throw new InvalidOperationException("Юнит не в фазе действия.");
         if (target.IsDead) throw new InvalidOperationException("Нельзя атаковать мертвого юнита.");
 
-        target.TakeDamage(CalculateAttackDamage());
         OnAttack?.Invoke(this);
+        target.TakeDamage(CalculateAttackDamage());
     }
 
     /// <inheritdoc/>
