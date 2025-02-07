@@ -61,16 +61,22 @@ public class ActionHandler : IActionHandler
     }
 
     /// <inheritdoc/>
-    public void HandleAbility(IUnit attacker, IAbility usedAbility, ICell targetedCell, List<ICell> legalAttackLocations)
+    public void HandleAbility(IUnit attacker, IAbility usedAbility, List<ICell> legalAttackLocations, ICell? targetedCell = null)
     {
-        if (!legalAttackLocations.Contains(targetedCell)) throw new InvalidOperationException("Клетка не находится в радиусе атаки.");
+        if (targetedCell != null && !legalAttackLocations.Contains(targetedCell)) throw new InvalidOperationException("Клетка не находится в радиусе атаки.");
         if (!attacker.Abilities.Contains(usedAbility)) throw new InvalidOperationException("Способность отсутствует у юнита.");
-        if (targetedCell.Content is IObstacle) throw new InvalidOperationException("Нельзя атаковать препятствие.");
-        if (targetedCell.Content is null) throw new InvalidOperationException("Выбрана пустая клетка.");
-
-        if (targetedCell.Content is IUnit target)
+        // if (targetedCell.Content is null) throw new InvalidOperationException("Выбрана пустая клетка.");
+        // if (targetedCell!.Content is IObstacle obstacle) throw new InvalidOperationException("Нельзя атаковать препятствие.");
+        if (targetedCell is null || targetedCell.Content is null)
         {
-            usedAbility.Activate(attacker, target);
+            usedAbility.Activate(attacker);
+            attacker.ChangeTurnPhase();
+            OnUpdatingGameBoard?.Invoke(_gameBoard);
+
+        }
+        else if (targetedCell!.Content is IUnit attacked)
+        {
+            usedAbility.Activate(attacker, attacked);
             attacker.ChangeTurnPhase();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
         }

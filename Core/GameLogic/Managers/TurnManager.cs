@@ -33,9 +33,9 @@ public class TurnManager : ITurnManager
     /// Выбрасывается, если <paramref name="players"/> не содержит ровно двух игроков.
     /// </exception>
     public TurnManager(
-        IGameBoard gameBoard, 
-        Player[] players, 
-        IActionHandler actionHandler, 
+        IGameBoard gameBoard,
+        Player[] players,
+        IActionHandler actionHandler,
         IScannerHandler scannerHandler)
     {
         if (players.Length != 2)
@@ -82,8 +82,8 @@ public class TurnManager : ITurnManager
         {
             for (int y = 0; y < _gameBoard.Height; y++)
             {
-                if (_gameBoard[x, y].Content is IUnit unit && 
-                    unit.Team == _currentPlayer.Team && 
+                if (_gameBoard[x, y].Content is IUnit unit &&
+                    unit.Team == _currentPlayer.Team &&
                     unit.CanMove())
                 {
                     _availableUnitsCells.Add(_gameBoard[x, y]);
@@ -118,7 +118,7 @@ public class TurnManager : ITurnManager
         if (!_availableUnitsCells.Contains(unitCell))
             throw new InvalidOperationException("Юнит недоступен для выбора.");
 
-        _selectedUnit = unitCell.Content as IUnit ?? 
+        _selectedUnit = unitCell.Content as IUnit ??
             throw new ArgumentNullException("В клетке не было юнита.");
         _selectedUnit.OccupiedCell = unitCell;
 
@@ -151,9 +151,9 @@ public class TurnManager : ITurnManager
 
     /// <inheritdoc/>
     public void ProcessPlayerAction(
-        ActionType action, 
-        List<ICell>? availableCells = null, 
-        object? target = null, 
+        ActionType action,
+        List<ICell>? availableCells = null,
+        object? target = null,
         IAbility? usedAbility = null)
     {
         if (_selectedUnit == null) return;
@@ -189,10 +189,15 @@ public class TurnManager : ITurnManager
                     ArgumentNullException.ThrowIfNull(usedAbility);
                     if (target is ICell targetedCellForAbility)
                     {
-                        _actionHandler.HandleAbility(_selectedUnit, usedAbility, targetedCellForAbility, availableCells);
+                        _actionHandler.HandleAbility(_selectedUnit, usedAbility, availableCells, targetedCellForAbility);
                         OnTurnStateChanged?.Invoke(_selectedUnit);
                     }
-                    else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
+                    else if (target is null)
+                    {
+                        _actionHandler.HandleAbility(_selectedUnit, usedAbility, availableCells, null);
+                        OnTurnStateChanged?.Invoke(_selectedUnit);
+                    }
+                    // else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
                     break;
                 case ActionType.Skip:
                     _actionHandler.HandleSkip(_selectedUnit);

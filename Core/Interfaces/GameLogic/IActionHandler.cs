@@ -33,7 +33,7 @@ public interface IActionHandler
     /// <param name="usedAbility">Используемая способность.</param>
     /// <param name="targetedCell">Целевая клетка для способности.</param>
     /// <param name="legalAttackLocations">Список доступных клеток для применения способности.</param>
-    void HandleAbility(IUnit attacker, IAbility usedAbility, ICell targetedCell, List<ICell> legalAttackLocations);
+    void HandleAbility(IUnit attacker, IAbility usedAbility, List<ICell> legalAttackLocations, ICell? targetedCell);
 
     /// <summary>
     /// Обрабатывает пропуск хода юнитом.
