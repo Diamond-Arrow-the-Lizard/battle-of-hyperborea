@@ -99,6 +99,7 @@ public class GameBoardService : IGameBoardService
     {
         if (obj == null) return;
         cell.Content = obj;
+        cell.UpdateIcon();
     }
 
     /// <inheritdoc/>
@@ -106,6 +107,7 @@ public class GameBoardService : IGameBoardService
     {
         if (obj == null) return;
         cell.Content = null;
+        cell.UpdateIcon();
     }
 
     /// <inheritdoc/>
