@@ -6,6 +6,12 @@ namespace BoH.Interfaces;
 /// </summary>
 public interface IGameController
 {
+    /// <summary>
+    /// Проверяет, закончился ли ход игрока. 
+    /// </summary>
+    /// <param name="player">Текущий игрок.</param>
+    /// <returns>True, елси походили все юниты игрока. </returns> 
+    public bool CheckForTurnEnd(IPlayer player);
 
     /// <summary>
     /// Проверяет выполнение условий победы.
