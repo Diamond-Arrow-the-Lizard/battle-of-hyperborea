@@ -12,7 +12,7 @@ public class StunningBlow : IAbility
     public string Name { get; } = "Ошеломляющий удар";
 
     /// <inheritdoc/> 
-    public string Description { get; } = "Оглушает противника при ударе. Бросается только один кубик";
+    public string Description { get; } = "Оглушает противника при ударе. Бросается только один кубик.";
 
     /// <inheritdoc/> 
     public bool IsActive { get; } = true;
@@ -40,13 +40,13 @@ public class StunningBlow : IAbility
         }
         else
         {
-            target.IsStunned = true;
+            OnAbilityUsed?.Invoke(this);
             var userDices = user.DamageDices;
             user.DamageDices = 1;
             user.Attack(target);
             user.DamageDices = userDices;
             Coolown = 2;
-            OnAbilityUsed?.Invoke(this);
+            target.GetStunned();
             return true;
         }
     }
