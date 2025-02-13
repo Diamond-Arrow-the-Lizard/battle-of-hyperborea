@@ -4,7 +4,7 @@
     <ProjectReference Include="..\Core\Interfaces\Interfaces.csproj" />
     <ProjectReference Include="..\Core\Models\Models.csproj" />
     <ProjectReference Include="..\Core\GameLogic\GameLogic.csproj" />
-    <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    <ProjectReference Include="..\Core\Utilities\Utilities.csproj" />
     <ProjectReference Include="..\Core\Services\Services.csproj" />
   </ItemGroup>
 
