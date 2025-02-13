@@ -13,14 +13,6 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
-    public IGameBoard StartGame(int width, int length, IPlayer[] players)
-    {
-        IGameBoard gameBoard = new GameBoard(width, length);
-
-        return gameBoard;
-    }
-
-    /// <inheritdoc/>
     public bool CheckVictoryCondition(IPlayer[] players)
     {
         foreach (var p in players)
