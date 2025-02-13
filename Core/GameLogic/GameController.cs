@@ -13,11 +13,22 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
+    public bool CheckForTurnEnd(IPlayer player)
+    {
+        foreach (var i in player.Units)
+        {
+            if (i.CurrentTurnPhase != TurnPhase.End)
+                return true;
+        }
+        return false;
+    }
+
+    /// <inheritdoc/>
     public bool CheckVictoryCondition(IPlayer[] players)
     {
         foreach (var p in players)
         {
-            if(!p.HasAliveUnits) return true;
+            if (!p.HasAliveUnits) return true;
         }
         return false;
     }
