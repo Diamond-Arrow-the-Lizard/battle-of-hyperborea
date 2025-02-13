@@ -108,6 +108,7 @@ public class Program
         turnManager.SelectUnit(gameBoard[2, 1]!);
         scannedCells = turnManager.ProcessScanner(ActionType.Attack);
         turnManager.ProcessPlayerAction(ActionType.Attack, scannedCells, gameBoard[1, 1]);
+        Console.WriteLine(gameController.CheckForTurnEnd(players[1]));
 
         // ... Проходит ход...
 

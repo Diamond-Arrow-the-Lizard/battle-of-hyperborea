@@ -18,9 +18,9 @@ public class GameController : IGameController
         foreach (var i in player.Units)
         {
             if (i.CurrentTurnPhase != TurnPhase.End)
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
     /// <inheritdoc/>
