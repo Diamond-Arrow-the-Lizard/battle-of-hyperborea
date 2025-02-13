@@ -82,6 +82,11 @@ public interface IUnit
     void TakeDamage(int amount);
 
     /// <summary>
+    /// Делает юнита оглушённым.
+    /// </summary>
+    void GetStunned();
+
+    /// <summary>
     /// Применяет лечение, увеличивая очки здоровья юнита.
     /// </summary>
     /// <param name="amount">Количество восстанавливаемого здоровья.</param>
@@ -142,16 +147,16 @@ public interface IUnit
     /// <summary>
     /// Событие, вызываемое при атаки юнита.
     /// </summary>
-    event Action<IUnit> OnAttack;
+    event Action<IUnit, int> OnAttack;
 
     /// <summary>
     /// Событие, вызываемое при получении урона.
     /// </summary>
-    event Action<IUnit> OnTakingDamage;
+    event Action<IUnit, int> OnTakingDamage;
 
     /// <summary>
     /// Событие, вызываемое при лечении юнита.
     /// </summary>
-    event Action<IUnit> OnHealed;
+    event Action<IUnit, int> OnHealed;
 
 }

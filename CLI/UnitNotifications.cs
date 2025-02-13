@@ -50,17 +50,17 @@ public class ConsoleUnitNotifications : IUnitNotifications
     {
         Console.WriteLine($"{unit.UnitName} совершил атаку");
     }
-    public void Notify_UnitRecievedDamage(IUnit unit)
+    public void Notify_UnitRecievedDamage(IUnit unit, int amount)
     {
-        Console.WriteLine($"{unit.UnitName} получил урон");
+        Console.WriteLine($"{unit.UnitName} получил урон в размере {amount}");
     }
     public void Notify_UnitUsedAbility(IUnit unit)
     {
         Console.WriteLine($"{unit.UnitName} Применил способность");
     }
-    public void Notify_UnitHealed(IUnit unit)
+    public void Notify_UnitHealed(IUnit unit, int amount)
     {
-        Console.WriteLine($"{unit.UnitName} был излечен");
+        Console.WriteLine($"{unit.UnitName} был излечен на {amount}");
     }
     public void Notify_UnitChangedTurnPhase(IUnit unit)
     {
