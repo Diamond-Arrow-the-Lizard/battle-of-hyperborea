@@ -7,8 +7,8 @@ public interface IUnitNotifications
     void Notify_UnitStunned(IUnit unit);
     void Notify_UnitMoved(IUnit unit);
     void Notify_UnitAttacked(IUnit unit);
-    void Notify_UnitRecievedDamage(IUnit unit);
+    void Notify_UnitRecievedDamage(IUnit unit, int amount);
     void Notify_UnitUsedAbility(IUnit unit);
-    void Notify_UnitHealed(IUnit unit);
+    void Notify_UnitHealed(IUnit unit, int amount);
     void Notify_UnitChangedTurnPhase(IUnit unit);
 }

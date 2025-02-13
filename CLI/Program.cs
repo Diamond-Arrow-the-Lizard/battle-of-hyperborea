@@ -41,7 +41,7 @@ public class Program
 
         foreach (var i in units)
         {
-            i.OnAttack += unitNotifications.Notify_UnitAttacked;
+            i.OnAttack += unitNotifications.Notify_UnitRecievedDamage;
             i.Abilities[0].OnAbilityUsed += abilityNotifications.Notify_AbilityUsed;
             i.OnTakingDamage += unitNotifications.Notify_UnitRecievedDamage;
         }

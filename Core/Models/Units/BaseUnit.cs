@@ -1,6 +1,7 @@
 ﻿namespace BoH.Models;
 
 using System.ComponentModel;
+using System.Runtime;
 using BoH.Interfaces;
 
 /// <summary>
@@ -86,13 +87,13 @@ public class BaseUnit : IUnit, IIconHolder
     public event Action<IUnit>? OnMove;
 
     /// <inheritdoc/>
-    public event Action<IUnit>? OnAttack;
+    public event Action<IUnit, int>? OnAttack;
 
     /// <inheritdoc/>
-    public event Action<IUnit>? OnTakingDamage;
+    public event Action<IUnit, int>? OnTakingDamage;
 
     /// <inheritdoc/>
-    public event Action<IUnit>? OnHealed;
+    public event Action<IUnit, int>? OnHealed;
 
     /// <summary>
     /// Инициализирует новый экземпляр юнита.
@@ -117,7 +118,7 @@ public class BaseUnit : IUnit, IIconHolder
 
         int effectiveDamage = Math.Max(0, amount - Defence);
         Hp -= effectiveDamage;
-        OnTakingDamage?.Invoke(this);
+        OnTakingDamage?.Invoke(this, amount);
 
         if (Hp <= 0)
         {
@@ -134,7 +135,7 @@ public class BaseUnit : IUnit, IIconHolder
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может быть вылечен.");
 
         Hp = Math.Min(MaxHealth, Hp + amount);
-        OnHealed?.Invoke(this);
+        OnHealed?.Invoke(this, amount);
     }
 
     /// <inheritdoc/>
@@ -149,6 +150,7 @@ public class BaseUnit : IUnit, IIconHolder
         if (OccupiedCell != null) OccupiedCell.Content = null;
         OccupiedCell = newPosition;
         newPosition.Content = this;
+        OnMove?.Invoke(this);
         ChangeTurnPhase();
     }
 
@@ -180,9 +182,9 @@ public class BaseUnit : IUnit, IIconHolder
         if (IsDead) throw new InvalidOperationException("Мертвый юнит не может атаковать.");
         if (CurrentTurnPhase != TurnPhase.Action) throw new InvalidOperationException("Юнит не в фазе действия.");
         if (target.IsDead) throw new InvalidOperationException("Нельзя атаковать мертвого юнита.");
-
-        OnAttack?.Invoke(this);
-        target.TakeDamage(CalculateAttackDamage());
+        int damageAmount = CalculateAttackDamage();
+        OnAttack?.Invoke(this, damageAmount);
+        target.TakeDamage(damageAmount);
     }
 
     /// <inheritdoc/>
@@ -208,5 +210,13 @@ public class BaseUnit : IUnit, IIconHolder
             _ => throw new InvalidEnumArgumentException(
                 $"Недопустимое значение фазы хода: {CurrentTurnPhase}")
         };
+    }
+
+    
+    /// <inheritdoc/>
+    public void GetStunned()
+    {
+        OnStunned?.Invoke(this);
+        IsStunned = true;
     }
 }
