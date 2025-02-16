@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using GUI.ViewModels;
+using BoH.GUI.ViewModels;
 
 namespace GUI;
 

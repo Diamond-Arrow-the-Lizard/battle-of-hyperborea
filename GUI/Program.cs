@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace GUI;
+namespace BoH.GUI;
 
 sealed class Program
 {
