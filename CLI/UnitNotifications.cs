@@ -46,13 +46,13 @@ public class ConsoleUnitNotifications : IUnitNotifications
     {
         Console.WriteLine($"{unit.UnitName} совершил передвижение");
     }
-    public void Notify_UnitAttacked(IUnit unit)
+    public void Notify_UnitAttacked(IUnit unit, int amount)
     {
-        Console.WriteLine($"{unit.UnitName} совершил атаку");
+        Console.WriteLine($"{unit.UnitName} совершил атаку в размере {amount} урона");
     }
     public void Notify_UnitRecievedDamage(IUnit unit, int amount)
     {
-        Console.WriteLine($"{unit.UnitName} получил урон в размере {amount}");
+        Console.WriteLine($"{unit.UnitName} получил урон в размере {amount} урона");
     }
     public void Notify_UnitUsedAbility(IUnit unit)
     {
