@@ -44,6 +44,7 @@ public class ActionHandler : IActionHandler
         OnUpdatingGameBoard?.Invoke(_gameBoard);
     }
 
+    /*
     /// <inheritdoc/>
     public void HandleAttack(IUnit attacker, ICell targetedCell, List<ICell> legalAttackLocations)
     {
@@ -58,9 +59,10 @@ public class ActionHandler : IActionHandler
         }
         else throw new InvalidDataException("Неизвестный тип объекта в клетке.");
     }
+    */
 
     /// <inheritdoc/>
-    public void HandleAbility(IUnit attacker, IAbility usedAbility, List<ICell> legalAttackLocations, ICell? targetedCell = null)
+    public void HandleAction(IUnit attacker, IAbility usedAbility, List<ICell> legalAttackLocations, ICell? targetedCell = null)
     {
         if (targetedCell != null && !legalAttackLocations.Contains(targetedCell)) throw new InvalidOperationException("Клетка не находится в радиусе атаки.");
         if (!attacker.Abilities.Contains(usedAbility)) throw new InvalidOperationException("Способность отсутствует у юнита.");

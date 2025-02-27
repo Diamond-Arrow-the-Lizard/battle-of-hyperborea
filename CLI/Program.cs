@@ -41,7 +41,7 @@ public class Program
 
         foreach (var i in units)
         {
-            i.OnAttack += unitNotifications.Notify_UnitRecievedDamage;
+            i.OnAttack += unitNotifications.Notify_UnitAttacked;
             i.Abilities[0].OnAbilityUsed += abilityNotifications.Notify_AbilityUsed;
             i.OnTakingDamage += unitNotifications.Notify_UnitRecievedDamage;
         }
@@ -66,53 +66,34 @@ public class Program
 
         // ------------------------------------------------------------------------------------------------------
 
-        // Ход игрока 1
         turnManager.StartNewRound(players[0]);
         renderer.Render(gameBoard);
         turnManager.SelectUnit(gameBoard[1, 0]);
-        scannedCells = turnManager.ProcessScanner(ActionType.Move);
-        turnManager.ProcessPlayerAction(ActionType.Move, scannedCells, gameBoard[1, 1]);
-        turnManager.SelectUnit(gameBoard[1, 1]);
-        scannedCells = turnManager.ProcessScanner(ActionType.Attack);
-        turnManager.ProcessPlayerAction(ActionType.Skip);
+        scannedCells = turnManager.ProcessScanner();
+        turnManager.ProcessPlayerAction(scannedCells, gameBoard[3, 3]);
+        turnManager.SelectUnit(gameBoard[3, 3]);
+        scannedCells = turnManager.ProcessScanner();
+        turnManager.ProcessPlayerAction();
 
-        // ... Проходит ход...
-
-        // Ход игрока 2
         turnManager.EndTurn();
-        gameController.CheckVictoryCondition(players);
+
         turnManager.StartNewRound(players[1]);
         turnManager.SelectUnit(gameBoard[6, 7]);
-        scannedCells = turnManager.ProcessScanner(ActionType.Move);
-        turnManager.ProcessPlayerAction(ActionType.Move, scannedCells, gameBoard[4, 4]);
-
+        scannedCells = turnManager.ProcessScanner();
+        turnManager.ProcessPlayerAction(scannedCells, gameBoard[5, 5]);
+        turnManager.SelectUnit(gameBoard[5, 5]);
+        IUnit unit = gameBoard[5, 5].Content as IUnit ?? throw new ArgumentNullException("");
+        scannedCells = turnManager.ProcessScanner();
+        turnManager.ProcessPlayerAction(scannedCells, gameBoard[6, 6], unit.Abilities[1]);
+        turnManager.SelectUnit(gameBoard[5, 5]);
+        turnManager.ProcessPlayerAction(scannedCells, gameBoard[4, 4]);
         turnManager.SelectUnit(gameBoard[4, 4]);
-        LizardWarrior selectedUnit = gameBoard[4, 4].Content as LizardWarrior ?? throw new ArgumentNullException();
-        selectedUnit.Abilities[0].OnCooldown += abilityNotifications.Notify_AbilityOnCooldown;
-        
-        scannedCells = turnManager.ProcessScanner(ActionType.Ability);
-        turnManager.ProcessPlayerAction(ActionType.Ability, scannedCells, null, selectedUnit.Abilities[0]);
-
-        Console.WriteLine(selectedUnit.CurrentTurnPhase);
-        Console.WriteLine(selectedUnit.Abilities[0]);
-
-        turnManager.SelectUnit(selectedUnit.OccupiedCell!);
-        scannedCells = turnManager.ProcessScanner(ActionType.Move);
-        Console.WriteLine(selectedUnit.CurrentTurnPhase);
-        Console.WriteLine(selectedUnit.Abilities[0]);
-        turnManager.ProcessPlayerAction(ActionType.Move, scannedCells, gameBoard[2, 1]);
-
-        Console.WriteLine(selectedUnit.CurrentTurnPhase);
-        Console.WriteLine(selectedUnit.Abilities[0]);
-        
-        turnManager.SelectUnit(gameBoard[2, 1]!);
-        scannedCells = turnManager.ProcessScanner(ActionType.Attack);
-        turnManager.ProcessPlayerAction(ActionType.Attack, scannedCells, gameBoard[1, 1]);
-        Console.WriteLine(gameController.CheckForTurnEnd(players[1]));
+        scannedCells = turnManager.ProcessScanner();
+        unit = gameBoard[4, 4].Content as IUnit ?? throw new ArgumentNullException("");
+        turnManager.ProcessPlayerAction(scannedCells, gameBoard[3, 3], unit.Abilities[0]);
 
         // ... Проходит ход...
 
-        // ...
     }
 
 }
