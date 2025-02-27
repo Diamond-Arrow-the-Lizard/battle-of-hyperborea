@@ -4,7 +4,7 @@ using BoH.Interfaces;
 
 public class RusArcher : BaseUnit
 {
-    protected override int MaxHealth { get; } = 10;
+    protected override int MaxHealth { get; } = 15;
 
     public RusArcher() : base("Рус-Лучник", 'Я', "Rus", UnitType.Range)
     {
