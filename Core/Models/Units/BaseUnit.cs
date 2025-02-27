@@ -185,6 +185,7 @@ public class BaseUnit : IUnit, IIconHolder
         int damageAmount = CalculateAttackDamage();
         OnAttack?.Invoke(this, damageAmount);
         target.TakeDamage(damageAmount);
+        ChangeTurnPhase();
     }
 
     /// <inheritdoc/>
