@@ -5,6 +5,9 @@ namespace BoH.Interfaces;
 /// </summary>
 public interface ITurnManager
 {
+    public IPlayer CurrentPlayer { get; set; }
+    public IUnit? SelectedUnit { get; set; }
+
     /// <summary>
     /// Событие, возникающее при завершении хода текущего игрока.
     /// </summary>
@@ -72,8 +75,8 @@ public interface ITurnManager
     /// Выбрасывается, если цель действия не является клеткой.
     /// </exception>
     void ProcessPlayerAction(
-        ActionType action, 
-        List<ICell>? availableCells = null, 
-        object? target = null, 
+        ActionType action,
+        List<ICell>? availableCells = null,
+        object? target = null,
         IAbility? usedAbility = null);
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using BoH.GUI.ViewModels;
 using BoH.GUI.Views;
+using Avalonia.Controls;
 
 namespace BoH.GUI;
 
@@ -27,6 +28,7 @@ public partial class App : Application
             {
                 DataContext = new MainWindowViewModel(),
             };
+            
         }
 
         base.OnFrameworkInitializationCompleted();
