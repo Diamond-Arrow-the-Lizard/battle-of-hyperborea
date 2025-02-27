@@ -5,7 +5,7 @@ public class LizardWarrior : BaseUnit
     protected override int MaxHealth { get; } = 20;
     public LizardWarrior() : base("Ящер-Боец", 'S', "Lizard")
     {
-        Abilities.Add(new MadDash());
+        Abilities.Add(new MadDash(this));
         Hp = MaxHealth;
         Defence = 4;
         DamageDices = 3;

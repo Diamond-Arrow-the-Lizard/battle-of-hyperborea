@@ -10,7 +10,7 @@ public class LizardArcher : BaseUnit
 
     public LizardArcher() : base("Ящер-Лучник", '2', "Lizard", UnitType.Range)
     {
-        Abilities.Add(new SelfCare());
+        Abilities.Add(new SelfCare(this));
         Hp = MaxHealth;
         Defence = 2;
         DamageDices = 3;

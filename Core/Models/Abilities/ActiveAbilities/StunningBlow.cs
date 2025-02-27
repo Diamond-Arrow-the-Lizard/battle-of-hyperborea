@@ -4,6 +4,9 @@ using BoH.Interfaces;
 
 public class StunningBlow : IAbility
 {
+
+    /// <summary> Применяющий способность юнит. </summary>
+    private readonly IUnit _abilityUser;
     
     /// <inheritdoc/> 
     public string AbilityId { get; }
@@ -21,30 +24,38 @@ public class StunningBlow : IAbility
     public int Coolown { set; get; } = 0;
 
     /// <inheritdoc/> 
+    public int AbilityRange { set; get; }
+
+    /// <inheritdoc/> 
     public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityFailed;
 
     /// <inheritdoc/> 
     public event Action<IAbility>? OnCooldown;
 
     /// <inheritdoc/> 
-    public bool Activate(IUnit user, IUnit? target = null)
+    public bool Activate(IUnit? target = null)
     {
         if (Coolown != 0) {
+            OnAbilityFailed?.Invoke(this);
             OnCooldown?.Invoke(this);
             return false;
         }
 
         if (target == null)
         {
+            OnAbilityFailed?.Invoke(this);
             return false;
         }
         else
         {
             OnAbilityUsed?.Invoke(this);
-            var userDices = user.DamageDices;
-            user.DamageDices = 1;
-            user.Attack(target);
-            user.DamageDices = userDices;
+            var userDices = _abilityUser.DamageDices;
+            _abilityUser.DamageDices = 1;
+            _abilityUser.Attack(target);
+            _abilityUser.DamageDices = userDices;
             Coolown = 2;
             target.GetStunned();
             return true;
@@ -58,8 +69,10 @@ public class StunningBlow : IAbility
             --Coolown;
     }
 
-    public StunningBlow()
+    public StunningBlow(IUnit abilityUser)
     {
+        _abilityUser = abilityUser;
+        AbilityRange = _abilityUser.Range;
         AbilityId = Guid.NewGuid().ToString();
     }
 }
