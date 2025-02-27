@@ -42,7 +42,11 @@ public class Program
         foreach (var i in units)
         {
             i.OnAttack += unitNotifications.Notify_UnitAttacked;
-            i.Abilities[0].OnAbilityUsed += abilityNotifications.Notify_AbilityUsed;
+            foreach(var j in i.Abilities)
+            {
+                j.OnAbilityUsed += abilityNotifications.Notify_AbilityUsed;
+                j.OnCooldown += abilityNotifications.Notify_AbilityOnCooldown;
+            }
             i.OnTakingDamage += unitNotifications.Notify_UnitRecievedDamage;
         }
 
@@ -83,12 +87,12 @@ public class Program
         turnManager.ProcessPlayerAction(scannedCells, gameBoard[5, 5]);
         turnManager.SelectUnit(gameBoard[5, 5]);
         IUnit unit = gameBoard[5, 5].Content as IUnit ?? throw new ArgumentNullException("");
-        scannedCells = turnManager.ProcessScanner();
-        turnManager.ProcessPlayerAction(scannedCells, gameBoard[6, 6], unit.Abilities[1]);
+        scannedCells = turnManager.ProcessScanner(unit.Abilities[1]);
+        turnManager.ProcessPlayerAction(scannedCells, null, unit.Abilities[1]);
         turnManager.SelectUnit(gameBoard[5, 5]);
         turnManager.ProcessPlayerAction(scannedCells, gameBoard[4, 4]);
         turnManager.SelectUnit(gameBoard[4, 4]);
-        scannedCells = turnManager.ProcessScanner();
+        scannedCells = turnManager.ProcessScanner(unit.Abilities[0]);
         unit = gameBoard[4, 4].Content as IUnit ?? throw new ArgumentNullException("");
         turnManager.ProcessPlayerAction(scannedCells, gameBoard[3, 3], unit.Abilities[0]);
 

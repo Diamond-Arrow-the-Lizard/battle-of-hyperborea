@@ -143,7 +143,8 @@ public class TurnManager : ITurnManager
     }
 
     /// <inheritdoc/>
-    public List<ICell> ProcessScanner()
+    /// <remarks> Для фазы движения или после неё не передавайте в метод параметры </remarks>
+    public List<ICell> ProcessScanner(IAbility? usedAbility = null)
     {
         ArgumentNullException.ThrowIfNull(_selectedUnit);
         ArgumentNullException.ThrowIfNull(_selectedUnit.OccupiedCell);
@@ -157,7 +158,14 @@ public class TurnManager : ITurnManager
                 scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Speed);
                 break;
             case TurnPhase.Action:
-                scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
+                if (usedAbility != null)
+                {
+                    scannedCells = _scannerHandler.HandleScan(scanningCell, usedAbility.AbilityRange);
+                }
+                else
+                {
+                    scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
+                }
                 break;
         }
 
