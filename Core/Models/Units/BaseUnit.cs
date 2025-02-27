@@ -119,7 +119,7 @@ public class BaseUnit : IUnit, IIconHolder
 
         int effectiveDamage = Math.Max(0, amount - Defence);
         Hp -= effectiveDamage;
-        OnTakingDamage?.Invoke(this, amount);
+        OnTakingDamage?.Invoke(this, effectiveDamage);
 
         if (Hp <= 0)
         {
