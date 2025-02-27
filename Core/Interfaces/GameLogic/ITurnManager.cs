@@ -60,8 +60,9 @@ public interface ITurnManager
     /// <summary>
     /// Обрабатывает сканирование клеток для указанного действия.
     /// </summary>
+    /// <param name="usedAbility"> Используемая способность во время фазы действия (опционально). </param>
     /// <returns>Список клеток, доступных для выполнения действия.</returns>
-    List<ICell> ProcessScanner();
+    List<ICell> ProcessScanner(IAbility? usedAbility = null);
 
     /// <summary>
     /// Выполняет действие, выбранное игроком.
