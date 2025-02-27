@@ -39,10 +39,10 @@ public class MadDash : IAbility
         }
         else
         {
+            OnAbilityUsed?.Invoke(this);
             user.CurrentTurnPhase = TurnPhase.End;
             user.Hp -= 5;
             Coolown = 3;
-            OnAbilityUsed?.Invoke(this);
             return true;
         }
     }
