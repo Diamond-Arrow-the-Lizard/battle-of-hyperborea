@@ -2,6 +2,7 @@ namespace BoH.GameLogic;
 
 using BoH.Interfaces;
 using BoH.Models;
+using Microsoft.Win32;
 using System.Linq;
 
 /// <inheritdoc cref="ITurnManager"/>
@@ -12,14 +13,27 @@ using System.Linq;
 /// </remarks>
 public class TurnManager : ITurnManager
 {
-    private IGameBoard _gameBoard;
+    private readonly IGameBoard _gameBoard;
     private Player _currentPlayer;
     private readonly Player[] _players;
     private readonly IActionHandler _actionHandler;
     private readonly IScannerHandler _scannerHandler;
     private int _currentPlayerIndex = 0;
-    private List<ICell> _availableUnitsCells = new();
+    private readonly List<ICell> _availableUnitsCells = [];
     private IUnit? _selectedUnit;
+
+
+    public IPlayer CurrentPlayer
+    {
+        get => _currentPlayer; 
+        set => _currentPlayer = value as Player ?? throw new ArgumentNullException("Player is null");
+    }
+
+    public IUnit? SelectedUnit
+    {
+        get { return _selectedUnit; }
+        set { _selectedUnit = value; }
+    }
 
     /// <summary>
     /// Инициализирует новый экземпляр менеджера ходов.
