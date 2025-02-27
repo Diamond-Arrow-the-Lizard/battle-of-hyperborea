@@ -31,13 +31,17 @@ public interface IAbility
     /// </summary>
     int Coolown { set; get; }
 
+    /// </summary>
+    /// Дальность применения способности.
+    /// </summary>
+    int AbilityRange { get; set; }
+
     /// <summary>
     /// Выполняет способность.
     /// </summary>
-    /// <param name="user">Юнит, использующий способность.</param>
     /// <param name="target">Целевой юнит или объект (опционально).</param>
     /// <returns>Возвращает `true`, если способность была успешно применена.</returns>
-    bool Activate(IUnit user, IUnit? target = null);
+    bool Activate(IUnit? target = null);
 
     /// <summary>
     /// Обновляет состояние способности, если требуется, например, восстановление
@@ -51,7 +55,13 @@ public interface IAbility
     event Action<IAbility> OnAbilityUsed;
 
     /// <summary>
+    /// Событие при провале применения способности
+    /// </summary>
+    event Action<IAbility>? OnAbilityFailed;
+
+    /// <summary>
     /// Событие при кулдауне способности 
     /// </summary>
     event Action<IAbility>? OnCooldown;
+
 }

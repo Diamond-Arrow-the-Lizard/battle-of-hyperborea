@@ -4,6 +4,9 @@ namespace BoH.Models;
 
 public class Attack : IAbility
 {
+    /// <summary> Применяющий способность юнит. </summary>
+    private readonly IUnit _abilityUser;
+
     /// <inheritdoc/> 
     public string AbilityId { get; }
 
@@ -20,18 +23,29 @@ public class Attack : IAbility
     public int Coolown { set; get; } = 0;
 
     /// <inheritdoc/> 
+    public int AbilityRange { get; set; }
+
+    /// <inheritdoc/> 
     public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityFailed;
 
     /// <inheritdoc/> 
     public event Action<IAbility>? OnCooldown = null;
 
     /// <inheritdoc/> 
-    public bool Activate(IUnit user, IUnit? target = null)
+    public bool Activate(IUnit? target = null)
     {
-        if (target == null) return false;
+        if (target == null) 
+        {
+            OnAbilityFailed?.Invoke(this);
+            return false;
+        }
 
         else if (Coolown > 0)
         {
+            OnAbilityFailed?.Invoke(this);
             OnCooldown?.Invoke(this);
             return false;
         }
@@ -39,19 +53,19 @@ public class Attack : IAbility
         else
         {
             OnAbilityUsed?.Invoke(this);
-            user.Attack(target);
+            _abilityUser.Attack(target);
             return true;
         }
     }
 
     /// <inheritdoc/> 
-    public void Update()
-    {
-        throw new InvalidOperationException("Обычная атака не имеет кулдауна.");
-    }
+    public void Update() { return; }
 
-    public Attack()
+    public Attack(IUnit abilityUser)
     {
+        _abilityUser = abilityUser;
+        AbilityRange = _abilityUser.Range;
+
         AbilityId = Guid.NewGuid().ToString();
         OnCooldown = null;
     }
