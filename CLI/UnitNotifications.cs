@@ -29,7 +29,7 @@ public class ConsoleUnitNotifications : IUnitNotifications
         infoMessage += $"Способности: \n";
         foreach(var i in unit.Abilities)
         {
-            infoMessage += $"{i.Name} ";
+            infoMessage += $"{i.Name}\n";
         }
         infoMessage += "\n";
         Console.WriteLine(infoMessage);
