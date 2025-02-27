@@ -54,7 +54,6 @@ public class ActionHandler : IActionHandler
         if (targetedCell.Content is IUnit target)
         {
             attacker.Attack(target);
-            attacker.ChangeTurnPhase();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
         }
         else throw new InvalidDataException("Неизвестный тип объекта в клетке.");
