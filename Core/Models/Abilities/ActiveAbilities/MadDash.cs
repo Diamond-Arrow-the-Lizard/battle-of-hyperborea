@@ -4,6 +4,9 @@ using BoH.Interfaces;
 
 public class MadDash : IAbility
 {
+    /// <summary> Применяющий способность юнит. </summary>
+    private readonly IUnit _abilityUser;
+
     /// <inheritdoc/> 
     public string AbilityId { get; }
 
@@ -20,28 +23,36 @@ public class MadDash : IAbility
     public int Coolown { set; get; } = 0;
 
     /// <inheritdoc/> 
+    public int AbilityRange { set; get; } 
+
+    /// <inheritdoc/> 
     public event Action<IAbility>? OnAbilityUsed;
+
+    /// <inheritdoc/> 
+    public event Action<IAbility>? OnAbilityFailed;
 
     /// <inheritdoc/> 
     public event Action<IAbility>? OnCooldown;
 
     /// <inheritdoc/> 
-    public bool Activate(IUnit user, IUnit? target = null)
+    public bool Activate(IUnit? target = null)
     {
         if (Coolown != 0) {
+            OnAbilityFailed?.Invoke(this);
             OnCooldown?.Invoke(this);
             return false;
         }
 
-        else if(user.Hp < 6)
+        else if(_abilityUser.Hp < 6)
         {
+            OnAbilityFailed?.Invoke(this);
             return false;
         }
         else
         {
             OnAbilityUsed?.Invoke(this);
-            user.CurrentTurnPhase = TurnPhase.End;
-            user.Hp -= 5;
+            _abilityUser.CurrentTurnPhase = TurnPhase.End;
+            _abilityUser.Hp -= 5;
             Coolown = 3;
             return true;
         }
@@ -54,8 +65,10 @@ public class MadDash : IAbility
             --Coolown;
     }
 
-    public MadDash()
+    public MadDash(IUnit abilityUser)
     {
+        _abilityUser = abilityUser;
+        AbilityRange = _abilityUser.Speed;
         AbilityId = Guid.NewGuid().ToString();
     }
 
