@@ -108,7 +108,7 @@ public class BaseUnit : IUnit, IIconHolder
         UnitType = type;
         Team = team;
         Icon = icon.ToString();
-        Abilities.Add(new Attack());
+        Abilities.Add(new Attack(this));
     }
 
     /// <inheritdoc/>

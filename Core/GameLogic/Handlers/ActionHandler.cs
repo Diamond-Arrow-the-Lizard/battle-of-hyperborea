@@ -77,7 +77,7 @@ public class ActionHandler : IActionHandler
         }
         else if (targetedCell!.Content is IUnit attacked)
         {
-            usedAbility.Activate(attacker, attacked);
+            usedAbility.Activate(attacked);
             attacker.ChangeTurnPhase();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
         }

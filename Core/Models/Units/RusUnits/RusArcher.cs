@@ -8,7 +8,7 @@ public class RusArcher : BaseUnit
 
     public RusArcher() : base("Рус-Лучник", 'Я', "Rus", UnitType.Range)
     {
-        Abilities.Add(new SelfCare());
+        Abilities.Add(new SelfCare(this));
         Range = 5;
         Hp = MaxHealth;
         Defence = 2;
