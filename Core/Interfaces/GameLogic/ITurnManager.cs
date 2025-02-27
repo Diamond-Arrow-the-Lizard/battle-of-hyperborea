@@ -60,14 +60,12 @@ public interface ITurnManager
     /// <summary>
     /// Обрабатывает сканирование клеток для указанного действия.
     /// </summary>
-    /// <param name="action">Тип действия (перемещение, атака, способность).</param>
     /// <returns>Список клеток, доступных для выполнения действия.</returns>
-    List<ICell> ProcessScanner(ActionType action);
+    List<ICell> ProcessScanner();
 
     /// <summary>
     /// Выполняет действие, выбранное игроком.
     /// </summary>
-    /// <param name="action">Тип действия.</param>
     /// <param name="availableCells">Список клеток, доступных для действия (опционально).</param>
     /// <param name="target">Цель действия (опционально).</param>
     /// <param name="usedAbility">Способность, используемая для действия (опционально).</param>
@@ -75,7 +73,6 @@ public interface ITurnManager
     /// Выбрасывается, если цель действия не является клеткой.
     /// </exception>
     void ProcessPlayerAction(
-        ActionType action,
         List<ICell>? availableCells = null,
         object? target = null,
         IAbility? usedAbility = null);
