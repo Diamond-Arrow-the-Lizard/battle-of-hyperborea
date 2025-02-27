@@ -38,8 +38,8 @@ public class Attack : IAbility
 
         else
         {
-            user.Attack(target);
             OnAbilityUsed?.Invoke(this);
+            user.Attack(target);
             return true;
         }
     }
