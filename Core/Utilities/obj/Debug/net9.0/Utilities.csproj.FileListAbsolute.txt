@@ -1,0 +1,12 @@
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/bin/Debug/net9.0/Utilities.deps.json
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/bin/Debug/net9.0/Utilities.dll
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/bin/Debug/net9.0/Utilities.pdb
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.GeneratedMSBuildEditorConfig.editorconfig
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.AssemblyInfoInputs.cache
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.AssemblyInfo.cs
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.csproj.CoreCompileInputs.cache
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.sourcelink.json
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.dll
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/refint/Utilities.dll
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/Utilities.pdb
+/home/d-arrow/Programming/battle-of-hyperborea/Core/Utilities/obj/Debug/net9.0/ref/Utilities.dll

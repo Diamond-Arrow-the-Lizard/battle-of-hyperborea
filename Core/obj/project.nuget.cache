@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xEtdcHE7QYo=",
+  "success": true,
+  "projectFilePath": "/home/d-arrow/programming/battle-of-hyperborea/Core/Utilities.csproj",
+  "expectedPackageFiles": [
+    "/home/d-arrow/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.1/microsoft.aspnetcore.app.ref.9.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
