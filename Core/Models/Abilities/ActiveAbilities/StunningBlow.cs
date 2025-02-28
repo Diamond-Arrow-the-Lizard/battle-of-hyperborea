@@ -73,7 +73,7 @@ public class StunningBlow : IAbility
     public StunningBlow(IUnit abilityUser)
     {
         _abilityUser = abilityUser;
-        AbilityRange = _abilityUser.Range;
+        AbilityRange = _abilityUser.Range+1;
         AbilityId = Guid.NewGuid().ToString();
     }
 }
