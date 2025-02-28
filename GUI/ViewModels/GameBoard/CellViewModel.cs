@@ -1,0 +1,18 @@
+namespace BoH.GUI.ViewModels;
+
+using System;
+using BoH.Interfaces;
+using BoH.Models;
+using CommunityToolkit.Mvvm;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+public partial class CellViewModel : ViewModelBase
+{
+    [ObservableProperty]
+    private Cell _cell;
+
+    public CellViewModel(ICell cell)
+    {
+        _cell = cell as Cell ?? throw new ArgumentNullException(nameof(cell));
+    }
+}
