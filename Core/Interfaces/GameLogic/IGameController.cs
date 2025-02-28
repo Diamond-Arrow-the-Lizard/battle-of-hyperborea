@@ -7,6 +7,11 @@ namespace BoH.Interfaces;
 public interface IGameController
 {
     /// <summary>
+    /// Событие при выигрыше одной команды
+    /// </summary>
+    public event Action<IPlayer>? OnPlayerWinning;
+
+    /// <summary>
     /// Проверяет, закончился ли ход игрока. 
     /// </summary>
     /// <param name="player">Текущий игрок.</param>

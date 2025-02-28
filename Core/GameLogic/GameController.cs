@@ -13,6 +13,9 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
+    public event Action<IPlayer>? OnPlayerWinning;
+
+    /// <inheritdoc/>
     public bool CheckForTurnEnd(IPlayer player)
     {
         foreach (var i in player.Units)
@@ -28,7 +31,11 @@ public class GameController : IGameController
     {
         foreach (var p in players)
         {
-            if (!p.HasAliveUnits) return true;
+            if (!p.HasAliveUnits)
+            {
+                OnPlayerWinning?.Invoke(p);
+                return true;
+            }
         }
         return false;
     }
