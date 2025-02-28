@@ -69,13 +69,9 @@ public class Scanner : IScanner
                 {
                     var cell = gameBoard[i, j];  // Получаем клетку по координатам (i, j)
 
-                    // Пропускаем клетки, которые равны текущей клетке или являются препятствиями
-                    if (cell != null && cell.Position != scanningCell.Position
-                        && !(cell.Content is Obstacle))
+                    if (!(cell.Content is Obstacle))
                     {
                         scannedCells.Add(cell);  // Добавляем подходящую клетку в список
-
-                        //Console.WriteLine($"Сканируем клетку: ({i}, {j})");
                     }
                 }
             }
