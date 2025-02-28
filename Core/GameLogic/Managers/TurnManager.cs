@@ -207,17 +207,6 @@ public class TurnManager : ITurnManager
 
                     _unitTurnPhase = _selectedUnit.CurrentTurnPhase;
                     break;
-                /*
-            case ActionType.Attack:
-                ArgumentNullException.ThrowIfNull(availableCells);
-                if (target is ICell targetedCellForAttack)
-                {
-                    _actionHandler.HandleAttack(_selectedUnit, targetedCellForAttack, availableCells);
-                    OnTurnStateChanged?.Invoke(_selectedUnit);
-                }
-                else throw new InvalidDataException("Атака осуществляется не на клетку.");
-                break;
-                */
                 case TurnPhase.Action:
                     ArgumentNullException.ThrowIfNull(availableCells);
                     ArgumentNullException.ThrowIfNull(usedAbility);
