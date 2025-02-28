@@ -43,6 +43,11 @@ public class SelfCare : IAbility
             return false;
         }
 
+        if (_abilityUser.IsDead == true)
+        {
+            return false;
+        }
+
         Random rnd = new Random();
         target ??= _abilityUser;
         _abilityUser.Heal(rnd.Next(1, 7));
