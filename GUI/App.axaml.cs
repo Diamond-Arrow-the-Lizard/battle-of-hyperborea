@@ -8,6 +8,10 @@ using BoH.GUI.ViewModels;
 using BoH.GUI.Views;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using BoH.Interfaces;
+using BoH.Models;
+using BoH.Services;
+using BoH.GameLogic;
 
 namespace BoH.GUI;
 
@@ -59,6 +63,12 @@ public partial class App : Application
         var collection = new ServiceCollection();
 
         collection.AddSingleton<MainWindowViewModel>();
+        collection.AddSingleton<GameBoardViewModel>();
+
+
+        collection.AddSingleton<IGameBoard, GameBoard>();
+        collection.AddSingleton<IGameBoardService, GameBoardService>();
+        collection.AddSingleton<ITurnManager, TurnManager>();
 
 
         return collection;

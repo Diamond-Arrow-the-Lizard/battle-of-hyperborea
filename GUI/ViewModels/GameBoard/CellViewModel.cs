@@ -16,6 +16,11 @@ public partial class CellViewModel : ViewModelBase
         Cell = new Cell((x, y));
     }
 
+    public CellViewModel(ICell cell)
+    {
+        Cell = cell as Cell ?? throw new ArgumentNullException(nameof(cell));
+    }
+
 
     public void DebugCommandClick()
     {
