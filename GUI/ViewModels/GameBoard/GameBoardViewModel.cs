@@ -16,7 +16,7 @@ public partial class GameBoardViewModel : ViewModelBase
     private ObservableCollection<CellViewModel> _cells = [];
 
     [ObservableProperty] private int _width;
-    [ObservableProperty] private int height;
+    [ObservableProperty] private int _height;
 
     public GameBoardViewModel(IGameBoard gameBoard)
     {

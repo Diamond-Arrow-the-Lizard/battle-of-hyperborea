@@ -21,7 +21,7 @@
 
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <views:CellView/>
+                <views:CellView Margin="0" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
