@@ -87,6 +87,7 @@ public partial class GameBoardViewModel : ViewModelBase
         catch (Exception e)
         {
             Console.WriteLine(e);
+            HighlightCells(null);
         }
         
         finally

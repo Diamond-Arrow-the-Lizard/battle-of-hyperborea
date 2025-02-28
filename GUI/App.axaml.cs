@@ -97,8 +97,10 @@ public partial class App : Application
             var gameBoardService = sp.GetRequiredService<IGameBoardService>();
             return gameBoardService.GenerateGameBoard(width, height, units, players as IPlayer[]);
         });
+        
         collection.AddSingleton<MainWindowViewModel>();
         collection.AddSingleton<GameBoardViewModel>();
+        collection.AddSingleton<AbilitiesViewModel>();
 
         return collection;
     }
