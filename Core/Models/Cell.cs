@@ -36,10 +36,15 @@ public class Cell : ICell, IIconHolder
     }
 
     /// <inheritdoc/>
-    /// <exception cref="ArgumentException"/>
     public void UpdateIcon()
     {
         Icon = Content?.Icon ?? " ";
+    }
+
+    /// <inheritdoc/>
+    public void UpdateIcon(string newIcon)
+    {
+        Icon = newIcon;
     }
 
     /// <summary>
