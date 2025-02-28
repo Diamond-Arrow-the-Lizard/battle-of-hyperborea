@@ -4,9 +4,17 @@
              x:Class="BoH.GUI.Views.BattleLogView"
              x:DataType="vm:BattleLogViewModel">
     <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
-        <StackPanel>
-            <TextBlock Text="Лог битвы" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ListBox ItemsSource="{Binding LogMessages}" />
-        </StackPanel>
+        <Grid RowDefinitions="Auto, *" Height="200">
+            <TextBlock Text="Лог битвы" FontWeight="Bold" Margin="0,0,0,5" Grid.Row="0"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <TextBox Text="{Binding LogText}" 
+                         IsReadOnly="True"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         FontFamily="Consolas"
+                         FontSize="12"
+                         Background="Transparent"/>
+            </ScrollViewer>
+        </Grid>
     </Border>
 </UserControl>
