@@ -51,7 +51,7 @@ public class MadDash : IAbility
         else
         {
             OnAbilityUsed?.Invoke(this);
-            _abilityUser.CurrentTurnPhase = TurnPhase.End;
+            _abilityUser.CurrentTurnPhase = TurnPhase.Movement;
             _abilityUser.Hp -= 5;
             Coolown = 3;
             return true;

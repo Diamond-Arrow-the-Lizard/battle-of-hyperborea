@@ -19,7 +19,6 @@ public class TurnManager : ITurnManager
     private readonly IScannerHandler _scannerHandler;
     private int _currentPlayerIndex = 0;
     private readonly List<ICell> _availableUnitsCells = [];
-    private IUnit? _selectedUnit;
     private TurnPhase? _unitTurnPhase;
 
 
@@ -29,11 +28,7 @@ public class TurnManager : ITurnManager
         set => _currentPlayer = value as Player ?? throw new ArgumentNullException("Player is null");
     }
 
-    public IUnit? SelectedUnit
-    {
-        get { return _selectedUnit; }
-        set { _selectedUnit = value; }
-    }
+    public IUnit? SelectedUnit { get; set; } = null;
 
     /// <inheritdoc/>
     public event Action<IPlayer>? OnTurnEnd;
@@ -133,12 +128,12 @@ public class TurnManager : ITurnManager
         if (!_availableUnitsCells.Contains(unitCell))
             throw new InvalidOperationException("Юнит недоступен для выбора.");
 
-        _selectedUnit = unitCell.Content as IUnit ??
+        SelectedUnit = unitCell.Content as IUnit ??
             throw new ArgumentNullException("В клетке не было юнита.");
-        _selectedUnit.OccupiedCell = unitCell;
-        _unitTurnPhase = _selectedUnit.CurrentTurnPhase;
+        SelectedUnit.OccupiedCell = unitCell;
+        _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
 
-        OnUnitSelected?.Invoke(_selectedUnit);
+        OnUnitSelected?.Invoke(SelectedUnit);
 
     }
 
@@ -146,16 +141,16 @@ public class TurnManager : ITurnManager
     /// <remarks> Для фазы движения или после неё не передавайте в метод параметры </remarks>
     public List<ICell> ProcessScanner(IAbility? usedAbility = null)
     {
-        ArgumentNullException.ThrowIfNull(_selectedUnit);
-        ArgumentNullException.ThrowIfNull(_selectedUnit.OccupiedCell);
+        ArgumentNullException.ThrowIfNull(SelectedUnit);
+        ArgumentNullException.ThrowIfNull(SelectedUnit.OccupiedCell);
 
-        ICell scanningCell = _selectedUnit.OccupiedCell;
+        ICell scanningCell = SelectedUnit.OccupiedCell;
         List<ICell> scannedCells = new();
 
         switch (_unitTurnPhase)
         {
             case TurnPhase.Movement:
-                scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Speed);
+                scannedCells = _scannerHandler.HandleScan(scanningCell, SelectedUnit.Speed);
                 break;
             case TurnPhase.Action:
                 if (usedAbility != null)
@@ -164,7 +159,7 @@ public class TurnManager : ITurnManager
                 }
                 else
                 {
-                    scannedCells = _scannerHandler.HandleScan(scanningCell, _selectedUnit.Range);
+                    scannedCells = _scannerHandler.HandleScan(scanningCell, SelectedUnit.Range);
                 }
                 break;
         }
@@ -181,15 +176,15 @@ public class TurnManager : ITurnManager
         object? target = null,
         IAbility? usedAbility = null)
     {
-        if (_selectedUnit == null) return;
-        ArgumentNullException.ThrowIfNull(_selectedUnit.OccupiedCell);
+        if (SelectedUnit == null) return;
+        ArgumentNullException.ThrowIfNull(SelectedUnit.OccupiedCell);
 
 
         try
         {
 
-            if (availableCells == null && target == null && usedAbility == null) _selectedUnit.CurrentTurnPhase = TurnPhase.End;
-            _unitTurnPhase = _selectedUnit.CurrentTurnPhase;
+            if (availableCells == null && target == null && usedAbility == null) SelectedUnit.CurrentTurnPhase = TurnPhase.End;
+            _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
 
             switch (_unitTurnPhase)
             {
@@ -198,45 +193,44 @@ public class TurnManager : ITurnManager
                     Console.WriteLine(availableCells.Count);
                     if (target is ICell destination)
                     {
-                        _availableUnitsCells.Remove(_selectedUnit.OccupiedCell);
-                        _actionHandler.HandleMovement(_selectedUnit, destination, availableCells);
-                        _availableUnitsCells.Add(_selectedUnit.OccupiedCell);
-                        OnTurnStateChanged?.Invoke(_selectedUnit);
+                        _availableUnitsCells.Remove(SelectedUnit.OccupiedCell);
+                        _actionHandler.HandleMovement(SelectedUnit, destination, availableCells);
+                        _availableUnitsCells.Add(SelectedUnit.OccupiedCell);
+                        OnTurnStateChanged?.Invoke(SelectedUnit);
                     }
                     else throw new InvalidDataException("Передвижение осуществляется не на клетку.");
 
-                    _unitTurnPhase = _selectedUnit.CurrentTurnPhase;
+                    _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
                     break;
                 case TurnPhase.Action:
                     ArgumentNullException.ThrowIfNull(availableCells);
                     ArgumentNullException.ThrowIfNull(usedAbility);
                     if (target is ICell targetedCellForAbility)
                     {
-                        _actionHandler.HandleAction(_selectedUnit, usedAbility, availableCells, targetedCellForAbility);
-                        OnTurnStateChanged?.Invoke(_selectedUnit);
+                        _actionHandler.HandleAction(SelectedUnit, usedAbility, availableCells, targetedCellForAbility);
+                        OnTurnStateChanged?.Invoke(SelectedUnit);
                     }
                     else if (target is null)
                     {
-                        _actionHandler.HandleAction(_selectedUnit, usedAbility, availableCells, null);
-                        OnTurnStateChanged?.Invoke(_selectedUnit);
+                        _actionHandler.HandleAction(SelectedUnit, usedAbility, availableCells, null);
+                        OnTurnStateChanged?.Invoke(SelectedUnit);
                     }
-                    _unitTurnPhase = _selectedUnit.CurrentTurnPhase;
+                    _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
                     // else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
                     break;
                 case TurnPhase.End:
-                    _actionHandler.HandleSkip(_selectedUnit);
-                    OnTurnStateChanged?.Invoke(_selectedUnit);
+                    _actionHandler.HandleSkip(SelectedUnit);
+                    OnTurnStateChanged?.Invoke(SelectedUnit);
                     break;
             }
 
-            if (_selectedUnit.CurrentTurnPhase == TurnPhase.End)
-                _availableUnitsCells.Remove(_selectedUnit.OccupiedCell);
+            if (SelectedUnit.CurrentTurnPhase == TurnPhase.End)
+                _availableUnitsCells.Remove(SelectedUnit.OccupiedCell);
 
-            OnTurnStateChanged?.Invoke(_selectedUnit);
         }
         finally
         {
-            _selectedUnit = null;
+            SelectedUnit = null;
         }
     }
 }
