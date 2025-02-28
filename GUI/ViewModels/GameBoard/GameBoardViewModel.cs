@@ -13,6 +13,7 @@ namespace BoH.GUI.ViewModels;
 public partial class GameBoardViewModel : ViewModelBase
 {
     [ObservableProperty] private GameBoard _gameBoard;
+    [ObservableProperty] private IPlayer[] _players;
     [ObservableProperty] private ObservableCollection<CellViewModel> _cells = [];
     [ObservableProperty] private int _width;
     [ObservableProperty] private int _height;
@@ -26,12 +27,14 @@ public partial class GameBoardViewModel : ViewModelBase
     public IAbility? SelectedAbility => SelectedUnit?.Abilities[0];
     
     private readonly ITurnManager _turnManager;
-    private readonly IGameBoardService _gameBoardService;
-    
-    
+    private readonly IGameController _gameController;
+    private int _currentPlayerIndex = 0;
+
+
     public GameBoardViewModel(IGameBoard gameBoard, 
         ITurnManager turnManager, 
-        IGameBoardService gameBoardService)
+        IGameController gameController,
+        IPlayer[] players)
     {
         GameBoard = gameBoard as GameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
         Width = GameBoard.Width;
@@ -47,7 +50,8 @@ public partial class GameBoardViewModel : ViewModelBase
         }
         
         _turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
-        _gameBoardService = gameBoardService ?? throw new ArgumentNullException(nameof(gameBoardService));
+        _gameController = gameController ?? throw new ArgumentNullException(nameof(gameController));
+        _players = players ?? throw new ArgumentNullException(nameof(players));
     }
 
     public void HandleCellSelection(CellViewModel cellViewModel)
@@ -67,7 +71,6 @@ public partial class GameBoardViewModel : ViewModelBase
                 _turnManager.SelectUnit(GameBoard[cellPosition.x, cellPosition.y]);
                 SelectedUnit = _turnManager.SelectedUnit;
                 CurrentTurnPhase = SelectedUnit?.CurrentTurnPhase;
-                Console.WriteLine($"What TurnManager knows: {_turnManager.SelectedUnit} - {_turnManager.SelectedUnit?.CurrentTurnPhase}");
                 ScannedCells =
                     _turnManager.ProcessScanner(SelectedUnit?.CurrentTurnPhase != TurnPhase.Action ? null : SelectedAbility);
                 
@@ -89,6 +92,16 @@ public partial class GameBoardViewModel : ViewModelBase
         finally
         {
             UpdateGameBoard();
+            if (_gameController.CheckVictoryCondition(Players))
+            {
+                _gameController.EndGame();
+            }
+            if (_gameController.CheckForTurnEnd(Players[_currentPlayerIndex]))
+            {
+                _currentPlayerIndex = (_currentPlayerIndex + 1) % Players.Length;
+                _turnManager.EndTurn();
+                _turnManager.StartNewRound(_turnManager.CurrentPlayer);
+            }
         }
     }
 
@@ -99,10 +112,9 @@ public partial class GameBoardViewModel : ViewModelBase
         Console.WriteLine("GBVM sees the click");
         Console.WriteLine($"{cellViewModel.Cell.Icon}");
         IUnit? unitVm = cellViewModel.Cell.Content as IUnit;
-        IUnit? unitGb = cell.Content as IUnit;
-        if (unitVm != null && unitGb != null)
+        if (unitVm != null)
         {
-            Console.WriteLine($"What cellVM knows: {unitVm} - {unitVm.CurrentTurnPhase}");
+            Console.WriteLine($"What cellVM knows: {unitVm} - {unitVm.CurrentTurnPhase}, HP: {unitVm.Hp}, Is dead: {unitVm.IsDead}");
         }
     }
 

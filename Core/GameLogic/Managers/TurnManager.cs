@@ -13,8 +13,8 @@ using System.Linq;
 public class TurnManager : ITurnManager
 {
     private readonly IGameBoard _gameBoard;
-    private Player _currentPlayer;
-    private readonly Player[] _players;
+    private IPlayer _currentPlayer;
+    private readonly IPlayer[] _players;
     private readonly IActionHandler _actionHandler;
     private readonly IScannerHandler _scannerHandler;
     private int _currentPlayerIndex = 0;
@@ -25,7 +25,7 @@ public class TurnManager : ITurnManager
     public IPlayer CurrentPlayer
     {
         get => _currentPlayer;
-        set => _currentPlayer = value as Player ?? throw new ArgumentNullException("Player is null");
+        set => _currentPlayer = value;
     }
 
     public IUnit? SelectedUnit { get; set; } = null;
@@ -56,7 +56,7 @@ public class TurnManager : ITurnManager
     /// </exception>
     public TurnManager(
         IGameBoard gameBoard,
-        Player[] players,
+        IPlayer[] players,
         IActionHandler actionHandler,
         IScannerHandler scannerHandler)
     {
