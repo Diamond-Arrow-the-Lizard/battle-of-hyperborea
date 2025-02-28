@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using BoH.GUI.ViewModels;
 using BoH.GUI.Views;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BoH.GUI;
 
@@ -21,12 +22,17 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var collection = new ServiceCollection();
+            collection = ProvideServices();
+
+            var services = collection.BuildServiceProvider();
+
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = services.GetRequiredService<MainWindowViewModel>(),
             };
             
         }
@@ -46,4 +52,16 @@ public partial class App : Application
             BindingPlugins.DataValidators.Remove(plugin);
         }
     }
+
+
+    private static ServiceCollection ProvideServices()
+    {
+        var collection = new ServiceCollection();
+
+        collection.AddSingleton<MainWindowViewModel>();
+
+
+        return collection;
+    }
+
 }
