@@ -148,11 +148,17 @@ public class BaseUnit : IUnit, IIconHolder
         if (CurrentTurnPhase != TurnPhase.Movement) throw new InvalidOperationException("Юнит не в фазе передвижения.");
         if (newPosition.Content != null) throw new InvalidOperationException("Клетка занята, передвижение невозможно.");
 
-        if (OccupiedCell != null) OccupiedCell.Content = null;
+        if (OccupiedCell != null)
+        {
+            OccupiedCell.Content = null;
+            OccupiedCell.UpdateIcon();
+        }
         OccupiedCell = newPosition;
         newPosition.Content = this;
+        newPosition.UpdateIcon();
         OnMove?.Invoke(this);
         ChangeTurnPhase();
+        return;
     }
 
     /// <inheritdoc/>
@@ -187,6 +193,7 @@ public class BaseUnit : IUnit, IIconHolder
         OnAttack?.Invoke(this, damageAmount);
         target.TakeDamage(damageAmount);
         ChangeTurnPhase();
+        return;
     }
 
     /// <inheritdoc/>

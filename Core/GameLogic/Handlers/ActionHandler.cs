@@ -30,17 +30,8 @@ public class ActionHandler : IActionHandler
             throw new InvalidOperationException("Клетка не находится в радиусе передвижения.");
 
         if (destination.IsOccupied()) throw new InvalidOperationException("Клетка занята, передвижение невозможно.");
-
-        ICell originalCell = movingUnit.OccupiedCell;
-        (int x, int y) originalPosition = originalCell.Position;
-        _gameBoard[originalPosition.x, originalPosition.y].Content = null;
-        originalCell.UpdateIcon();
-
-        movingUnit.OccupiedCell = destination;
-        destination.Content = movingUnit as IIconHolder;
-        destination.UpdateIcon();
-
-        movingUnit.ChangeTurnPhase();
+        
+        movingUnit.PlaceUnit(destination);
         OnUpdatingGameBoard?.Invoke(_gameBoard);
     }
     
@@ -54,14 +45,11 @@ public class ActionHandler : IActionHandler
         if (targetedCell is null || targetedCell.Content is null)
         {
             usedAbility.Activate(attacker);
-            attacker.ChangeTurnPhase();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
-
         }
         else if (targetedCell!.Content is IUnit attacked)
         {
             usedAbility.Activate(attacked);
-            attacker.ChangeTurnPhase();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
         }
         else throw new InvalidDataException("Неизвестный тип объекта в клетке.");
