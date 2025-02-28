@@ -27,8 +27,10 @@
         <!-- Здесь можно разместить дополнительные элементы для детальной информации -->
       </Border>
       <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
-        <TextBlock Text="Активные способности" FontWeight="Bold"/>
-        <!-- Здесь список способностей -->
+        <StackPanel>
+          <TextBlock Text="Активные способности" FontWeight="Bold" />
+          <views:AbilitiesView DataContext="{Binding AbilitiesVm}" />
+        </StackPanel>
       </Border>
     </StackPanel>
 
