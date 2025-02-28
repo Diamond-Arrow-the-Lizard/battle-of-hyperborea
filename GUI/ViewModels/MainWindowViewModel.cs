@@ -2,5 +2,10 @@
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    public GameBoardViewModel GameBoardVm { get; }
+    
+    public MainWindowViewModel(GameBoardViewModel gameBoardVm)
+    {
+        GameBoardVm = gameBoardVm;
+    }
 }
