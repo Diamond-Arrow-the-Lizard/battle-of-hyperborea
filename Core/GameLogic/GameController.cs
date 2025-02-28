@@ -20,7 +20,7 @@ public class GameController : IGameController
     {
         foreach (var i in player.Units)
         {
-            if (i.CurrentTurnPhase != TurnPhase.End)
+            if (i.IsDead == false && i.CurrentTurnPhase != TurnPhase.End)
                 return false;
         }
         return true;
