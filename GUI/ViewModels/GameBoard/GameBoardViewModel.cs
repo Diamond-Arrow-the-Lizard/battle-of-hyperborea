@@ -17,17 +17,20 @@ public partial class GameBoardViewModel : ViewModelBase
 
     [ObservableProperty] private int _width;
     [ObservableProperty] private int _height;
-
-    public GameBoardViewModel(IGameBoard gameBoard)
+    
+    private readonly ITurnManager _turnManager;
+    
+    public GameBoardViewModel(IGameBoard gameBoard, ITurnManager turnManager)
     {
         GameBoard = gameBoard as GameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
         Width = GameBoard.Width;
         Height = GameBoard.Height;
-        
         foreach(var cell in gameBoard.Cells)
         {
             Cells.Add(new CellViewModel(cell));
         }
+        
+        _turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
     }
 
 }

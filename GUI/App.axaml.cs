@@ -63,9 +63,6 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
 
-        collection.AddSingleton<IGameBoardService, GameBoardService>();
-        collection.AddSingleton<ITurnManager, TurnManager>();
-        
         int width = 8;
         int height = 8;
         Player[] players = new Player[2];
@@ -85,6 +82,14 @@ public partial class App : Application
             new LizardArcher(),
             new LizardWarrior()
         };
+        
+        collection.AddSingleton<Player[]>(players);
+        collection.AddSingleton<IActionHandler, ActionHandler>();
+        collection.AddSingleton<IScanner, Scanner>();
+        collection.AddSingleton<IScannerHandler, ScannerHandler>();
+        collection.AddSingleton<IGameBoardService, GameBoardService>();
+        collection.AddSingleton<ITurnManager, TurnManager>();
+        
         collection.AddSingleton<IGameBoard>(sp =>
         {
             var gameBoardService = sp.GetRequiredService<IGameBoardService>();
