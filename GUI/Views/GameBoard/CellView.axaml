@@ -9,6 +9,6 @@
              x:DataType="vm:CellViewModel">
 
 
-    <Button Content="{Binding Cell.Icon}" />
+    <Button Content="{Binding Cell.Icon}" Command="{Binding HandleClick}" />
 
 </UserControl>
