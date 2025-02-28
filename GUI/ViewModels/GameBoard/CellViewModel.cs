@@ -42,7 +42,17 @@ public partial class CellViewModel : ViewModelBase
 
     public void UpdateViewModel()
     {
-        Cell.UpdateIcon();
+        if (Cell.Content is IUnit unit)
+        {
+            if (unit.IsDead == true)
+            {
+                Cell.UpdateIcon("X");
+            }
+        }
+        else
+        {
+            Cell.UpdateIcon();
+        }
         OnPropertyChanged(nameof(Icon));
     }
 }
