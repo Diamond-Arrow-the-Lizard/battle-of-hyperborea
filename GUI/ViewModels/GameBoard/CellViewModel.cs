@@ -11,8 +11,20 @@ public partial class CellViewModel : ViewModelBase
     [ObservableProperty]
     private Cell _cell;
 
-    public CellViewModel(ICell cell)
+    public CellViewModel(int x, int y)
     {
-        _cell = cell as Cell ?? throw new ArgumentNullException(nameof(cell));
+        Cell = new Cell((x, y));
+    }
+
+
+    public void DebugCommandClick()
+    {
+        Console.WriteLine("Button was clicked");
+    }
+
+
+    public void HandleClick()
+    {
+        DebugCommandClick();
     }
 }
