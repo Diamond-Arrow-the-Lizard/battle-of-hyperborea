@@ -58,6 +58,7 @@ public class StunningBlow : IAbility
             _abilityUser.DamageDices = userDices;
             Coolown = 2;
             target.GetStunned();
+            _abilityUser.ChangeTurnPhase();
             return true;
         }
     }
