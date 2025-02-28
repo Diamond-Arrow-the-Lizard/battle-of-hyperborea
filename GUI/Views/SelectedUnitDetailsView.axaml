@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:BoH.GUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BoH.GUI.Views.SelectedUnitDetailsView"
+             x:DataType="vm:SelectedUnitDetailsViewModel">
+    <StackPanel Margin="5">
+        <TextBlock Text="Описание выбранного юнита:" FontWeight="Bold" />
+        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="0,5,0,10"/>
+    
+        <TextBlock Text="Пассивные способности:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <ListBox ItemsSource="{Binding PassiveAbilities}" Width="200">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,5">
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>
