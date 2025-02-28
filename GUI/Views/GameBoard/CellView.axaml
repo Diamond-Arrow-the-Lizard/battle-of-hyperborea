@@ -14,7 +14,7 @@
             VerticalContentAlignment="Center"
             Padding="0"
             FontSize="36">
-        <TextBlock Text="{Binding Cell.Icon}"
+        <TextBlock Text="{Binding Icon}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    TextAlignment="Center" />

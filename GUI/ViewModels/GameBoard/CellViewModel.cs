@@ -8,10 +8,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 public partial class CellViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private Cell _cell;
-    
-    public event Action? OnCellClicked;
+    [ObservableProperty] private Cell _cell;
+    public string Icon => Cell.Icon;
+    public event Action<CellViewModel>? OnCellClicked;
 
     public CellViewModel(int x, int y)
     {
@@ -24,7 +23,7 @@ public partial class CellViewModel : ViewModelBase
     }
 
 
-    public void DebugCommandClick()
+    private void DebugCommandClick()
     {
         Console.WriteLine("Button was clicked");
     }
@@ -32,7 +31,14 @@ public partial class CellViewModel : ViewModelBase
 
     public void HandleClick()
     {
-        OnCellClicked?.Invoke();
+        OnCellClicked?.Invoke(this);
+        UpdateViewModel();
         DebugCommandClick();
+    }
+
+    public void UpdateViewModel()
+    {
+        Cell.UpdateIcon();
+        OnPropertyChanged(nameof(Icon));
     }
 }
