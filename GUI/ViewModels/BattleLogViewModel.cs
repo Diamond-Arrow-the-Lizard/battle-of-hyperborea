@@ -10,15 +10,44 @@ namespace BoH.GUI.ViewModels;
     {
         [ObservableProperty]
         private ObservableCollection<string> logMessages = new();
+        
+        public string LogText => string.Join(Environment.NewLine, LogMessages);
 
-        public BattleLogViewModel()
+        public BattleLogViewModel(ITurnManager turnManager, IGameController gameController,
+            IPlayer[] players)
         {
-             
+            foreach (var player in players)
+            {
+                foreach (var unit in player.Units)
+                {
+                    unit.OnAttack += Notify_UnitAttacked;
+                    unit.OnDeath += Notify_UnitDead;
+                    unit.OnHealed += Notify_UnitHealed;
+                    unit.OnMove += Notify_UnitMoved;
+                    unit.OnTakingDamage += Notify_UnitRecievedDamage;
+                    unit.OnStunned += Notify_UnitStunned;
+                    foreach (var ability in unit.Abilities)
+                    {
+                        ability.OnCooldown += Notify_AbilityOnCooldown;
+                        ability.OnAbilityUsed += Notify_AbilityUsed;
+                        ability.OnAbilityFailed += Notify_AbilityFailed;
+                    }
+
+                }
+            }
+
+            turnManager.OnTurnEnd += Notify_TurnEnded;
+            turnManager.OnTurnStart += Notify_TurnStarted;
+            turnManager.OnTurnStateChanged += Notify_UnitChangedTurnPhase;
+            turnManager.OnUnitSelected += Notify_UnitSelected;
+            gameController.OnPlayerWinning += Notify_PlayerWon;
+
         }
 
         private void AddLogMessage(string message)
         {
             LogMessages.Add($"{DateTime.Now:HH:mm:ss}: {message}");
+            OnPropertyChanged(nameof(LogText));
         }
 
         public void Notify_AbilityUsed(IAbility ability)
@@ -53,7 +82,7 @@ namespace BoH.GUI.ViewModels;
 
         public void Notify_UnitAttacked(IUnit unit, int amount)
         {
-            AddLogMessage($"Юнит атакован: {unit.UnitName} (урон: {amount})");
+            AddLogMessage($"Юнит атаковал: {unit.UnitName} (урон: {amount})");
         }
 
         public void Notify_UnitRecievedDamage(IUnit unit, int amount)
@@ -74,6 +103,20 @@ namespace BoH.GUI.ViewModels;
         public void Notify_UnitChangedTurnPhase(IUnit unit)
         {
             AddLogMessage($"Юнит сменил фазу хода: {unit.UnitName} → {unit.CurrentTurnPhase}");
+        }
+
+        public void Notify_TurnStarted(IPlayer player)
+        {
+            AddLogMessage($"Начинается ход команды {player.Team}");
+        }
+        public void Notify_TurnEnded(IPlayer player)
+        {
+            AddLogMessage($"Закончен ход команды {player.Team}");
+        }
+
+        public void Notify_UnitSelected(IUnit unit)
+        {
+            AddLogMessage($"Выбран юнит: {unit.UnitName}");
         }
 
         public void Notify_PlayerWon(IPlayer player)
