@@ -101,6 +101,7 @@ public partial class App : Application
         collection.AddSingleton<MainWindowViewModel>();
         collection.AddSingleton<GameBoardViewModel>();
         collection.AddSingleton<AbilitiesViewModel>();
+        collection.AddSingleton<SelectedUnitDetailsViewModel>();
 
         return collection;
     }
