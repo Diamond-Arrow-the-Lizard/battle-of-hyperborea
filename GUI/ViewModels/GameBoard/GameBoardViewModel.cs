@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
-using Avalonia.Threading;
 using BoH.Interfaces;
 using BoH.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -21,10 +20,8 @@ public partial class GameBoardViewModel : ViewModelBase
     [ObservableProperty] private IUnit? _selectedUnit = null;
     [ObservableProperty] private TurnPhase? _currentTurnPhase = null;
     [ObservableProperty] private bool? _isTurnEnded = null;
-    
-    
-    // TODO changable ability
-    public IAbility? SelectedAbility => SelectedUnit?.Abilities[0];
+    [ObservableProperty] private IAbility? _selectedAbility = null;
+    public event Action<IUnit>? OnUnitSelectedForAbilities;
     
     private readonly ITurnManager _turnManager;
     private readonly IGameController _gameController;
@@ -70,6 +67,8 @@ public partial class GameBoardViewModel : ViewModelBase
                 (int x, int y) cellPosition = FetchCoordinates(cellViewModel);
                 _turnManager.SelectUnit(GameBoard[cellPosition.x, cellPosition.y]);
                 SelectedUnit = _turnManager.SelectedUnit;
+                if(SelectedUnit != null) OnUnitSelectedForAbilities?.Invoke(SelectedUnit);
+                
                 CurrentTurnPhase = SelectedUnit?.CurrentTurnPhase;
                 ScannedCells =
                     _turnManager.ProcessScanner(SelectedUnit?.CurrentTurnPhase != TurnPhase.Action ? null : SelectedAbility);
@@ -117,6 +116,12 @@ public partial class GameBoardViewModel : ViewModelBase
         {
             Console.WriteLine($"What cellVM knows: {unitVm} - {unitVm.CurrentTurnPhase}, HP: {unitVm.Hp}, Is dead: {unitVm.IsDead}");
         }
+    }
+
+    public void UpdateScan(IAbility ability)
+    {
+        ScannedCells = _turnManager.ProcessScanner(ability);
+        HighlightCells(ScannedCells);
     }
 
     private void UpdateGameBoard()
