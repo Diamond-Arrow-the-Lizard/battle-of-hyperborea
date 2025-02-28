@@ -91,6 +91,7 @@ public partial class App : Application
         collection.AddSingleton<IGameController, GameController>();
         collection.AddSingleton<IGameBoardService, GameBoardService>();
         collection.AddSingleton<ITurnManager, TurnManager>();
+        collection.AddSingleton<BattleLogViewModel>();
         
         collection.AddSingleton<IGameBoard>(sp =>
         {

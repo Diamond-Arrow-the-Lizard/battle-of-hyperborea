@@ -2,7 +2,6 @@ namespace BoH.Interfaces;
 
 public interface IUnitNotifications
 {
-    void ShowUnitStats(IUnit unit);
     void Notify_UnitDead(IUnit unit);
     void Notify_UnitStunned(IUnit unit);
     void Notify_UnitMoved(IUnit unit);

@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BoH.GUI.ViewModels"
+             x:Class="BoH.GUI.Views.BattleLogView"
+             x:DataType="vm:BattleLogViewModel">
+    <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+        <StackPanel>
+            <TextBlock Text="Лог битвы" FontWeight="Bold" Margin="0,0,0,5"/>
+            <ListBox ItemsSource="{Binding LogMessages}" />
+        </StackPanel>
+    </Border>
+</UserControl>
