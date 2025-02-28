@@ -1,4 +1,6 @@
+using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using BoH.GUI.ViewModels;
 using BoH.Models;
 
@@ -9,7 +11,5 @@ public partial class CellView : UserControl
     public CellView()
     {
         InitializeComponent();
-
-        DataContext = new CellViewModel(new Cell((0, 0)));
     }
 }
