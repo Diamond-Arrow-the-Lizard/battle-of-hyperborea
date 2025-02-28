@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Avalonia.Media;
 using Avalonia.Threading;
 using BoH.Interfaces;
 using BoH.Models;
@@ -11,19 +12,19 @@ namespace BoH.GUI.ViewModels;
 
 public partial class GameBoardViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private GameBoard _gameBoard;
-
-    [ObservableProperty]
-    private ObservableCollection<CellViewModel> _cells = [];
-
+    [ObservableProperty] private GameBoard _gameBoard;
+    [ObservableProperty] private ObservableCollection<CellViewModel> _cells = [];
     [ObservableProperty] private int _width;
     [ObservableProperty] private int _height;
+    [ObservableProperty] private List<ICell> _scannedCells = [];
     
     private readonly ITurnManager _turnManager;
-    private List<ICell> _scannedCells = [];
+    private readonly IGameBoardService _gameBoardService;
     
-    public GameBoardViewModel(IGameBoard gameBoard, ITurnManager turnManager)
+    
+    public GameBoardViewModel(IGameBoard gameBoard, 
+        ITurnManager turnManager, 
+        IGameBoardService gameBoardService)
     {
         GameBoard = gameBoard as GameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
         Width = GameBoard.Width;
@@ -39,6 +40,7 @@ public partial class GameBoardViewModel : ViewModelBase
         }
         
         _turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
+        _gameBoardService = gameBoardService ?? throw new ArgumentNullException(nameof(gameBoardService));
     }
 
     public void HandleCellSelection(CellViewModel cellViewModel)
@@ -51,13 +53,16 @@ public partial class GameBoardViewModel : ViewModelBase
             {
                 _turnManager.SelectUnit(cellViewModel.Cell);
                 IUnit unit = _turnManager.SelectedUnit ?? throw new ArgumentNullException(nameof(cellViewModel.Cell));
-                _scannedCells =
+                ScannedCells =
                     _turnManager.ProcessScanner(unit.CurrentTurnPhase != TurnPhase.Action ? null : unit.Abilities[0]);
+                
+                HighlightCells(ScannedCells);
             }
             else
             {
                 IUnit unit = _turnManager.SelectedUnit;
-                _turnManager.ProcessPlayerAction(_scannedCells, cellViewModel.Cell);
+                _turnManager.ProcessPlayerAction(ScannedCells, cellViewModel.Cell);
+                HighlightCells(null);
             }
         }
         catch (Exception e)
@@ -75,6 +80,9 @@ public partial class GameBoardViewModel : ViewModelBase
     {
         Console.WriteLine("GBVM sees the click");
         Console.WriteLine($"{cellViewModel.Cell.Icon}");
+        IUnit? unit = cellViewModel.Cell.Content as IUnit;
+        if (unit != null)
+            Console.WriteLine(unit.CurrentTurnPhase);
     }
 
     private void UpdateGameBoard()
@@ -84,4 +92,21 @@ public partial class GameBoardViewModel : ViewModelBase
             cell.UpdateViewModel(); 
         }
     }
+    
+    private void HighlightCells(List<ICell>? scannedCells)
+    {
+        foreach (var cellVm in Cells)
+        {
+            if (scannedCells != null)
+            {
+                cellVm.Background = scannedCells.Contains(cellVm.Cell) ? 
+                    new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Transparent);
+            }
+            else
+            {
+                cellVm.Background = new SolidColorBrush(Colors.Gray);
+            }
+        }
+    }
+
 }

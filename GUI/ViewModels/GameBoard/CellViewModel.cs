@@ -1,3 +1,5 @@
+using Avalonia.Media;
+
 namespace BoH.GUI.ViewModels;
 
 using System;
@@ -9,8 +11,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 public partial class CellViewModel : ViewModelBase
 {
     [ObservableProperty] private Cell _cell;
+    [ObservableProperty] private IBrush _background = new SolidColorBrush(Colors.Gray);
     public string Icon => Cell.Icon;
     public event Action<CellViewModel>? OnCellClicked;
+    
 
     public CellViewModel(int x, int y)
     {
