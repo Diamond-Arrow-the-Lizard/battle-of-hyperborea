@@ -183,7 +183,8 @@ public class TurnManager : ITurnManager
         try
         {
 
-            if (availableCells == null && target == null && usedAbility == null) SelectedUnit.CurrentTurnPhase = TurnPhase.End;
+            if (availableCells == null && target == null && usedAbility == null)
+                SelectedUnit.CurrentTurnPhase = TurnPhase.End;
             _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
 
             switch (_unitTurnPhase)
@@ -215,8 +216,8 @@ public class TurnManager : ITurnManager
                         _actionHandler.HandleAction(SelectedUnit, usedAbility, availableCells, null);
                         OnTurnStateChanged?.Invoke(SelectedUnit);
                     }
+
                     _unitTurnPhase = SelectedUnit.CurrentTurnPhase;
-                    // else throw new InvalidDataException("Активация способности осуществляется не на клетку.");
                     break;
                 case TurnPhase.End:
                     _actionHandler.HandleSkip(SelectedUnit);
@@ -224,9 +225,19 @@ public class TurnManager : ITurnManager
                     break;
             }
 
-            if (SelectedUnit.CurrentTurnPhase == TurnPhase.End)
+            if (SelectedUnit is { CurrentTurnPhase: TurnPhase.End })
+            {
                 _availableUnitsCells.Remove(SelectedUnit.OccupiedCell);
+            }
 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"TurnManager's exception: {ex.Message}");
+            if (!_availableUnitsCells.Contains(SelectedUnit.OccupiedCell))
+            {
+                _availableUnitsCells.Add(SelectedUnit.OccupiedCell); 
+            }
         }
         finally
         {
