@@ -46,9 +46,7 @@
     <!-- Лог боя в нижней части окна (занимает всю ширину) -->
     <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Margin="5"
             BorderBrush="Gray" BorderThickness="1" Padding="5">
-      <StackPanel>
         <views:BattleLogView DataContext="{Binding BattleLogVm}"/>
-      </StackPanel>
     </Border>
   </Grid>
 </Window>
