@@ -5,6 +5,7 @@ using Avalonia.Media;
 using BoH.Interfaces;
 using BoH.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BoH.GUI.ViewModels;
 
@@ -118,11 +119,20 @@ public partial class GameBoardViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    public void SkipTurn()
+    {
+        _turnManager.ProcessPlayerAction(null, null, null);
+        HighlightCells(null);
+        UpdateGameBoard();
+    }
+    
     public void UpdateScan(IAbility ability)
     {
         ScannedCells = _turnManager.ProcessScanner(ability);
         HighlightCells(ScannedCells);
     }
+    
 
     private void UpdateGameBoard()
     {
