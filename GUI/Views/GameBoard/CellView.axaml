@@ -7,8 +7,17 @@
              mc:Ignorable="d"
              x:Class="BoH.GUI.Views.CellView"
              x:DataType="vm:CellViewModel">
-
-
-    <Button Content="{Binding Cell.Icon}" Width="80" Height="80" Command="{Binding HandleClick}" />
-
+    
+    <Button Width="80" Height="80"
+            Command="{Binding HandleClick}"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Padding="0"
+            FontSize="36">
+        <TextBlock Text="{Binding Cell.Icon}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center" />
+    </Button>
+    
 </UserControl>
