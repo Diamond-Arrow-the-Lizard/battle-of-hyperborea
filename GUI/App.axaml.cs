@@ -13,6 +13,7 @@ using BoH.Interfaces;
 using BoH.Models;
 using BoH.Services;
 using BoH.GameLogic;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BoH.GUI;
 
