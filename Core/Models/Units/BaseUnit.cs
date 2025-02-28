@@ -101,13 +101,14 @@ public class BaseUnit : IUnit, IIconHolder
     /// <param name="icon">Иконка препятствия (необязательный параметр, по умолчанию 'B').</param>
     /// <param name="team">Фракция юнита (необязательный параметр, по умолчанию "Dev").</param>
     /// <param name="type">Тип атаки персонажа (необязательный параметр, по умолчанию Melee).</param>
-    public BaseUnit(string unitName, char icon = 'T', string team = "Dev", UnitType type = UnitType.Melee)
+    public BaseUnit(string unitName, char icon = 'T', string team = "Dev", UnitType type = UnitType.Melee, int range = 1)
     {
         UnitName = unitName;
         UnitId = Guid.NewGuid().ToString();
         UnitType = type;
         Team = team;
         Icon = icon.ToString();
+        Range = range;
         Abilities.Add(new Attack(this));
     }
 
