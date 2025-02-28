@@ -23,8 +23,10 @@
     <!-- Панель для информации о юните и активных способностях справа от игрового поля -->
     <StackPanel Grid.Column="1" Grid.Row="0" Margin="0" Orientation="Vertical" Spacing="0">
       <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+        <StackPanel>
         <TextBlock Text="Информация о юните" FontWeight="Bold"/>
-        <!-- Здесь можно разместить дополнительные элементы для детальной информации -->
+        <views:SelectedUnitDetailsView DataContext="{Binding SelectedUnitDetailsVm}"/>
+        </StackPanel>
       </Border>
       <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
         <StackPanel>
