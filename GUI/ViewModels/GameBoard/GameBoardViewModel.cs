@@ -75,7 +75,8 @@ public partial class GameBoardViewModel : ViewModelBase
             }
             else
             {
-                _turnManager.ProcessPlayerAction(ScannedCells, cellViewModel.Cell);
+                _turnManager.ProcessPlayerAction(ScannedCells, cellViewModel.Cell, 
+                    SelectedUnit?.CurrentTurnPhase == TurnPhase.Movement ? null : SelectedAbility);
                 HighlightCells(null);
                 SelectedUnit = null;
             }
