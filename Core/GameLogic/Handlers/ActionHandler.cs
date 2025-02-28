@@ -44,7 +44,7 @@ public class ActionHandler : IActionHandler
         // if (targetedCell!.Content is IObstacle obstacle) throw new InvalidOperationException("Нельзя атаковать препятствие.");
         if (targetedCell is null || targetedCell.Content is null)
         {
-            usedAbility.Activate(attacker);
+            usedAbility.Activate();
             OnUpdatingGameBoard?.Invoke(_gameBoard);
         }
         else if (targetedCell!.Content is IUnit attacked)
