@@ -10,6 +10,8 @@ public partial class CellViewModel : ViewModelBase
 {
     [ObservableProperty]
     private Cell _cell;
+    
+    public event Action? OnCellClicked;
 
     public CellViewModel(int x, int y)
     {
@@ -30,6 +32,7 @@ public partial class CellViewModel : ViewModelBase
 
     public void HandleClick()
     {
+        OnCellClicked?.Invoke();
         DebugCommandClick();
     }
 }
