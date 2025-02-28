@@ -69,6 +69,8 @@ public partial class App : Application
         int width = 8;
         int height = 8;
         Player[] players = new Player[2];
+        players[0] = new Player("Rus");
+        players[1] = new Player("Lizard");
         List<IUnit> units = new(){
             new RusArcher(),
             new RusWarrior(),
