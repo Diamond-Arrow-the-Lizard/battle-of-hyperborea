@@ -15,9 +15,15 @@ public partial class GameBoardViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<CellViewModel> _cells = [];
 
+    [ObservableProperty] private int _width;
+    [ObservableProperty] private int height;
+
     public GameBoardViewModel(IGameBoard gameBoard)
     {
-        _gameBoard = gameBoard as GameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
+        GameBoard = gameBoard as GameBoard ?? throw new ArgumentNullException(nameof(gameBoard));
+        Width = GameBoard.Width;
+        Height = GameBoard.Height;
+        
         foreach(var cell in gameBoard.Cells)
         {
             Cells.Add(new CellViewModel(cell));
