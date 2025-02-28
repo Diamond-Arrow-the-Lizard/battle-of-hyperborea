@@ -66,7 +66,7 @@ public partial class App : Application
 
         int width = 8;
         int height = 8;
-        Player[] players = new Player[2];
+        IPlayer[] players = new IPlayer[2];
         players[0] = new Player("Rus");
         players[1] = new Player("Lizard");
         List<IUnit> units = new(){
@@ -83,11 +83,12 @@ public partial class App : Application
             new LizardArcher(),
             new LizardWarrior()
         };
-        
-        collection.AddSingleton<Player[]>(players);
+
+        collection.AddSingleton<IPlayer[]>(players);
         collection.AddSingleton<IActionHandler, ActionHandler>();
         collection.AddSingleton<IScanner, Scanner>();
         collection.AddSingleton<IScannerHandler, ScannerHandler>();
+        collection.AddSingleton<IGameController, GameController>();
         collection.AddSingleton<IGameBoardService, GameBoardService>();
         collection.AddSingleton<ITurnManager, TurnManager>();
         
