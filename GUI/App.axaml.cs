@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
@@ -62,14 +63,33 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
 
-        collection.AddSingleton<MainWindowViewModel>();
-        collection.AddSingleton<GameBoardViewModel>();
-
-
-        collection.AddSingleton<IGameBoard, GameBoard>();
         collection.AddSingleton<IGameBoardService, GameBoardService>();
         collection.AddSingleton<ITurnManager, TurnManager>();
-
+        
+        int width = 8;
+        int height = 8;
+        Player[] players = new Player[2];
+        List<IUnit> units = new(){
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior(),
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior(),
+            new RusArcher(),
+            new RusWarrior(),
+            new LizardArcher(),
+            new LizardWarrior()
+        };
+        collection.AddSingleton<IGameBoard>(sp =>
+        {
+            var gameBoardService = sp.GetRequiredService<IGameBoardService>();
+            return gameBoardService.GenerateGameBoard(width, height, units, players as IPlayer[]);
+        });
+        collection.AddSingleton<MainWindowViewModel>();
+        collection.AddSingleton<GameBoardViewModel>();
 
         return collection;
     }
