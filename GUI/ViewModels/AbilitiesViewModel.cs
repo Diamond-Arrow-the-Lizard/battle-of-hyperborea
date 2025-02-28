@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,13 +13,18 @@ namespace BoH.GUI.ViewModels
         private ObservableCollection<IAbility> _activeAbilities = new();
 
         [ObservableProperty] private IAbility? _selectedAbility = null;
+        
+        public event Action<IAbility?>? AbilityChanged;
 
-        // Метод обновления способностей для нового выбранного юнита.
         public void UpdateAbilities(IUnit unit)
         {
-            if (unit == null) return;
-            ActiveAbilities = new ObservableCollection<IAbility>(unit.Abilities);
+            ActiveAbilities = new ObservableCollection<IAbility>(unit.Abilities.Where(x => x.IsActive));
             SelectedAbility = ActiveAbilities.FirstOrDefault();
+        }
+
+        partial void OnSelectedAbilityChanged(IAbility? value)
+        {
+            AbilityChanged?.Invoke(value);
         }
     }
 }

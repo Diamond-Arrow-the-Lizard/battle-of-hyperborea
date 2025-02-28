@@ -1,4 +1,7 @@
-﻿namespace BoH.GUI.ViewModels;
+﻿using System;
+using System.ComponentModel;
+
+namespace BoH.GUI.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -9,5 +12,13 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         GameBoardVm = gameBoardVm;
         AbilitiesVm = abilitiesVm;
+        
+        GameBoardVm.OnUnitSelectedForAbilities += unit => AbilitiesVm.UpdateAbilities(unit);
+        AbilitiesVm.AbilityChanged += ability =>
+        {
+            GameBoardVm.SelectedAbility = ability;
+            if(ability != null) GameBoardVm.UpdateScan(ability);
+        };
     }
+    
 }
