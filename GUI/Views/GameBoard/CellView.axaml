@@ -13,7 +13,8 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Padding="0"
-            FontSize="36">
+            FontSize="36"
+            Background="{Binding Background}">
         <TextBlock Text="{Binding Icon}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
