@@ -13,7 +13,7 @@ public class GameController : IGameController
     }
 
     /// <inheritdoc/>
-    public event Action<IPlayer>? OnPlayerWinning;
+    public event Action<IPlayer>? OnPlayerLosing;
 
     /// <inheritdoc/>
     public bool CheckForTurnEnd(IPlayer player)
@@ -33,7 +33,7 @@ public class GameController : IGameController
         {
             if (!p.HasAliveUnits)
             {
-                OnPlayerWinning?.Invoke(p);
+                OnPlayerLosing?.Invoke(p);
                 return true;
             }
         }

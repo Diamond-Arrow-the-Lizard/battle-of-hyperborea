@@ -40,7 +40,7 @@ namespace BoH.GUI.ViewModels;
             turnManager.OnTurnStart += Notify_TurnStarted;
             turnManager.OnTurnStateChanged += Notify_UnitChangedTurnPhase;
             turnManager.OnUnitSelected += Notify_UnitSelected;
-            gameController.OnPlayerWinning += Notify_PlayerWon;
+            gameController.OnPlayerLosing += Notify_PlayerWon;
 
         }
 
@@ -121,7 +121,7 @@ namespace BoH.GUI.ViewModels;
 
         public void Notify_PlayerWon(IPlayer player)
         {
-            AddLogMessage($"|------------!!! Команда {player.Team} победила !!!------------|");
+            AddLogMessage($"|------------!!! Команда {player.Team} потерпела поражение !!!------------|");
         }
     }
 

@@ -125,6 +125,16 @@ public partial class GameBoardViewModel : ViewModelBase
         _turnManager.ProcessPlayerAction(null, null, null);
         HighlightCells(null);
         UpdateGameBoard();
+        if (_gameController.CheckVictoryCondition(Players))
+        {
+            _gameController.EndGame();
+        }
+        if (_gameController.CheckForTurnEnd(Players[_currentPlayerIndex]))
+        {
+            _currentPlayerIndex = (_currentPlayerIndex + 1) % Players.Length;
+            _turnManager.EndTurn();
+            _turnManager.StartNewRound(_turnManager.CurrentPlayer);
+        }
     }
     
     public void UpdateScan(IAbility ability)

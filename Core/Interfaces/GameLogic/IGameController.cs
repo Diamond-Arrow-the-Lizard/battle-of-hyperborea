@@ -9,7 +9,7 @@ public interface IGameController
     /// <summary>
     /// Событие при выигрыше одной команды
     /// </summary>
-    public event Action<IPlayer>? OnPlayerWinning;
+    public event Action<IPlayer>? OnPlayerLosing;
 
     /// <summary>
     /// Проверяет, закончился ли ход игрока. 
